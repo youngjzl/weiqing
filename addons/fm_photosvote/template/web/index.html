@@ -1,0 +1,414 @@
+{template 'web/common/header_amaze'}
+	<style>
+	.table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+	  white-space: inherit;
+	  overflow: hidden;
+	  text-overflow: clip;
+	}
+	#function ul li {list-style: none;width: 33%; float: left;    text-align: center; padding: 10px;}
+	#function ul li a{padding: 35px; font-size: 18px;}
+	#function .modal-header{border-bottom: 0;}
+	</style>
+	{php $huise = '#bdbdbd';}
+	{if !empty($huise)}
+	<div id="huise" class="am-hide">
+
+	</div>
+	{/if}
+	<div class="row" style="overflow: visible;">
+		<div class="am-u-md-12 am-u-sm-12 row-mb">
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title">
+					<div class="tpl-caption font-yellow ">
+						<i class="am-icon-desktop"></i>
+						<span >活动进度</span>
+					</div>
+
+					<div class="actions-hd">
+						<ul class="actions-btn">
+							<li class="green"><a href="{php echo $this->createWebUrl('start')}" target="_blank"><i class="am-icon-plus-square"></i> 添加活动</a></li>
+							<li class="blue"><a href="{php echo $this->createWebUrl('index')}" target="_blank"><i class="am-icon-plus-square"></i> 管理活动</a></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="am-tabs tpl-index-tabs" data-am-tabs>
+					<ul class="am-tabs-nav am-nav am-nav-tabs">
+						<li class="am-active">
+							<a href="#tab1"><i class="am-icon-th-list"></i></a>
+						</li>
+						<!--<li class="am-hide">
+							<a href="#tab2"><i class="am-icon-th-large"></i></a>
+						</li>-->
+					</ul>
+
+					<div class="am-tabs-bd"  style="overflow: visible;">
+						<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+							<div id="wrapperA" class="wrapper wrapper-h-auto" style="overflow: visible;">
+									<div class="tpl-scrollable" style="min-height: 200px;">
+										<table class="am-table am-table-hover tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th style="min-width: 300px;">活动</th>
+													<th width="350px">进度</th>
+													<th width="200px">活动链接(点击复制)</th>
+													<th style="min-width: 230px;">操作</th>
+												</tr>
+											</thead>
+											<tbody id="html_hdysh" class="">
+												{loop $fm_list $row}
+												{php $sytime = $this->getsytime($row['start_time'], $row['end_time'], '2');}
+												{if $sytime >= '100'}{php $sytime = '100';$color = 'huise';$disabled = 'am-disabled';}{else}{php $color = 'warning'}{/if}
+												<tr>
+													<td><span class="am-badge am-badge-warning am-round">{$row['rid']}</span>
+														<span>
+															<img src="{php echo tomedia($row['picture'])}" alt="{php echo $row['title']}" class="user-pic am-img-thumbnail am-circle" style="border-radius: 5px;">
+															<a class="font-yellow font-yellow-size"  href="{php echo $this->createWebUrl('members', array('rid' => $row['rid']))}">{php echo cutstr($row['title'],'30')}</a>
+														</span>
+														<div class="am-alert am-alert-secondary am-text-xs">
+															<i class="am-icon-calendar"></i> {php echo date('Y-m-d H:i', $row['start_time']);} - {php echo date('Y-m-d H:i', $row['end_time']);}
+														</div>
+														<div class="">
+														{if $row['uniacid'] == $uniacid}
+															<a href="{php echo $this->createWebUrl('members', array('rid' => $row['rid']))}" class="am-btn am-btn-default am-btn-sm btn" data-toggle="tooltip" data-placement="top"  title="活动数据管理"><i class="am am-icon-users"></i> 活动管理</a>
+															<a href="{php echo $this->createWebUrl('copyactivity', array('rid' => $row['rid']))}" class="am-btn am-btn-default am-btn-sm btn" data-toggle="tooltip" data-placement="top"  title="复制该活动"><i class="am am-icon-copy"></i> 复制活动</a>
+
+															<a class="am-btn {if (!empty($row['templates']) && $row['templates']!='default')}am-btn-secondary{else}am-btn-default{/if} am-btn-sm btn-loading-template  btn" herf="javascript:;" style="padding-right: 18px;margin-top: 1px;" title="模板选择" data-toggle="modal" data-target="#ListStyle" onclick="$('#stylerid').val({$row['rid']});$('#ctm_{if empty($row['templates'])}default{else}{$row['templates']}{/if}').addClass('active');$('.ctm_moban').text('模板风格列表【当前默认模板：{if empty($row['templates'])}default{else}{$row['templates']}{/if}】');"><i class="am am-icon-plane"></i> {if empty($row['templates'])}模板选择{else}{php echo $this->gettemname($row['templates'])}{/if}</a>
+
+															<div class="am-dropdown" data-am-dropdown>
+																	<button type="button" id="limitsd_{$row['rid']}" class="am-btn {if empty($row['menuid'])}am-btn-default{else}am-btn-secondary{/if} am-btn-sm am-dropdown-toggle  btn" data-toggle="tooltip" data-placement="top" title="底部导航" data-am-dropdown-toggle><i class="am am-icon-paper-plane"></i> {if empty($row['menuid'])}底部导航{else}{php echo cutstr($this->GetMenuname($row['menuid']), '4')}{/if} <span class="am-icon-caret-down"></span></button>
+
+																	<ul class="am-dropdown-content am-dropdown-content-width">
+																	{loop $menus $menu}
+																		<li  {if $row['menuid'] == $menu['id']}style="background: #659be0;" {/if}><a data="{$menu['id']}" href="javascript:;" {if $row['menuid'] == $menu['id']} class="label label-info" style="color:#fff" {/if} onclick="setProperty(this,{$row['rid']},'menu')"><i class="am-icon-paper-plane"></i> {$menu['menuname']}</a></li>
+																	{/loop}
+																		<li role="separator" class="divider"></li>
+																		<li><a href="{php echo $this->createWebUrl('templates', array('op' => 'menu','rid' => $rid))}" ><i class="am-icon-paper-plane"></i> 添加新的底部导航</a></li>
+																		<li><a data="0" href="javascript:;"  onclick="setProperty(this,{$row['rid']},'menu')"><i class="am-icon-paper-plane"></i> 取消自定义底部导航</a></li>
+
+																	</ul>
+															</div>
+														{/if}
+
+														</div>
+													</td>
+													<td>
+			                      						<span class="progress">
+			                    								<div class="am-progress am-progress-striped am-active"><div class="am-progress-bar am-progress-bar-{$color}" style="width:{$sytime}%"><i class="am-icon-circle-o-notch"></i> {$sytime}%</div></div>
+			                								</span>
+			                								<a href="" class="am-badge am-badge-success am-round btn" data-toggle="tooltip" data-placement="top" title="参赛报名人数"><i class="am-icon-user-plus"></i> 报名 {php echo $this->getshuju('1',$row['rid'], '2')}</a>
+														<a class="am-badge am-badge-danger am-round btn" data-toggle="tooltip" data-placement="top" title="报名未审核人数"><i class="am-icon-user-plus"></i> 未审核 {php echo $this->getregsh('2', $row['rid'])}</a>
+														<a class="am-badge am-badge-secondary am-round btn" data-toggle="tooltip" data-placement="top" title="所有参与该活动的人数及点击数总和"><i class="am-icon-eye"></i> 参与 {php echo $this->getshuju('2',$row['rid'], '2')}</a>
+														<a class="am-badge am-badge-primary am-round btn" data-toggle="tooltip" data-placement="top" title="点击数"><i class="am-icon-eye"></i> 点击 {php echo $this->getshuju('3',$row['rid'], '2')}</a>
+														<a class="am-badge am-badge-danger am-round btn" data-toggle="tooltip" data-placement="top" title="充值数"><i class="am-icon-money"></i> 充值 {php echo $this->getshuju('4',$row['rid'], '2')}</a>
+														<a class="am-badge am-badge-warning am-round btn" data-toggle="tooltip" data-placement="top" title="送出礼物数据"><i class="am-icon-money"></i> 礼物 {php echo $this->getshuju('5',$row['rid'], '2')}</a>
+														<a class="am-badge am-badge-warning am-round b-purple btn" data-toggle="tooltip" data-placement="top" title="投票总数"><i class="am-icon-clone"></i> 投票 {php echo $this->getshuju('6',$row['rid'], '2')}</a>
+														<a class="am-badge am-badge-none am-round btn" data-toggle="tooltip" data-placement="top" title="投票后取消关注等的票数"><i class="am-icon-clone"></i> 无效投票 {$row['user_qxps']}</a>
+														<a class="am-badge am-badge-warning am-round btn" data-toggle="tooltip" data-placement="top" title="所有参赛者的人气"><i class="am-icon-heart-o"></i> 人气 {php echo $this->getshuju('7',$row['rid'], '2')}</a>
+														<a class="am-badge am-badge-success am-round btn" data-toggle="tooltip" data-placement="top" title="所有参赛者的点赞数"><i class="am-icon-star-o"></i> 点赞 {php echo $this->getshuju('8',$row['rid'], '2')}</a>
+														<a class="am-badge am-badge-warning am-round b-purple btn" data-toggle="tooltip" data-placement="top" title="所有参赛者的分享数"><i class="am-icon-share-alt"></i> 分享 {php echo $this->getshuju('9',$row['rid'], '2')}</a>
+														<a class="am-badge am-badge-primary am-round btn" data-toggle="tooltip" data-placement="top" title="参与该活动的粉丝数据"><i class="am-icon-users"></i> 粉丝 {php echo $this->getshuju('10',$row['rid'], '2')}</a>
+													</td>
+													<td>
+														<a id="link_copy" class="am-btn am-btn-default am-round am-btn-xs" href="javascript:;" data ="{php echo $_W['siteroot'].'app/'.$this->createMobileUrl('photosvote', array('rid'=>$row['rid']))}">
+															<i class="am-icon-home"></i> 首页</a>
+														<a id="link_copy" class="am-btn am-btn-default am-round am-btn-xs" href="javascript:;" data ="{php echo $_W['siteroot'].'app/'.$this->createMobileUrl('reg', array('rid'=>$row['rid']))}">
+															<i class="am-icon-user-plus"></i> 报名</a><p>
+														<a id="link_copy" class="am-btn am-btn-default am-round am-btn-xs" href="javascript:;" data ="{php echo $_W['siteroot'].'app/'.$this->createMobileUrl('paihang', array('rid'=>$row['rid']))}">
+															<i class="am-icon-sort-amount-desc"></i> 排行榜</a>
+														<a id="link_copy" class="am-btn am-btn-default am-round am-btn-xs" href="javascript:;" data ="{php echo $_W['siteroot'].'app/'.$this->createMobileUrl('des', array('rid'=>$row['rid']))}">
+															<i class="am-icon-wpforms"></i> 详情页</a></p>
+														<div>
+															<button type="button" class="am-btn am-btn-primary am-btn-xs am-round js-modal-toggle" onclick="getqrcode('{php echo $row['rid']}');">查看二维码</button>
+														</div>
+													</td>
+													<td>
+														{if $row['uniacid'] == $uniacid}
+															<div class="am-btn-toolbar">
+																<div class="am-btn-group am-btn-group-xs">
+																	<a class="am-btn am-btn-default btn " data-toggle="tooltip" data-placement="top" href="{php echo $this->createWebUrl('system', array('rid' => $row['rid'],'op'=>'rbasic'))}" title="活动编辑" target="_blank"><i class="am-icon-edit"></i> 编辑</a>
+																	{if $row['status'] == 1}
+																		<a class="am-btn am-btn-default {$disabled} btn" data-toggle="tooltip" data-placement="top" href="#" onclick="drop_confirm('您确定要暂停吗，设置中途可以随时修改', '{php echo $this->createWebUrl('status', array('status' => '0', 'rid' => $row['rid']))}');" title="活动开始中，点击之后暂停活动" ><i class="am-icon-stop"></i> 暂停</a>
+																	{else}
+																		<a class="am-btn am-btn-default {$disabled} btn" data-toggle="tooltip" data-placement="top" href="#" onclick="drop_confirm('您确定要开始吗，设置中途可以随时修改', '{php echo $this->createWebUrl('status', array('status' => '1', 'rid' => $row['rid']))}');" title="活动暂停中，点击之后开始" ><i class="am-icon-play"></i> 开始</a>
+																	{/if}
+																	{if $_W['role']=='founder'}<a class="am-btn am-btn-default btn" data-toggle="tooltip" data-placement="top" href="#" onclick="drop_confirm('您确定要删除吗?', '{php echo $this->createWebUrl('delete',array('rid'=>$row['rid'], 'id'=>$row['id']))}');" title="删除"><i class="am-icon-times"></i> 删除</a>{/if}
+																</div>
+															</div>
+															<a class="am-badge am-badge-primary am-round tpl-badge-yellow" href="{php echo $this->createWebUrl('system', array('rid' => $row['rid'],'op'=>'rbasic'))}" target="_blank"><i class="am-icon-home"></i> 基本设置</a>
+															<a class="am-badge am-badge-primary am-round tpl-badge-yellow" href="{php echo $this->createWebUrl('system', array('rid' => $row['rid'],'op'=>'rdisplay'))}" target="_blank"><i class="am-icon-desktop"></i> 显示设置</a>
+															<a class="am-badge am-badge-primary am-round tpl-badge-yellow" href="{php echo $this->createWebUrl('system', array('rid' => $row['rid'],'op'=>'rvote'))}" target="_blank"><i class="am-icon-weibo"></i> 投票设置</a>
+															<a class="am-badge am-badge-primary am-round tpl-badge-yellow" href="{php echo $this->createWebUrl('system', array('rid' => $row['rid'],'op'=>'rhuihua'))}" target="_blank"><i class="am-icon-wechat"></i> 会话设置</a>
+															<a class="am-badge am-badge-primary am-round tpl-badge-yellow" href="{php echo $this->createWebUrl('system', array('rid' => $row['rid'],'op'=>'rshare'))}" target="_blank"><i class="am-icon-share-alt"></i> 关注分享</a>
+															<a class="am-badge am-badge-primary am-round tpl-badge-yellow" href="{php echo $this->createWebUrl('system', array('rid' => $row['rid'],'op'=>'rbody'))}" target="_blank"><i class="am-icon-tablet"></i> 页面设置</a>
+															<a class="am-badge am-badge-primary am-round tpl-badge-yellow" href="{php echo $this->createWebUrl('system', array('rid' => $row['rid'],'op'=>'rupload'))}" target="_blank"><i class="am-icon-cloud-upload"></i> 存储设置</a>
+															<a class="am-badge am-badge-primary am-round tpl-badge-yellow" href="{php echo $this->createWebUrl('system', array('rid' => $row['rid'],'op'=>'rjifen'))}" target="_blank"><i class="am-icon-gift"></i> 积分礼物</a>
+															<!--a class="am-badge am-badge-primary am-round tpl-badge-yellow" href="{php echo $this->createWebUrl('system', array('rid' => $row['rid'],'op'=>'rshare'))}" target="_blank"><i class="am-icon-share-square-o"></i> 抢幸运星</a>-->
+														{else}
+															{php $acc  = account_fetch($row['uniacid'])}
+															<a class="am-btn am-btn-default btn" data-toggle="tooltip" data-placement="top" href="javascript:;" title="请在主公众号 {$acc['name']} 里面进行编辑活动" ><i class="am-icon-edit"></i> {$acc['name']}</a>
+														{/if}
+
+													</td>
+												</tr>
+												{/loop}
+											</tbody>
+										</table>
+										<div style="text-align: center;">{$pager}</div>
+									</div>
+							</div>
+						</div>
+						<!--<div class="am-tab-panel am-fade" id="tab2">
+							<div id="wrapperB" class="wrapper wrapper-h">
+								<div id="scroller" class="scroller">
+									<div class="tpl-scrollable" style="min-height: 200px;">
+										<table class="am-table tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th >活动</th>
+													<th width="350px">进度（已结束）</th>
+													<th >数据</th>
+													<th>操作</th>
+												</tr>
+											</thead>
+											<tbody id="html_hdwsh">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>-->
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	{if $_W['isfounder']}
+<!-- 		<div class="row">
+			<div class="am-u-md-12 am-u-sm-12 row-mb">
+				<div class="tpl-portlet" style="height: 200px;">
+					<div class="tpl-portlet-title">
+						<div class="tpl-caption font-green">
+							<i class="am-icon-comments"></i>
+							<span> 给开发者建议或留言</span>
+						</div>
+					</div>
+					<div class="tpl-scrollable">
+						<div>
+							{php $url = base64_encode($_SERVER ['HTTP_HOST'])}
+							<a class="btn btn-default" data-toggle="tooltip" data-placement="top" target="_blank" href="http://help.fmoons.com/index.php?oauthurl={$url}&fmauthtoken={php echo getoauth()}&m=fm_photosvote" title="帮助中心"><i class="am-icon-edit"></i> 帮助&教程</a>
+						</div>
+						<div class="span8 control-group">
+							【本部分仅创始人可见，不必担心客户或其他管理员能看到】有何建议或BUG请直接提交  联系开发者QQ:<a href="tencent://message/?uin=513200958&Site=qq&Menu=yes">513200958</a> 工作日时间（周一 - 周五 9：00 - 18：00）请直接Q我!其他时间勿扰。
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+ -->	{/if}
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="my_qrcode">
+	<div class="am-modal-dialog" style="width: 170px;">
+		<div class="am-modal-hd">
+			<a href="javascript: void(0)" class="am-close am-close-spin" style="display: none;" data-am-modal-close>&times;</a>
+		</div>
+		<div class="am-modal-bd" >
+			<div  style="position: relative;">
+				<span class="am-icon-spinner am-icon-spin"></span>
+				<img src="" class="am-img-responsive am-img-thumbnail am-radius" id="qrurllink">
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 风格列表 -->
+<input type="hidden" name="rid" id="stylerid" value="" />
+
+<style>
+	.template .item{position:relative;display:block;float:left;border:1px #ddd solid;border-radius:5px;background-color:#fff;padding:5px;width:190px;margin:0 20px 20px 0; overflow:hidden;}
+	.template .title{margin:5px auto;line-height:2em;}
+	.template .title a{text-decoration:none;}
+	.template .item img{width:178px;height:270px; cursor:pointer;}
+	.template .active.item-style img, .template .item-style:hover img{width:178px;height:270px;border:3px #009cd6 solid;padding:1px; }
+	.template .title .fa{display:none}
+	.template .active .fa.fa-check{display:inline-block;position:absolute;bottom:33px;right:6px;color:#FFF;background:#009CD6;padding:5px;font-size:14px;border-radius:0 0 6px 0;}
+	.template .fa.fa-times{cursor:pointer;display:inline-block;position:absolute;top:10px;right:6px;color:#D9534F;background:#ffffff;padding:5px;font-size:14px;text-decoration:none;}
+	.template .fa.fa-times:hover{color:red;}
+	.template .item-bg{width:100%; height:342px; background:#000; position:absolute; z-index:1; opacity:0.5; margin:-5px 0 0 -5px;}
+	.template .item-build-div1{position:absolute; z-index:2; margin:-5px 10px 0 5px; width:168px;}
+	.template .item-build-div2{text-align:center; line-height:30px; padding-top:150px;}
+	@media screen and (min-width:992px){#ListStyle{width:890px; margin:100px auto;}}
+</style>
+<div class="modal fade" id="ListStyle" aria-hidden="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+			<h4 class="modal-title ctm_moban">模板风格列表(当前默认模板： )</h4>
+		</div>
+		<div class="modal-body template clearfix" style="width:100%;float:none;">
+			{loop $styles $si $style}
+				<div id="ctm_{$style['name']}" class="item item-style">
+						<div class="title">
+							<div style="overflow:hidden; height:28px;" id="styleid">{$style['title']} ({$style['name']})</div>
+								<a href="javascript:;" onclick="ctemplatespost('{$style['name']}');">
+								<img src="{if !empty($style['thumb'])}{php echo toimage($style['thumb'])}{else}../addons/fm_photosvote/template/mobile/templates/{$style['name']}/preview.jpg{/if}" class="img-rounded">
+								</a>
+							<span class="am-icon-check"></span>
+						</div>
+						<div class="btn-group  btn-group-justified">
+							<a href="javascript:;" onclick="ctemplatespost('{$style['name']}');" class="btn btn-default btn-xs" >设置为默认模板</a>
+						</div>
+				</div>
+			{/loop}
+		</div>
+			<div class="modal-footer">
+				<!--<input type="submit" name="tijiao" id="tijiao" class="btn btn-success" value="开始上传">-->
+				<button type="button" class="btn btn-danger" data-dismiss="modal">关闭</button>
+			</div>
+	</div>
+</div>
+<script type="text/javascript">
+	function ctemplatespost(templatesname) {
+		var submitData = {
+			rid : $('#stylerid').val(),
+			templatesname: templatesname,
+		};
+		$.post("{php echo $this->createWebUrl('templates', array('op' => 'default'))}", submitData, function(data) {
+			if (data.success == true) {
+				$('#ListStyle').modal('hide');
+				setTimeout(function () {
+					window.location.reload();
+				},3)
+			}else{
+				alert(data.msg);
+			}
+		},"json")
+
+		return false;
+	}
+	function getqrcode(rid) {
+		$.post("{php echo $this->createWebUrl('getqrcode')}" ,{rid:rid},function(d){
+			//console.log(d);
+			$('#my_qrcode').modal('toggle');
+			$("#qrurllink").attr("src",d);
+			$('#my_qrcode span').hide();
+		})
+
+	}
+	function setProperty(obj,id,type){
+ 		if (type == 'limitsd' || type == 'menu') {
+ 			$("#limitsd_"+id).html($("#limitsd_"+id).html() + "...");
+ 		}
+		$(obj).html($(obj).html() + "...");
+		$.post("{php echo $this->createWebUrl('settuijian')}"
+			,{id:id,type:type, data: obj.getAttribute("data")}
+			,function(d){
+
+				if(type=='tuijian'){
+					$(obj).html($(obj).html().replace("...",""));
+					$(obj).html( d.data=='1'?'<i class="am-icon-star"></i>取消推荐':'<i class="am-icon-star-o"></i>设为推荐');
+					$(obj).attr("data",d.data);
+					if(d.result==1){
+						$(obj).toggleClass("btn-info");
+					}
+				}
+				if(type=='limitsd'){
+					$("#limitsd_"+id).html($("#limitsd_"+id).html().replace("...",""));
+					$("#limitsd_"+id).html( d.data=='0'?'<i class="am-icon-ban"></i>开始限速':'<i class="am-icon-ban"></i>限速中');
+
+				}
+				if(type=='menu'){
+					if (d.data=='0') {
+						$("#limitsd_"+id).removeClass('am-btn-secondary');
+						$("#limitsd_"+id).addClass('am-btn-default');
+					}else{
+						$("#limitsd_"+id).removeClass('am-btn-default');
+					$("#limitsd_"+id).addClass('am-btn-secondary');
+					}
+
+
+					$("#limitsd_"+id).html($("#limitsd_"+id).html().replace("...",""));
+					$("#limitsd_"+id).html( d.data=='0'?'<i class="am am-icon-plane"></i> 底部导航 <span class="am-icon-caret-down"></span>':'<i class="am am-icon-plane"></i> ' + d.menuname + ' <span class="am-icon-caret-down"></span>');
+
+				}
+
+
+			}
+			,"json"
+		);
+	}
+	$(document).ready(function() {
+		$('.tpl-index-tabs #link_copy').each(function(){
+			clip(this, $(this).attr('data'),link_swf);
+		});
+		$('.btn-loading-template').click(function () {
+		  var $btn = $(this)
+		  $btn.button('loading');
+		    setTimeout(function(){
+		      $btn.button('reset');
+		  }, 1200);
+		});
+		$('.btn').hover(function(){
+			$(this).tooltip('show');
+		},function(){
+			$(this).tooltip('hide');
+		});
+	});
+
+	function drop_confirm(msg, url){
+		if(confirm(msg)){
+			window.location = url;
+		}
+	}
+
+	function changecolor(id) {
+//		var color = '
+//			<style>
+//			.am-badge-success {
+//				background-color: {$huise};
+//			}
+//			.am-badge-warning {
+//				background-color: {$huise};
+//			}
+//			.am-badge-danger {
+//				background-color: {$huise};
+//			}
+//			.am-badge-primary {
+//				background-color: {$huise};
+//			}
+//			.am-badge-secondary {
+//				background-color: {$huise};
+//			}
+//			.am-badge-none {
+//				background-color: {$huise};
+//			}
+//			.am-btn-primary {
+//				background-color: {$huise};
+//				border-color: {$huise};
+//			}
+//			.am-btn-secondary {
+//				background-color: {$huise};
+//				border-color: {$huise};
+//			}
+//			.am-btn-success {
+//				background-color: {$huise};
+//				border-color: {$huise};
+//			}
+//			.am-btn-danger {
+//				background-color: {$huise};
+//				border-color: {$huise};
+//			}
+//			.am-btn-none {
+//				background-color: {$huise};
+//				border-color: {$huise};
+//			}
+//			.tpl-badge-yellow {
+//			    background-color: {$huise}!important;
+//			}
+//		</style>
+//		';
+		$(id).html(color);
+	}
+
+</script>
+{template 'web/common/footer_amaze'}

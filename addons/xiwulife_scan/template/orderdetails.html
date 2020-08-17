@@ -1,0 +1,282 @@
+{template 'xiwuheader'}
+<!-- Modal -->
+<style>
+.modal-backdrop.fade.in{opacity: 0}
+.modal.fade.in{ background: rgba(0,0,0,0.5); }
+</style>
+<div class="xiwulife_content">
+  <div class="center-back right-back">
+    <div class="container-fluid">
+      <div class="info-center">
+        <div class="page-header">
+          <div class="pull-left">
+            <h4>订单详情</h4></div>
+        </div>
+        <div class="panel panel-success">
+          <div class="panel-heading">操作</div>
+          <div class="panel-body">
+              {if $item['ordertype'] != 5}
+              <button class="btn btn-success" onclick="baidutts()">
+                <span class="fa fa-bullhorn"></span>取餐提醒</button>
+              {/if}
+              {if $item['status'] == 0}
+              <button class="btn btn-success" onclick="queren({$item['id']})">
+                <span class="fa fa-check-square-o"></span>确认接单</button>
+              {/if}
+              {if $item['status'] == 1 &&  $item['ordertype'] != 5}
+              <button class="btn btn-success" onclick="wancheng({$item['id']})">
+                <span class="fa fa-check-square-o"></span>确认送达</button>
+              {/if}
+              {if $item['payment'] == '现金支付' && $item['state'] != 1}
+              <button class="btn btn-success" onclick="xianjin({$item['id']})">
+                <span class="fa fa-usd"></span>支付确认</button>
+              {/if}
+              <button class="btn btn-success" onclick="dayin()">
+                <span class="fa fa-list-alt"></span>打印小票</button>
+              <button class="btn btn-success" onclick="shuaxin()">
+                <span class="fa fa-refresh"></span>刷新订单</button>
+          </div>
+        </div>
+        <div class="panel panel-success">
+          <div class="panel-heading">{$item['title']}</div>
+          <div class="table-responsive panel-body">
+            <div class="row">
+              <div class="bs-example" data-example-id="contextual-table" style="text-align:left;">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <th width="15%">订单类型：</th>
+                      {if $item['ordertype'] == 0 || $item['ordertype'] == ''}
+                      <td width="35%">扫码点餐（{$item['tablenumber']}）</td>
+                      {elseif $item['ordertype'] == 1}
+                      <td width="35%">预约订单</td>
+                      {elseif $item['ordertype'] == 2}
+                      <td width="35%">外卖订单</td>
+                      {elseif $item['ordertype'] == 3}
+                      <td width="35%">店内买单</td>
+                      {elseif $item['ordertype'] == 4}
+                      <td width="35%">排队取号</td>
+                      {elseif $item['ordertype'] == 5}
+                      <td width="35%">余额充值</td>
+                      {/if}
+                      <th width="15%">订单号：</th>
+                      <td width="35%">{$item['ordernumber']}</td></tr>
+                    <tr>
+                      <th width="15%">用户昵称：</th>
+                      <td width="35%">{$item['nickName']}</td>
+                      <th width="15%">订单状态：</th>{if $item['status'] == 0}
+                      <td width="35%">已下单{elseif $item['status'] == 1}
+                      <td width="35%">已接单{elseif $item['status'] == 2}
+                      <td width="35%">已送达{elseif $item['status'] == 3}
+                      <td width="35%">已完成{/if}（{if $item['state'] == 0}未付款{elseif $item['state'] == 1}已付款{elseif $item['state'] == 2}待确认{/if}）
+                      </td>
+                    </tr>
+                    {if $item['ordertype'] == 1}
+                    <tr>
+                      <th width="15%">联系人：</th>
+                      <td width="35%">{$item['men']}（电话：{$item['tel']}）</td>
+                      <th width="15%">预约时间：</th>
+                      <td width="35%">{$item['appointday']} {$item['appointtime']}</td>
+                    </tr>
+                    {/if}
+                    {if $item['ordertype'] == 2}
+                    <tr>
+                      <th width="15%">联系人：</th>
+                      <td width="35%">{$item['men']}（电话：{$item['tel']}）</td>
+                      <th width="15%">送餐地址：</th>
+                      <td width="35%">{$item['address']}</td>
+                    </tr>
+                    {/if}
+                    {if $item['orderlist']}
+                    <tr>
+                      <th colspan="4">取餐码：{$item['qucanma']}</th>
+                    </tr>
+                    <tr>
+                      <td colspan="4">{if $item['pindan'] == 0} {loop unserialize($item['orderlist']) $list}
+                        {if $list['goodtype'] == 0}
+                        <div class="col-sm-6 col-md-2 hahaha">
+                          <div class="thumbnail">
+                            <img style="height:150px" src="{$list['pic']}">
+                            <div class="ordertion">
+                              <h5>{$list['title']}</h5>
+                              <h5 class="ordercolor">{$list['price']}元
+                                <span style="float:right; padding:2px 10px; border-radius:3px;" class="btn-warning">x{$list['num']}</span></h5>
+                            </div>
+                          </div>
+                        </div>
+                        {/if}
+                        {if $list['goodtype'] == 1}
+                          {loop $list['spec'] $spec}
+                           {if $spec['num'] > 0}
+                          <div class="col-sm-6 col-md-2 hahaha">
+                            <div class="thumbnail">
+                              <img style="height:150px" src="{$list['pic']}">
+                              <div class="ordertion">
+                                <h5>{$list['title']}（{$spec['title']}）</h5>
+                                <h5 class="ordercolor">{$spec['price']}元
+                                  <span style="float:right; padding:2px 10px; border-radius:3px;" class="btn-warning">x{$spec['num']}</span></h5>
+                              </div>
+                            </div>
+                          </div>
+                          {/if}
+                          {/loop}
+                        {/if}
+                        {/loop}
+                        {else}
+                        {loop unserialize($item['orderlist']) $list}
+                        <div class="panel panel-warning">
+                          <div class="panel-heading">{$list['nickname']}</div>
+                          <div class="table-responsive panel-body">
+                            <div class="row">{loop $list['cart'] $list}
+                              {if $list['goodtype'] == 0}
+                              <div class="col-sm-6 col-md-2 hahaha">
+                                <div class="thumbnail">
+                                  <img style="height:150px" src="{$list['pic']}">
+                                  <div class="ordertion">
+                                    <h5>{$list['title']}</h5>
+                                    <h5 class="ordercolor">{$list['price']}元
+                                      <span style="float:right; padding:2px 10px; border-radius:3px;" class="btn-warning">x{$list['num']}</span></h5>
+                                  </div>
+                                </div>
+                              </div>
+                              {/if}
+                              {if $list['goodtype'] == 1}
+                                {loop $list['spec'] $spec}
+                                {if $spec['num'] > 0}
+                                <div class="col-sm-6 col-md-2 hahaha">
+                                  <div class="thumbnail">
+                                    <img style="height:150px" src="{$list['pic']}">
+                                    <div class="ordertion">
+                                      <h5>{$list['title']}（{$spec['title']}）</h5>
+                                      <h5 class="ordercolor">{$spec['price']}元
+                                        <span style="float:right; padding:2px 10px; border-radius:3px;" class="btn-warning">x{$spec['num']}</span></h5>
+                                    </div>
+                                  </div>
+                                </div>
+                                {/if}
+                                {/loop}
+                              {/if}
+                              {/loop}
+                            </div>
+                          </div>
+                        </div>
+                        {/loop}
+                        {/if}
+                      </td>
+                    </tr>
+                    {/if}
+                      <th width="15%">用餐人数：</th>
+                      <td width="35%">{$item['scannum']}</td>
+                      <th width="15%">下单时间：</th>
+                      <td width="35%">{php echo date('Y-m-d H:i:s',$item['time'])}</td></tr>
+                    <tr>
+                      <th width="15%">商品总价：</th>
+                      <td width="35%" class="ordercolor">{$item['price']}</td>
+                      <th width="15%">优惠：</th>
+                      <td width="35%" class="ordercolor">店铺优惠{$item['storediscount']}元，优惠券{$item['carddiscount']}元</td></tr>
+                    <tr>
+                      <th width="15%">支付方式：</th>
+                      <td width="35%" class="ordercolor">{$item['payment']}</td>
+                      <th width="15%">付款总价：</th>
+                      <td width="35%" class="ordercolor">{$item['payprice']}元</td></tr>
+                    <tr>
+                      <th width="15%">备注：</th>
+                      <td colspan="3">{$item['remarks']}</td></tr>
+                    <tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<audio class="audio" src=""></audio>
+  <script type="text/javascript">
+  function queren(id){
+    var url = "{php echo $this->createWebUrl('order',array('id' => $_GPC['id'],'sub' =>'orderdetails','click' => 'queren'));}";
+    $.ajax({
+      type: 'post',
+      data: {
+        id: id,
+      },
+      url: url,
+      success: function(d) {
+        xiwualert(d);
+        setTimeout(function(){
+           window.location.reload();
+        },1500);
+      }
+    })
+  }
+  function wancheng(id){
+    var url = "{php echo $this->createWebUrl('order',array('id' => $_GPC['id'],'sub' =>'orderdetails','click' => 'wancheng'));}";
+    $.ajax({
+      type: 'post',
+      data: {
+        id: id,
+      },
+      url: url,
+      success: function(d) {
+        xiwualert(d);
+        setTimeout(function(){
+           window.location.reload();
+        },1500);
+      }
+    })
+  }
+  function xianjin(id){
+    var url = "{php echo $this->createWebUrl('order',array('id' => $_GPC['id'],'sub' =>'orderdetails','click' => 'xianjin'));}";
+    $.ajax({
+      type: 'post',
+      data: {
+        id: id,
+      },
+      url: url,
+      success: function(d) {
+        xiwualert(d);
+        setTimeout(function(){
+           window.location.reload();
+        },1500);
+      }
+    })
+  }
+   function dayin(id){
+    var url = "{php echo $this->createWebUrl('order',array('id' => $_GPC['id'],'sub' =>'orderdetails','click' => 'dayin'));}";
+    $.ajax({
+      type: 'post',
+      data: {
+        id: id,
+      },
+      url: url,
+      success: function(d) {
+        xiwualert(d);
+        console.log(d);
+      }
+    })
+  }
+  function baidutts(id){
+    console.log($('.audio')[0].src);
+    var url = "{php echo $this->createWebUrl('order',array('id' => $_GPC['id'],'sub' =>'orderdetails','click' => 'baidutts'));}";
+    if($('.audio')[0].src != ''){
+      $.ajax({
+        type: 'post',
+        url: url,
+        success: function(d) {
+          $('.audio').attr('src',d);
+          var player = $(".audio")[0];
+          player.play();
+        }
+      })
+    }else{
+      var player = $(".audio")[0];
+      player.play();
+    }
+  }
+  function shuaxin(){
+     window.location.reload();
+  }
+  </script>
+{template 'xiwufooter'}

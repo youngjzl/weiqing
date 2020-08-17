@@ -1,0 +1,1142 @@
+{template 'web/common/header_amaze_post'}
+{if $foo == 'display'}
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-search"></span> 筛选
+	            </div>
+	        </div>
+	        <div class="tpl-block">
+	            <div class="am-g">
+	                <div class="tpl-form-body tpl-form-line">
+	                    <form class="am-form tpl-form-line-form" action="./index.php"  method="get" data-am-validator>
+	                    		<fieldset>
+					        <input type="hidden" name="c" value="site" />
+					        <input type="hidden" name="a" value="entry" />
+					        <input type="hidden" name="m" value="fm_photosvote" />
+					        <input type="hidden" name="do" value="provevote" />
+					        <input type="hidden" name="rid" value="{$_GPC['rid']}" />
+	                        	<div class="am-form-group">
+	                            <label for="fm-search" class="am-u-sm-3 am-form-label">综合搜索 <span class="tpl-form-line-small-title">Search</span></label>
+	                            <div class="am-u-sm-9">
+	                                <input type="text" name="keyword" value="{$_GPC['keyword']}" class="tpl-form-input" id="zh-search"  placeholder="请输入 用户编号（UID）或者 昵称"/>
+
+	                                <div class="am-alert am-alert-warning alert alert-dismissible" role="alert">
+	                                		<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="right: 0;"><span aria-hidden="true">&times;</span></button>
+									  	{if (!empty($_GPC['time']['start']))}在 {php echo date('Y-m-d', $starttime)} - {php echo date('Y-m-d', $endtime)}之间，{/if}系统已搜索到 {$total} 条{if $keyword}包含 “{$keyword}” 的相关{/if}数据......
+									</div>
+	                            </div>
+	                        	</div>
+	                        	{if $reply['regpay']}
+		                         <div class="am-form-group">
+	                                	<label for="user-intro" class="am-u-sm-3 am-form-label">是否付费 <span class="tpl-form-line-small-title">Pay</span></label>
+	                                	<div class="am-u-sm-9">
+	                                    <div class="tpl-switch">
+	                                        <input type="checkbox"  name="votepay" class="ios-switch bigswitch tpl-switch-btn" {if $_GPC['votepay'] == 'on'}checked{/if} />
+	                                        <div class="tpl-switch-btn-view">
+	                                            <div>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+
+	                                </div>
+	                           	</div>
+                           	{/if}
+                           	<div class="am-form-group">
+                                	<label for="user-intro" class="am-u-sm-3 am-form-label">报名时间 <span class="tpl-form-line-small-title">Time</span></label>
+                                	<div class="am-u-sm-9">
+                                		{php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d', $starttime),'endtime'=>date('Y-m-d', $endtime)));}
+                                </div>
+                           	</div>
+
+
+	                        <div class="am-form-group">
+	                            <div class="am-u-sm-9 am-u-sm-push-3">
+	                                <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success "><i class="am-icon-search"></i> 开始搜索</button>
+	                            </div>
+	                        </div>
+	                        </fieldset>
+	                    </form>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-users"></span> 参赛者管理
+	            </div>
+				<div class="actions">
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('download',array('rid'=>$rid, 'status'=>'1', 'start_time' =>$starttime, 'end_time'=>$endtime,'title'=>$reply['title'], 'uniacid'=>$reply['uniacid']))}" data-toggle="tooltip" data-placement="bottom"  title="导出该活动参赛用户数据" style="margin-right: 1.3rem;">
+	                		<i class="am-icon-download"></i> 导出
+					</a>
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('provevote', array('status' => '1', 'sh' => 'all', 'rid' => $rid, 'from_user' => $item['from_user'], 'foo' => 'display'))}" data-toggle="tooltip" data-placement="bottom"  title="全部通过审核" style="margin-right: 3.3rem;">
+	                		<i class="am-icon-download"></i> 全部通过
+					</a>
+				</div>
+	        </div>
+	        <div class="am-tabs tpl-index-tabs" data-am-tabs>
+					<div class="am-tabs-bd">
+						<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+							<div id="wrapperA" class="wrapper wrapper-h-auto">
+								<form method="post" class="am-form tpl-form-line-form" id="formfans">
+									<input type="hidden" name="op" value="del" />
+									<div class="tpl-scrollable" style="min-height: 200px;">
+										<table class="am-table am-table-hover tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th style="min-width: 300px;"><input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"> 参赛者</th>
+													<th width="350px">报名时间/进度</th>
+													<th width="200px">信息</th>
+													<th style="min-width: 230px;">状态 / 操作</th>
+												</tr>
+											</thead>
+											<tbody id="html_hdysh" class="">
+												{loop $list_praise $mid $row}
+												{php $level = intval($this->fmvipleavel($rid, $uniacid, $row['from_user']));}
+												{php $commentnum = $this->getcommentnum($rid, $uniacid, $row['from_user']);$fmimage = $this->getpicarr($uniacid,$rid, $row['from_user'],1);$tagname = $this->gettagname($row['tagid'],$row['tagpid'],$row['tagtid'],$rid);}
+												{php $acc  = uni_fetch($row['uniacid'])}
+												{php $hdinfo  = $this->gethdinfo($rid);$sytime = $this->getsytime($row['createtime'], $hdinfo['end_time'], '2');}
+												{if $sytime >= '100'}{php $sytime = '100';$color = 'huise';$disabled = 'am-disabled';}{else}{php $color = 'warning'}{/if}
+												<tr>
+													<td>
+														<div class="">
+															<input type="checkbox" name="uid[]" value="{$row['id']}" class="">
+															<span class="am-badge am-badge-warning am-round {if stristr($row['uid'],$keyword)}active{/if}">{$row['uid']}</span>
+															<span>
+																<img src="{php echo $this->getname($row['rid'],$row['from_user'],'4','avatar')}" alt="{php echo $this->getname($row['rid'],$row['from_user'],'20')}" class="user-pic am-img-thumbnail am-circle am-img-responsive" style="border-radius: 5px;">
+																<a class="font-yellow font-yellow-size"  href="{php echo $this->createWebUrl('provevote', array('status' => '1', 'member' => 1, 'foo' => 'post', 'rid' => $rid, 'from_user' => $row['from_user']))}">
+																	<span {if stristr($this->getusernames($row['realname'], $row['nickname']),$keyword)}class="active"{/if}>{php echo $this->getname($row['rid'],$row['from_user'],'10')}</span>
+																	<span class="level level_{$level}">{$level}</span>
+																	<span class="level {if $row['sex'] == 2}female{else}male{/if}"></span>
+																</a>
+															</span>
+														</div>
+														<div class="">
+															<span ><a href="javascript::;" class="label label-success" data-toggle="tooltip" data-placement="top" title="所属公众号">{$acc['name']}</a>
+														<!--<span ><a href="javascript::;" class="label label-warning" data-toggle="tooltip" data-placement="top" title="活跃等级">{$level} 级</a></span>-->
+															<span ><a href="javascript::;" class="label label-success" data-toggle="tooltip" data-placement="top" title="性别">{if $row['sex'] == 1}男{elseif $row['sex'] == 2}女{else}男{/if}</a></span>
+															<span ><a href="javascript::;" class="label label-info" data-toggle="tooltip" data-placement="top" title="用户参赛组别">{$tagname}</a></span>
+														</div>
+														<div class="am-img-fengmian">
+															<img src="{if (!empty($fmimage['photos']))}{php echo tomedia($fmimage['photos'])}{else}{FM_STATIC_MOBILE}public/images/nofoundpic.gif{/if}" alt="{php echo $this->getname($row['rid'],$row['from_user'],'20')}" class="am-img-thumbnail am-img-responsive" height="200">
+														</div>
+													</td>
+													<td>
+														<div class="am-alert am-alert-secondary am-text-xs">
+															<i class="am-icon-calendar"></i> {php echo date('Y-m-d H:i', $row['createtime']);}
+														</div>
+			                      						<span class="progress">
+			                    								<div class="am-progress am-progress-striped am-active"><div class="am-progress-bar am-progress-bar-{$color}" style="width:{$sytime}%">{$sytime}%</div></div>
+			                								</span>
+			                								<div class="progress-m-top">
+			                									<a class="am-badge am-badge-success am-round btn btn-default" data-toggle="tooltip" data-placement="top" title="真实票数" href="{php echo $this->createWebUrl('votelog', array('tfrom_user' => $row['from_user'], 'rid' => $rid))}"><i class="am-icon-clone"></i> 真实票数 {$row['photosnum']}</{php echo $this->createWebUrl('votelog', array('tfrom_user' => $row['from_user'], 'rid' => $rid))}>
+															<a class="am-badge am-badge-success am-round btn btn-default" data-toggle="tooltip" data-placement="top" title="虚拟票数" href="javascript:;"><i class="am-icon-clone"></i> 虚拟票数 {$row['xnphotosnum']}</a>
+															<span class="am-badge am-badge-primary am-round btn btn-default" data-toggle="tooltip" data-placement="top" title="真实人气"><i class="am-icon-eye"></i> 真实人气 {$row['hits']}</span>
+															<span class="am-badge am-badge-primary am-round btn btn-default" data-toggle="tooltip" data-placement="top" title="虚拟人气"><i class="am-icon-eye"></i> 虚拟人气 {php echo intval($row['xnhits'])}</span>
+															<span class="am-badge am-badge-none am-round btn btn-default" data-toggle="tooltip" data-placement="top" title="减少的票数"><i class="am-icon-user-times"></i> 减少的票数 {$row['unphotosnum']}</span>
+															<span class="am-badge am-badge-none am-round btn btn-default" data-toggle="tooltip" data-placement="top" title="减少的人气"><i class="am-icon-eye-slash"></i> 减少的人气 {$row['unhits']}</span>
+															<span class="am-badge am-badge-warning am-round b-purple btn btn-default" data-toggle="tooltip" data-placement="top" title="分享数"><i class="am-icon-share-alt"></i> 分享数 {$row['sharenum']}</span>
+															<a class="am-badge am-badge-warning am-round btn btn-default" data-toggle="tooltip" data-placement="top" title="点赞数" href="{php echo $this->createWebUrl('message', array('tfrom_user' => $row['from_user'], 'rid' => $rid, 'zan' => '1', 'keyword' => $row['from_user']))}"><i class="am-icon-thumbs-o-up"></i> 点赞数 {php echo intval($row['zans'])}</a>
+															<a class="am-badge am-badge-warning am-round btn btn-default" data-toggle="tooltip" data-placement="top" title="评论数" href="{php echo $this->createWebUrl('message', array('tfrom_user' => $row['from_user'], 'rid' => $rid, 'keyword' => $row['from_user']))}"><i class="am-icon-comment"></i> 评论数 {$commentnum}</a>
+															<a class="am-badge am-badge-danger am-round btn btn-default" data-toggle="tooltip" data-placement="top" title="收到的礼物" href="{php echo $this->createWebUrl('votemembers', array('tfrom_user' => $row['from_user'], 'rid' => $rid, 'op' => 'credit_record', 'foo' => 'mygetgift'))}"><i class="am-icon-gift"></i> 收到的礼物 {php echo $this->getgiftnum($rid, $row['from_user'])}</a>
+															<a class="am-badge am-badge-danger am-round btn btn-default" data-toggle="tooltip" data-placement="top" title="获得的金额" href="{php echo $this->createWebUrl('votemembers', array('rid' => $rid, 'op' => 'allxiaofei', 'keyword' => $row['from_user'], 'tuser' => '1'))}"><i class="am-icon-money"></i> 获得的金额 {php echo $this->getregusermoney($rid, $row['from_user'])}</a>
+
+			                								</div>
+
+													</td>
+													<td>
+														<span class="am-badge am-badge-info">手机:{$row['mobile']}</span>
+														<span class="am-badge am-badge-info">宣言:{$row['photoname']}</span>
+														<span class="am-badge am-badge-info">音频:{php echo $this->getusermedia(rid,$row['from_user'],'music')}</span>
+														<span class="am-badge am-badge-info">视频:{php echo $this->getusermedia(rid,$row['from_user'],'video')}</span>
+													</td>
+													<td>
+														<div class="" style="margin-bottom: 1em;">
+														{if $reply['regpay']}<span >{if $row['ordersn']}<a href="javascript:;" class="label label-success" data-toggle="tooltip" data-placement="top" title="是否付费">已付费</a>{else}<a href="javascript:;" class="label label-danger" data-toggle="tooltip" data-placement="top" title="是否付费">未付费</a>{/if}</span>{/if}
+														{if $row['status']==1}<span ><a href="javascript:;" class="label label-success" data-toggle="tooltip" data-placement="top" title="是否审核">已审核</a></span>{else}<span ><a href="javascript:;" class="label label-warning" data-toggle="tooltip" data-placement="top" title="是否审核">未审核</a></span>{/if}
+														</div>
+														<div class="am-btn-toolbar">
+															<div class="am-btn-group am-btn-group-xs">
+																<a class="am-btn am-btn-default btn " data-toggle="tooltip" data-placement="top" href="{php echo $this->createWebUrl('provevote', array('status' => '1', 'member' => 1, 'foo' => 'post', 'rid' => $rid, 'from_user' => $row['from_user']))}" title="活动编辑" target="_blank"><i class="am-icon-edit"></i> 查看</a>
+																<a class="am-btn am-btn-default btn " data-toggle="tooltip" data-placement="top" href="{php echo $this->createWebUrl('provevote', array('status' => '1', 'sh' => '1', 'rid' => $rid, 'from_user' => $row['from_user'], 'foo' => 'display'))}" title="通过审核" target="_blank"><i class="am-icon-edit"></i> 通过</a>
+																<a class="am-btn am-btn-default btn" data-toggle="tooltip" data-placement="top" href="#" onclick="drop_confirm('您确定要删除该参赛者吗，删除后无法恢复，请谨慎操作?', '{php echo $this->createWebUrl('deletefans',array('rid'=>$row['rid'], 'uid'=>$row['uid'], 'type' => 'one'))}');" title="删除该参赛者吗，删除后无法恢复，请谨慎操作"><i class="am-icon-times"></i> 删除</a>
+															</div>
+														</div>
+													</td>
+												</tr>
+												{/loop}
+												<tr>
+													<td colspan="2" style="line-height: 8.2em;">
+								                                <div class="am-btn-toolbar">
+																	<div class="am-btn-group am-btn-group-sm">
+								                            				<input type="checkbox" class="checkbox-all" style="margin-right: 1em; margin-top: 0.5em;" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+								                                			<input name="token" type="hidden" value="{$_W['token']}" />
+								                                			<input type="hidden" name="submit_sh" class="am-btn am-btn-primary btn" data="sh" value="批量通过审核" data-toggle="tooltip" data-placement="top" title="将选中的参赛者批量通过审核">
+								                                			<input type="submit" name="submit" class="am-btn am-btn-danger btn" value="删除选中的粉丝" data-toggle="tooltip" data-placement="top" title="删除选中的参赛者，一旦删除则无法恢复，请谨慎选择！">
+								                                		</div>
+								                                </div>
+													</td>
+
+													<td colspan="8" style="line-height: 10em;">
+														<div style="text-align: center;">{$pager}</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+	    </div>
+	</div>
+</div>
+<script>
+	require(['jquery', 'util'], function($, u){
+  		$('#formfans').submit(function(){
+	        if($(":checkbox[name='uid[]']:checked").size() > 0){
+	          	var check = $(":checkbox[name='uid[]']:checked");
+			        if( confirm("确认要删除选择的参赛者?")){
+			            var id = new Array();
+			            var rid = {$rid};
+			                check.each(function(i){
+			                  	id[i] = $(this).val();
+			                });
+			            $.post('{php echo $this->createWebUrl('deletefans')}', {idArr:id,rid:rid},function(data){
+			              	if (data.errno ==0){
+			            			location.reload();
+			              	} else {
+			               		alert(data.error);
+			             	}
+			            },'json');
+			        }
+
+	        }else{
+	            u.message('没有选择参赛者', '', 'error');
+	            return false;
+	        }
+	  	});
+
+	});
+</script>
+
+
+{elseif $foo == 'post'}
+<link rel="stylesheet" href="{FM_STATIC_WEB}public/web/assets/css/app_post.css?v=1">
+<style>
+  .parentFileBox>.fileBoxUl>li>.imagedel>a>.diyCancel {
+    background: url({FM_STATIC_MOBILE}stylebase/images/x_alt.png) no-repeat;
+    top: 2px;
+  }
+  .parentFileBox>.fileBoxUl>li>.videodel>a>.diyCancel {
+    background: url({FM_STATIC_MOBILE}stylebase/images/x_alt.png) no-repeat;
+    top: 2px;
+  }
+  .parentFileBox>.fileBoxUl>li>.musicdel>a>.diyCancel {
+    background: url({FM_STATIC_MOBILE}stylebase/images/x_alt.png) no-repeat;
+    top: 2px;
+  }
+  .parentFileBox>.fileBoxUl>li>.setfm>a>.isfm {
+    background: url({FM_STATIC_MOBILE}stylebase/images/check_alt.png) no-repeat;
+  }
+  .parentFileBox>.fileBoxUl>li>.diyFileName {
+    background: url({FM_STATIC_MOBILE}stylebase/images/bgblack.png);
+  }
+
+  	.smile_popo {
+      height: 30px;
+      background: url({FM_STATIC_MOBILE}stylebase/images/popo_2adefed.png) no-repeat 50% 0
+  	}
+  	.level {
+      background-image: url({FM_STATIC_MOBILE}stylebase/images/new_sglobal_icon.png);
+  	}
+</style>
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-user"></span> 参赛者详情
+	            </div>
+	        </div>
+	        <div class="tpl-block">
+	            <div class="am-g">
+	                <div class="tpl-form-body tpl-form-line">
+	                    <form class="am-form tpl-form-line-form form" action=""  method="post" enctype="multipart/form-data" id="form_post_users" data-am-validator>
+	                    		<fieldset>
+		                        	<div class="am-form-group">
+		                            <label for="fm_openid" class="am-u-sm-3 am-form-label">唯一识别码 <span class="tpl-form-line-small-title">Openid</span></label>
+		                            <div class="am-u-sm-9">
+		                                	<input type="text" class="tpl-form-input" readonly value="{if $item['from_user']}{$item['from_user']}{else}{$from_user}{/if}"/>
+										<p class="am-form-help">参赛者唯一识别码，系统自动生成或者用户自带，请勿修改！</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_uid" class="am-u-sm-3 am-form-label">参赛ID <span class="tpl-form-line-small-title">Uid</span></label>
+		                            <div class="am-u-sm-9">
+		                                	<input type="text" name = "uid" class="tpl-form-input" value="{$item['uid']}" id="fm_uid" placeholder='uid,系统自动生成'/>
+										<p class="am-form-help">参赛 ID, 系统会自动生成，一般情况请勿随意修改，修改请慎重！</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label class="am-u-sm-3 am-form-label">活跃等级 <span class="tpl-form-line-small-title">Level</span></label>
+		                            <div class="am-u-sm-9">
+            								<span class="am-badge am-badge-warning">{$level} 级</span>
+										<p class="am-form-help">活跃等级即为用户活跃度，等级由系统自动根据用户的：投票数量、拉票数、人气、点赞、转发，积分等各项参数整合分析，综合评定，人工无需操作。</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label class="am-u-sm-3 am-form-label">积分 <span class="tpl-form-line-small-title">Point</span></label>
+		                            <div class="am-u-sm-9">
+		                                	<input type="text" name = "jifen" class="tpl-form-input" value="{$jifen}" minlength="1" placeholder=''/>
+										<p class="am-form-help">积分</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_avatar" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 头像 <span class="tpl-form-line-small-title">Avatar</span></label>
+		                            <div class="am-u-sm-9">
+		                                	{php echo tpl_fans_form('avatar', $item['avatar']);}
+										<p class="am-form-help">参赛者头像！</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_nickname" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle  color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填" ></span> 昵称 <span class="tpl-form-line-small-title">Username</span><span></label>
+		                            <div class="am-u-sm-9">
+		                                	<input type="text" name = "nickname" class="tpl-form-input" value="{$item['nickname']}" id="fm_nickname" placeholder='请填写参赛者昵称' required/>
+										<p class="am-form-help">参赛者昵称或者参赛作品名称</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_sex" class="am-u-sm-3 am-form-label">性别 <span class="tpl-form-line-small-title">Sex</span></label>
+		                            <div class="am-u-sm-9">
+							            <label class='am-radio-inline'>
+							              <input type='radio' name='sex' value='1' {if $item['sex']==1}checked{/if} required/> 男
+							            </label>
+							            <label class='am-radio-inline'>
+							              <input type='radio' name='sex' value='2' {if $item['sex']==2}checked{/if} required/> 女
+							            </label>
+		                                	<label class='am-radio-inline'>
+							              <input type='radio' name='sex' value='0' {if $item['sex']==0}checked{/if} required/> 其他
+							            </label>
+										<p class="am-form-help">性别</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_group" class="am-u-sm-3 am-form-label">分组 <span class="tpl-form-line-small-title">Group</span></label>
+		                            <div class="am-u-sm-9"><style>.col-md-6 {width: 33%;}</style>
+            								{php echo fm_form_category_2level('category', $parent, $children, $tagpid, $tagid, $tagtid)}
+										<p class="am-form-help">参赛者所属分组</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_photoname" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle  color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填" ></span> {if empty($regtitlearr['cmmphotosname'])}宣言{else}{$regtitlearr['cmmphotosname']}{/if} <span class="tpl-form-line-small-title">Declaration</span></label>
+		                            <div class="am-u-sm-9">
+		                            		<div class="input-group">
+		                                		<input type="text" name = "photoname" class="tpl-form-input form-control" value="{$item['photoname']}" id="fm_photoname" placeholder="请填写参赛者{if empty($regtitlearr['cmmphotosname'])}宣言{else}{$regtitlearr['cmmphotosname']}{/if}" required/>
+		                                		<span class="input-group-btn">
+		                                			<a class ="am btn btn-default" href="{php echo $this->createWebUrl('provevote', array('rid'=>$rid,'foo'=>'pnametag'))}">添加默认{if empty($regtitlearr['cmmphotosname'])}宣言{else}{$regtitlearr['cmmphotosname']}{/if}</a>
+		                                		</span>
+		                                	</div>
+										<p class="am-form-help">参赛者 {if empty($regtitlearr['cmmphotosname'])}宣言{else}{$regtitlearr['cmmphotosname']}{/if}</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_realname" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle  color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填" ></span> 姓名 <span class="tpl-form-line-small-title">Realname</span></label>
+		                            <div class="am-u-sm-9">
+		                                	<input type="text" name = "realname" class="tpl-form-input" value="{$item['realname']}" id="fm_realname" placeholder='请填写参赛者真实姓名' required/>
+										<p class="am-form-help">参赛者真实姓名</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_mobile" class="am-u-sm-3 am-form-label">{$regtitlearr['cmmmobile']} <span class="tpl-form-line-small-title">Mobile</span></label>
+		                            <div class="am-u-sm-9">
+		                                	<input type="text" name = "mobile" class="tpl-form-input" value="{$item['mobile']}" id="fm_mobile" placeholder="请填写参赛者{$regtitlearr['cmmmobile']}"/>
+										<p class="am-form-help">参赛者 {$regtitlearr['cmmmobile']}</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_weixin" class="am-u-sm-3 am-form-label">{$regtitlearr['cmmweixin']} <span class="tpl-form-line-small-title">Wechat</span></label>
+		                            <div class="am-u-sm-9">
+		                                	<input type="text" name = "weixin" class="tpl-form-input" value="{$item['weixin']}" id="fm_weixin" placeholder="请填写参赛者{$regtitlearr['cmmweixin']}"/>
+										<p class="am-form-help">参赛者 {$regtitlearr['cmmweixin']}</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_qqhao" class="am-u-sm-3 am-form-label">{$regtitlearr['cmmqqhao']} <span class="tpl-form-line-small-title">QQ</span></label>
+		                            <div class="am-u-sm-9">
+		                                	<input type="text" name = "qqhao" class="tpl-form-input" value="{$item['qqhao']}" id="fm_qqhao" placeholder="请填写参赛者{$regtitlearr['cmmqqhao']}"/>
+										<p class="am-form-help">参赛者 {$regtitlearr['cmmqqhao']}</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_email" class="am-u-sm-3 am-form-label">{$regtitlearr['cmmemail']} <span class="tpl-form-line-small-title">Email</span></label>
+		                            <div class="am-u-sm-9">
+		                                	<input type="text" name = "email" class="tpl-form-input" value="{$item['email']}" id="fm_email" placeholder="请填写参赛者{$regtitlearr['cmmemail']}"/>
+										<p class="am-form-help">参赛者 {$regtitlearr['cmmemail']}</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_job" class="am-u-sm-3 am-form-label">{$regtitlearr['cmmjob']} <span class="tpl-form-line-small-title">Job</span></label>
+		                            <div class="am-u-sm-9">
+		                                	<input type="text" name = "job" class="tpl-form-input" value="{$item['job']}" id="fm_job" placeholder="请填写参赛者{$regtitlearr['cmmjob']}"/>
+										<p class="am-form-help">参赛者 {$regtitlearr['cmmjob']}</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_xingqu" class="am-u-sm-3 am-form-label">{$regtitlearr['cmmxingqu']} <span class="tpl-form-line-small-title">Hobby</span></label>
+		                            <div class="am-u-sm-9">
+		                                	<input type="text" name = "xingqu" class="tpl-form-input" value="{$item['xingqu']}" id="fm_xingqu" placeholder="请填写参赛者{$regtitlearr['cmmxingqu']}"/>
+										<p class="am-form-help">参赛者 {$regtitlearr['cmmxingqu']}</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_address" class="am-u-sm-3 am-form-label">{$regtitlearr['cmmaddress']} <span class="tpl-form-line-small-title">Address</span></label>
+		                            <div class="am-u-sm-9">
+		                                	<input type="text" name = "address" class="tpl-form-input" value="{$item['address']}" id="fm_address" placeholder="请填写参赛者{$regtitlearr['cmmaddress']}"/>
+										<p class="am-form-help">参赛者 {$regtitlearr['cmmaddress']}</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_des" class="am-u-sm-3 am-form-label">{if empty($regtitlearr['cmmregdes'])}介绍{else}{$regtitlearr['cmmregdes']}{/if} <span class="tpl-form-line-small-title">Description</span></label>
+		                            <div class="am-u-sm-9">
+		                                	{php echo tpl_ueditor('description', $item['description']);}
+										<p class="am-form-help">参赛者 {if empty($regtitlearr['cmmregdes'])}介绍{else}{$regtitlearr['cmmregdes']}{/if}</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_qrcode" class="am-u-sm-3 am-form-label">海报二维码 <span class="tpl-form-line-small-title">Qrcode</span></label>
+		                            <div class="am-u-sm-9">
+		                                	<img src="{php echo tomedia($item['haibao'])}">
+										<p class="am-form-help">参赛者活动端生成的海报二维码</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_picture" class="am-u-sm-3 am-form-label">参赛照片 <span class="tpl-form-line-small-title">Picture</span></label>
+		                            <div class="am-u-sm-9">
+		                            		{if !empty($picarrs)}
+								              {loop $picarrs $pitem}
+								                <div class="parentFileBox allbox{$pitem['id']}" id="parentFileBox{$pitem['id']}" style="width: 30%;  margin-right: 3%;margin-top:3%;">
+								                  <a href="javascript:;" class="fmwebuploader-pick" id="webuploader{$pitem['id']}" onclick="javascript:$('#photo{$pitem['id']}').click();" style="display:none; width: 100%;height: 180px;" /><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 15%;  top: 5%;"/></a>
+								                    <ul class="fileBoxUl" style="  width: 100%;height: 180px;">
+								                      <li id="fileBox_WU_FILE_{$pitem['id']}" class="diyUploadHover" style="  width: 100%; height: 180px;margin-top: 0;margin-left: 0;">
+								                        <div class="viewThumb"  style="  width: 100%; height: 180px;">
+								                            <a href="javascript:;" onclick="javascript:$('#photo{$pitem['id']}').click();" ><img src="{php echo toimage($pitem['photos'])}" id="preview{$pitem['id']}" width="100%;" /></a>
+								                        </div>
+								                        <div id="imagedel{$pitem['id']}" class="imagedel"><a href="javascript:;" onclick="imagedel('{$pitem['id']}')"><div class="diyCancel" id="diyCancel{$pitem['id']}" style="display:block;" ></div></a></div>
+								                        <div ><a href="{php echo toimage($pitem['photos'])}" target="_blank" ><div class="diySuccess am-pic-ckyt" width="100%;" style="">查看原图</div></a></div>
+								                        <div id="setfm{$pitem['id']}" class="setfm">
+								                        		<a href="javascript:;" id="setfm{$pitem['id']}" onclick="setfm('{$pitem['id']}')">
+								                        			<div class="diySuccess am-pic-swfm {if $pitem['isfm']}isfm{/if}" id="diySuccess{$pitem['id']}" width="100%;" >{if !$pitem['isfm']}设为封面{/if}</div>
+								                        		</a>
+								                        </div>
+								                        <div class="diyFileName" id="diyFileName{$pitem['id']}">preview.png</div>
+								                        <div class="diyBar" id="diyBar{$pitem['id']}" style="display:none">
+								                            <div class="diyProgress" id="diyProgress{$pitem['id']}"></div>
+								                            <div class="diyProgressText" id="diyProgressText{$pitem['id']}"></div>
+								                        </div>
+								                      </li>
+								                    </ul>
+								                 </div>
+								                 <div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">
+								                  <input type="file" name="photo{$pitem['id']}" id="photo{$pitem['id']}" class="webuploader-element-invisible" style="display:none;" accept="image/*" capture="camera" onchange="changeone('photo{$pitem['id']}', '{$pitem['id']}')" >
+								                </div>
+								              {/loop}
+								              {if $photosarrnum < $reply['tpxz']}
+								                <div class="parentFileBox allbox{$mid}" id="parentFileBox{$mid}" style="width: 30%;  margin-right: 3%;margin-top:3%;">
+								                  <a href="javascript:;" class="fmwebuploader-pick" id="webuploader{$mid}" onclick="javascript:$('#photo{$mid}').click();" style="  width: 100%;height: 180px;"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 15%;  top: 5%;"/></a>
+
+								                    <ul class="fileBoxUl" style="  width: 100%;height: 180px;">
+								                      <li id="fileBox_WU_FILE_{$mid}" class="diyUploadHover" style="  width: 100%; height: 180px;margin-top: 0;margin-left: 0;">
+								                        <div class="viewThumb" style="  width: 100%; height: 180px;">
+								                            <img src="" id="preview{$mid}"/>
+								                        </div>
+								                        <div id="imagedel{$mid}" class="imagedel"><a href="javascript:;" onclick="imagedel('{$mid}')"><div class="diyCancel" id="diyCancel{$mid}" width="100%;"></div></a></div>
+								                        <div id="setfm{$mid}" class="setfm"><a href="javascript:;" id="setfm{$mid}" onclick="setfm('{$mid}')"><div class="diySuccess am-pic-swfm" id="diySuccess{$mid}" width="100%;">设为封面</div></a></div>
+								                        <div class="diyFileName" id="diyFileName{$mid}">preview.png</div>
+								                        <div class="diyBar" id="diyBar{$mid}" style="display:none">
+								                            <div class="diyProgress" id="diyProgress{$mid}"></div>
+								                            <div class="diyProgressText" id="diyProgressText{$mid}"></div>
+								                        </div>
+								                      </li>
+								                    </ul>
+								                 </div>
+								                 <div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">
+								                  <input type="file" name="photo{$mid}" id="photo{$mid}" class="webuploader-element-invisible" style="display:none;" accept="image/*" capture="camera" onchange="changeone('photo{$mid}', '{$mid}')" >
+								                </div>
+								              {/if}
+								              <div id="afteradd"></div>
+								        {else}
+								              <div class="parentFileBox allbox{$mid}" id="parentFileBox{$mid}" style="width: 30%;  margin-right: 3%;margin-top:3%;">
+								                <a href="javascript:;" class="fmwebuploader-pick" id="webuploader{$mid}" onclick="javascript:$('#photo{$mid}').click();" style="  width: 100%;height: 180px;"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 15%;  top: 5%;"/></a>
+								                  <ul class="fileBoxUl" style="  width: 100%;height: 180px;">
+								                    <li id="fileBox_WU_FILE_{$mid}" class="diyUploadHover" style="  width: 100%; height: 180px;margin-top: 0;margin-left: 0;">
+								                      <div class="viewThumb" style="  width: 100%; height: 180px;">
+								                          <img src="" id="preview{$mid}" width="100%;"/>
+								                      </div>
+								                      <div id="imagedel{$mid}" class="imagedel"><a href="javascript:;"  onclick="imagedel('{$mid}')"><div class="diyCancel" id="diyCancel{$mid}" ></div></a></div>
+								                      <div id="setfm{$mid}" class="setfm"><a href="javascript:;" id="setfm{$mid}" onclick="setfm('{$mid}')"><div class="diySuccess am-pic-swfm" id="diySuccess{$mid}" width="100%;">设为封面</div></a></div>
+								                      <div class="diyFileName" id="diyFileName{$mid}">preview.png</div>
+								                      <div class="diyBar" id="diyBar{$mid}" style="display:none">
+								                          <div class="diyProgress" id="diyProgress{$mid}"></div>
+								                          <div class="diyProgressText" id="diyProgressText{$mid}"></div>
+								                      </div>
+								                    </li>
+								                  </ul>
+								               </div>
+								               <div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">
+								                <input type="file" name="photo{$mid}" id="photo{$mid}" class="webuploader-element-invisible" style="display:none;" accept="image/*" capture="camera" onchange="changeone('photo{$mid}', '{$mid}')" >
+								              </div>
+								              <div id="afteraddnew"></div>
+								            {/if}
+		                            </div>
+		                        	</div>
+
+
+		                        	<div class="am-form-group">
+		                            <label for="fm_audio" class="am-u-sm-3 am-form-label">录音 <span class="tpl-form-line-small-title">Record</span></label>
+		                            <div class="am-u-sm-9">
+							            <audio id="audio" controls preload="none">
+							              <source src="{php echo tomedia($item['voice'])}" type="audio/mpeg" codecs="mp3"></source>
+							            </audio>
+										<p class="am-form-help">参赛者报名录音</p>
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_audio" class="am-u-sm-3 am-form-label">上传音频 <span class="tpl-form-line-small-title">Music</span></label>
+		                            <div class="am-u-sm-9">
+							            <div class="parentFileBox allboxm" id="parentFileBoxm" style="width: 50%;">
+								            <a href="javascript:;" class="fmwebuploader-pick" id="webuploaderm" onclick="javascript:$('#music').click();" style="{if !empty($item['music'])}display:none;{/if} width: 90%;height: 200px;  background: #E7E7E7;"><img src="{FM_STATIC_MOBILE}public/images/music.png?v=3.0" width="30" style="width: 30%;position: absolute; z-index: 11;  text-align: center;  left: 35%;top:15%" /></a>
+
+								                <ul class="fileBoxUl">
+								                  <li id="fileBox_WU_FILE_m" class="diyUploadHover" style="width: 90%;height: 200px;">
+								                    <div class="viewThumb" id="musicpreview" style="  width: 100%;height: 200px;background:#E7E7E7 url('{if !empty($item['music'])}{php echo $this->getphotos($fmimage['photos'], $item['avatar'], $reply['picture'])}{/if}') no-repeat;  background-size: 100% 100%;">
+								                        {if !empty($item['music'])}
+								                        <link rel="stylesheet" href="{FM_STATIC_MOBILE}audio/css/style.css?{TIMESTAMP}" media="screen" type="text/css" />
+								                        <style type="text/css">label { text-shadow: 0px 0px 0px #000;}</style>
+								                      <div id="players" style="position: absolute;top: 32%;bottom: 0;  text-align: center; left: 42%;  background: rgba(0, 0, 0, 0.5);">
+								                        <audio id="audio" controls preload="none">
+								                          <source src="{php echo tomedia($item['music'])}" type="audio/mpeg" codecs="mp3"></source>
+								                        </audio>
+								                        <div class="coveraudio" style="top: 5%;right: 18px;opacity: 0.8;">
+								                          <div class="controls">
+								                            <button id="play-pause" title="Play" onclick="togglePlayPause()"><i class="fa fa-play fa-2x"></i></button>
+								                          </div><!-- #controls -->
+								                        </div><!-- #coveraudio -->
+								                      </div><!-- #player -->
+								                      <script src="{FM_STATIC_MOBILE}audio/js/audio.js?{TIMESTAMP}"></script>
+								                    {/if}
+								                    </div>
+								                    <div id="musicdel" class="musicdel"><a href="javascript:;" onclick="musicdel('{$item['music']}')"><div class="diyCancel" id="diyCancelm" width="100%;" {if !empty($item['music'])}style="display:block;"{/if}></div></a></div>
+								                    <div class="diyFileName" id="diyFileNamev">preview.png</div>
+								                    <div class="diyBar" id="diyBarm" style="display:none">
+								                        <div class="diyProgress" id="diyProgressm" style="top:0;height:200px;"></div>
+								                        <div class="diyProgressText" id="diyProgressTextm" style="font-size: 25px;"></div>
+								                    </div>
+								                  </li>
+								                </ul>
+								            </div>
+								            <div class="am-m-input">
+								              <input type="file" name="music" id="music" class="webuploader-element-invisible" style="display:none;" accept="audio/*" capture="camcorder" onchange="audios('music', 'm')" >
+								            </div>
+								            <div id="musicafter"></div>
+		                            </div>
+		                        	</div>
+
+								<div class="am-form-group">
+		                            <label for="fm_video" class="am-u-sm-3 am-form-label">上传视频 <span class="tpl-form-line-small-title">Video</span></label>
+		                            <div class="am-u-sm-9">
+							            {loop $videoarr $row}
+						                    <div class="parentFileBox allboxv{$row['id']}" id="parentFileBoxv{$row['id']}" style="width: 100%;">
+						                          <ul class="fileBoxUl">
+						                            <li id="fileBox_WU_FILE_v{$row['id']}" class="diyUploadHover" style="  width: 90%;height: 200px;">
+						                              <div class="viewThumb" id="vediopreview{$row['id']}" style="  width: 100%;height: 200px;">
+						                                 <video controls preload="auto" width="100%" height="200" id="previewv{$row['id']}" poster="{php echo $this->getphotos($fmimage['photos'], $mygift['avatar'], $rbasic['picture'])}">
+						                                  <source src="{php echo tomedia($row['videopath'])}" type='video/mp4' />
+						                                  <p class="vjs-no-js">你的浏览器不支持该视频</a></p>
+						                                	</video>
+
+						                              </div>
+						                               <div id="videodel{$row['id']}" class="videodel"><a href="javascript:;" onclick="videodel('{$row['id']}')"><div class="diyCancel" id="diyCancelv{$row['id']}" width="100%;" {if !empty($row['videopath'])}style="display:block;"{/if}></div></a></div>
+						                              <div class="diyFileName" id="diyFileNamev{$row['id']}">preview.png</div>
+						                              <div class="diyBar" id="diyBarv{$row['id']}" style="display:none">
+						                                  <div class="diyProgress" id="diyProgressv{$row['id']}" style="top:0;height:200px;"></div>
+						                                  <div class="diyProgressText" id="diyProgressTextv{$row['id']}" style="font-size: 25px;"></div>
+						                              </div>
+						                            </li>
+						                          </ul>
+						                     </div>
+						                     <div class="am-v-input">
+						                        <input type="file" name="vedio" id="vedio{$row['id']}" class="webuploader-element-invisible" style="display:block;" accept="video/*"  onchange="audios('vedio', 'v{$row['id']}')" >
+						                     </div>
+						                {/loop}
+
+							            <div class="parentFileBox allboxv" id="parentFileBoxv" style="width: 50%;">
+							              <a href="javascript:;" class="fmwebuploader-pick" id="webuploaderv" onclick="javascript:$('#vedio').click();" style="{if !empty($item['vedio'])}display:none;{/if} width: 90%;height: 200px;  background: #E7E7E7;"><img src="{FM_STATIC_MOBILE}public/images/video.png?v=3.0" width="30" style="width: 30%;position: absolute; z-index: 11;  text-align: center;  left: 35%;top:35%" /></a>
+
+							                <ul class="fileBoxUl">
+							                  <li id="fileBox_WU_FILE_v" class="diyUploadHover" style="  width: 90%;height: 200px;">
+							                    <div class="viewThumb" id="vediopreview" style=" background:#E7E7E7; width: 100%;height: 200px;">
+
+							                          <video controls preload="auto" width="100%" height="200" id="previewv" poster="{if !empty($item['vedio'])}{php echo $this->getphotos($fmimage['photos'], $item['avatar'], $reply['picture'])}{/if}">
+							                        <source src="{php echo tomedia($item['vedio'])}" type='video/mp4' />
+							                        <p class="vjs-no-js">你的浏览器不支持该视频</a></p>
+							                      </video>
+
+							                    </div>
+							                    <div id="videodel" class="videodel"><a href="javascript:;" onclick="videodel('{$item['vedio']}')"><div class="diyCancel" id="diyCancelv" width="100%;" {if !empty($item['vedio'])}style="display:block;"{/if}></div></a></div>
+							                    <div class="diyFileName" id="diyFileNamev">preview.png</div>
+							                    <div class="diyBar" id="diyBarv" style="display:none">
+							                        <div class="diyProgress" id="diyProgressv" style="top:0;height:200px;"></div>
+							                        <div class="diyProgressText" id="diyProgressTextv" style="font-size: 25px;"></div>
+							                    </div>
+							                  </li>
+							                </ul>
+							            </div>
+							            <div class="am-m-input">
+							              <input type="file" name="vedio" id="vedio" class="webuploader-element-invisible" style="display:none;" accept="video/*" capture="camcorder" onchange="audios('vedio', 'v')" >
+							            </div>
+							            <div id="vedioafter"></div>
+		                            </div>
+		                        	</div>
+
+		                        	<div class="am-form-group">
+		                            <label for="fm_audio" class="am-u-sm-3 am-form-label">网络视频 <span class="tpl-form-line-small-title">Network</span></label>
+		                            <div class="am-u-sm-9">
+		                            		<div class="input-group">
+		                                		<span class="input-group-btn">
+							            			<textarea name="youkuurl" class="tpl-form-input form-control" placeholder="请填写例如： 优酷、土豆、腾讯视频的通用代码。详细方法请点击说明" cols="70" items="100">{$item['youkuurl']}</textarea>
+
+							            		</span>
+							            	</div>
+							            	<a href="http://bbs.fmoons.com/forum.php?mod=viewthread&tid=6&extra=page%3D1" class="am btn btn-default" target="_blank">填写说明</a>
+							            <div style="clear:both;"></div>
+							            <br />
+							            <div><span>预览：</span></div>
+							            {if !empty($item['youkuurl'])}
+							              <div class="parentFileBox allboxvw" id="parentFileBoxvw" style="width: 50%;">
+							                  <ul class="fileBoxUl">
+							                    <li id="fileBox_WU_FILE_vw" class="diyUploadHover" style="  width: 90%;height: 200px;">
+							                      <div class="viewThumb" id="vediopreview" style=" background:#E7E7E7; width: 100%;height: 200px;">
+							                          <iframe  src="{if (substr($item['youkuurl'],0,7)=='http://' || substr($item['youkuurl'],0,8)=='https://')}{$item['youkuurl']}{else}http://player.youku.com/embed/{$item['youkuurl']}{/if}" frameborder="0" allowfullscreen="" style="width:100%; height: 200px;">
+							                      </iframe>
+							                      </div>
+							                    </li>
+							                  </ul>
+							              </div>
+							            {/if}
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+								    <label for="fm_photosnum" class="am-u-sm-3 am-form-label">票数 <span class="tpl-form-line-small-title">Ticket</span></label>
+						          	<div class="am-u-sm-9">
+						            		<input type="text" name="photosnum" class="tpl-form-input"  value="{$item['photosnum']}" />
+						          		<p class="am-form-help">真实票数</p>
+						          	</div>
+						        </div>
+
+						        	<div class="am-form-group">
+								    <label for="fm_audio" class="am-u-sm-3 am-form-label">虚拟票数 <span class="tpl-form-line-small-title">Virtual Ticket</span></label>
+						          	<div class="am-u-sm-9">
+						            		<input type="text" name="xnphotosnum" class="tpl-form-input" value="{$item['xnphotosnum']}" />
+						          		<p class="am-form-help">总票数最终由真是票数与虚拟票数的总和</p>
+						          	</div>
+						        </div>
+
+						        	<div class="am-form-group">
+								    <label for="fm_hits" class="am-u-sm-3 am-form-label">人气 <span class="tpl-form-line-small-title">Hits</span></label>
+						          	<div class="am-u-sm-9">
+						            		<input type="text" name="hits" class="tpl-form-input"  value="{$item['hits']}" />
+						          		<p class="am-form-help">真实人气</p>
+						          	</div>
+						        </div>
+
+						        	<div class="am-form-group">
+								    <label for="fm_xnhits" class="am-u-sm-3 am-form-label">虚拟人气 <span class="tpl-form-line-small-title">Virtual Hits</span></label>
+						          	<div class="am-u-sm-9">
+						            		<input type="text" name="xnhits" class="tpl-form-input" value="{$item['xnhits']}" />
+						          		<p class="am-form-help">总人气最终由真是人气与虚拟人气的总和</p>
+						          	</div>
+						        </div>
+						        	<div class="am-form-group">
+								    <label for="fm_sharenum" class="am-u-sm-3 am-form-label">分享 <span class="tpl-form-line-small-title">Share</span></label>
+						          	<div class="am-u-sm-9">
+						            		{php $sm = $this->getsharenum($uniacid,  $tfrom_user, $rid, $item['sharenum'])}
+						            		<input type="text" name="sharenum" class="tpl-form-input" value="{$sharesn}" />
+						          		<p class="am-form-help">分享数</p>
+						          	</div>
+						        </div>
+
+						        	<div class="am-form-group">
+								    <label for="fm_zans" class="am-u-sm-3 am-form-label">点赞 <span class="tpl-form-line-small-title">Zans</span></label>
+						          	<div class="am-u-sm-9">
+						            		<input type="text" name="zans" class="tpl-form-input" value="{$item['zans']}" />
+						          		<p class="am-form-help">用户点赞数</p>
+						          	</div>
+						        </div>
+						        {if $reply['regpay']}
+							        	<div class="am-form-group">
+									    <label for="fm_pay" class="am-u-sm-3 am-form-label">当前付费状态 <span class="tpl-form-line-small-title">Pay</span></label>
+							          	<div class="am-u-sm-9">
+							            		{if $item['ordersn']}<a href="javascript:;" class="label label-success" data-toggle="tooltip" data-placement="top" title="是否付费">已付费</a>{else}<a href="javascript:;" class="label label-warning" data-toggle="tooltip" data-placement="top" title="是否付费">未付费</a>{/if}
+							          		<p class="am-form-help">当前报名付费状态</p>
+							          	</div>
+							        </div>
+						        {/if}
+		                        	<div class="am-form-group">
+		                            <label for="fm_status" class="am-u-sm-3 am-form-label">审核 <span class="tpl-form-line-small-title">Status</span></label>
+		                            <div class="am-u-sm-9">
+							            <label class='am-radio-inline'>
+							              <input type='radio' name='status' value='1' {if $item['status']==1}checked{/if} required/> 通过
+							            </label>
+							            <label class='am-radio-inline'>
+							              <input type='radio' name='status' value='2' {if $item['status']==2}checked{/if} required/> 审核中
+							            </label>
+		                                	<label class='am-radio-inline'>
+							              <input type='radio' name='status' value='3' {if $item['status']==3}checked{/if} required/> 不通过
+							            </label>
+										<p class="am-form-help">审核状态</p>
+		                            </div>
+		                        	</div>
+
+		                        <div class="am-form-group">
+		                            <div class="am-u-sm-9 am-u-sm-push-3">
+      									<input type="hidden" name="token" value="{$_W['token']}" />
+		                                	<input type="submit" name="submit" value="提交" class="am-btn am-btn-primary tpl-btn-bg-color-success " />
+		                            </div>
+		                        </div>
+	                        </fieldset>
+	                    </form>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+<div class="loading" style="display: none;"></div>
+<div class="overlay_container j_overlay_container unmasked beforeFadeIn" style="display: none;">
+	<div class="overlay_content_container j_overlay_content_container">
+		<div class="overlay_content">
+			<div id="toast" class="toast"></div>
+		</div>
+	</div>
+</div>
+<div id="bodyhidden" style="display: none;"></div>
+<script src="{FM_STATIC_PLUGIN}upload/distweb/dist/lrz.bundle.js"></script>
+<script type="text/javascript">
+  function afteradd(addmid){
+    var html ='<div class="parentFileBox allbox' + addmid + '" id="parentFileBox' + addmid + '"  style="width: 30%;  margin-right: 3%;margin-top:3%;">  ';
+        html +='<a href="javascript:;" class="fmwebuploader-pick" id="webuploader' + addmid + '" onclick="javascript:$(\'#photo' + addmid + '\').click();" style="  width: 100%;height: 180px;"><img src="{FM_STATIC_MOBILE}public/images/addimages.png?v=3.1" width="30" style="width: 60%;position: absolute; z-index: 11;  text-align: center;  left: 15%;  top: 5%;"/></a>';
+        html +='<ul class="fileBoxUl" style="  width: 100%;height: 180px;">';
+      html +='      <li id="fileBox_WU_FILE_' + addmid + '" class="diyUploadHover" style="  width: 100%; height: 180px;margin-top: 0;margin-left: 0;">  ';
+      html +='        <div class="viewThumb"  style="  width: 100%; height: 180px;">';
+      html +='            <img src="" id="preview' + addmid + '"/>';
+      html +='        </div> ';
+      html +='        <div id="imagedel' + addmid + '" class="imagedel"><a href="javascript:;" onclick="imagedel(\'' + addmid + '\')"><div class="diyCancel" id="diyCancel' + addmid + '" width="100%;"></div></a></div>';
+      html +='        <div id="setfm' + addmid + '" class="setfm"><a href="javascript:;" id="setfm' + addmid + '" onclick="setfm(\'' + addmid + '\')"><div class="diySuccess am-pic-swfm" id="diySuccess' + addmid + '" width="100%;">设为封面</div></a></div> ';
+      html +='        <div class="diyFileName" id="diyFileName' + addmid + '">preview.png</div> ';
+      html +='        <div class="diyBar" id="diyBar' + addmid + '" style="display:none"> ';
+      html +='            <div class="diyProgress" id="diyProgress' + addmid + '"></div> ';
+      html +='            <div class="diyProgressText" id="diyProgressText' + addmid + '"></div> ';
+      html +='        </div>';
+      html +='      </li>';
+      html +='    </ul></div>';
+            html += '<div style="position: absolute; top: 0px; left: 0px; width: 126px; height: 36px; overflow: hidden; bottom: auto; right: auto;">';
+            html +='<input type="file" name="photo' + addmid + '" id="photo' + addmid + '" class="webuploader-element-invisible" style="display:none;" accept="image/*" capture="camera" onchange="changeone(\'photo' + addmid + '\', \'' + addmid + '\');" ></div>';
+        {if !empty($picarrs)}
+         $("#afteradd").parent().append( html );
+        {else}
+         $("#afteraddnew").parent().append( html );
+        {/if}
+    return false;
+
+   }
+  function imagedel(mid) {
+    fmloadding('.overlay_container', '正在删除中');
+
+        var url  = "{php echo $this->createWebUrl('provevote', array('foo' => 'post','rid'=>$rid,'from_user'=>$from_user, 'delete' => 1))}&photoid="+mid;
+        $.ajax({
+            url:url,
+            type:"post",
+            dataType:"json",
+            success:function(result){
+               if(result.flag == '1'){
+
+                $(".allbox" + mid).remove();
+                fmloadding('.overlay_container', result.msg);
+                var tpxz = "{$reply['tpxz']}";
+          //if (result.photosarrnum < tpxz) {
+          //  afteradd(result.addlastmid);
+          //}
+              }else{
+                 fmloadding('.overlay_container', result.msg);
+              }
+            }
+        });
+    return false;
+  }
+  function videodel(mid) {
+    fmloadding('.overlay_container', '正在删除中');
+
+        var url  = "{php echo $this->createWebUrl('provevote', array('foo' => 'post','rid'=>$rid,'from_user'=>$from_user, 'deletev' => 1))}&vedio="+mid;
+        $.ajax({
+            url:url,
+            type:"post",
+            dataType:"json",
+            success:function(result){
+               if(result.flag == '1'){
+                  //$(".allboxv").remove();
+                  //vedioafter(result.mid);
+                fmloadding('.overlay_container', result.msg);
+                setTimeout(function () {
+									window.location.reload();
+								},2000)
+              }else{
+                 fmloadding('.overlay_container', result.msg);
+              }
+            }
+        });
+    return false;
+  }
+
+  function musicdel(mid) {
+    		fmloadding('.overlay_container', '正在删除中');
+
+        var url  = "{php echo $this->createWebUrl('provevote', array('foo' => 'post','rid'=>$rid,'from_user'=>$from_user, 'deletem' => 1))}&music="+mid;
+        $.ajax({
+            url:url,
+            type:"post",
+            dataType:"json",
+            success:function(result){
+               if(result.flag == '1'){
+                  $(".allboxm").remove();
+                  musicafter(result.mid);
+                fmloadding('.overlay_container', result.msg);
+              }else{
+                 fmloadding('.overlay_container', result.msg);
+              }
+            }
+        });
+    return false;
+  }
+  function setfm(mid) {
+    fmloadding('.overlay_container', '正在设置中');
+        var url  = "{php echo $this->createWebUrl('provevote', array('foo' => 'post','rid'=>$rid,'from_user'=>$from_user, 'setfm' => 1))}&photoid="+mid;
+        $.ajax({
+            url:url,
+            type:"post",
+            dataType:"json",
+            success:function(result){
+               if(result.flag == '1'){
+                  $("#diySuccess" + mid).addClass('isfm');
+                  $("#diySuccess" + mid).html('');
+          $("#diySuccess" + result.delmid).removeClass('isfm');
+                $("#diySuccess" + result.delmid).html('设为封面');
+                fmloadding('.overlay_container', result.msg);
+              }else{
+                 fmloadding('.overlay_container', result.msg);
+              }
+            }
+        });
+    return false;
+  }
+
+
+    function upload(filename, posturl, mid) {
+        var width = "{$reply['autolitpic']}";
+        var zl = "{php echo $reply['autozl']/100}";
+
+        lrz(filename.files[0], {
+              width: width,
+              quality: zl
+          })
+        .then(function (rst) {
+          //var MB = 1000*1000;
+          var imgsize = "{$_W['setting']['upload']['image']['limit']}";
+          var imgsizem = "{php echo $_W['setting']['upload']['image']['limit']*1024;}";
+          var imgmsize ="{php echo $_W['setting']['upload']['image']['limit']/1024;}";
+          var ytsize = rst.origin.size;
+          if (ytsize > imgsizem) {
+            var amsg = '图片大小不能超过 '+imgmsize+' MB';
+            fmloadding('.overlay_container', amsg);
+            return false;
+          }
+
+
+          setTimeout(function () {
+            document.getElementById('webuploader' + mid).style.display = 'none';
+            document.getElementById('diyBar' + mid).style.display = 'block';
+
+            // 发送到后端
+            var xhr = new XMLHttpRequest();
+            var data = {
+              base64: rst.base64,
+              size: rst.base64.length // 校验用，防止未完整接收
+            };
+
+
+
+            xhr.upload.addEventListener('progress', function(e, m){ uploadProgress(e,mid); }, false);
+            xhr.addEventListener("load",  function(e, m){ uploadComplete(e,mid); }, false);
+            xhr.addEventListener("error", function(e, m){ uploadFailed(e,mid); }, false);
+            xhr.addEventListener("abort", function(e, m){ uploadCanceled(e,mid); }, false);
+
+
+            xhr.open('POST', posturl);
+            xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4 && xhr.status === 200) {
+                var result = JSON.parse(xhr.response);
+                //console.log(result);
+                //uppic();
+                if (result.success == true) {
+                  fmloadding('.overlay_container', result.msg);
+                  document.getElementById('imagedel' + mid).innerHTML = '<a href="javascript:;"  onclick="imagedel('+ result.lastmid +')"><div class="diyCancel" id="diyCancel'+ result.lastmid +'" ></div></a>';
+                  document.getElementById('setfm' + mid).innerHTML = '<a href="javascript:;"  onclick="setfm('+ result.lastmid +')"><div class="diySuccess am-pic-swfm" id="diySuccess'+ result.lastmid +'" >设为封面</div></a>';
+                  $("#parentFileBox" + mid).removeClass("allbox" + mid);
+                  $("#parentFileBox" + mid).addClass("allbox" + result.lastmid);
+                  document.getElementById('diyBar' + mid).style.display = 'none';
+                  document.getElementById('preview' + mid).style.display = 'block';
+                  document.getElementById('preview' + mid).src = result.imgurl;
+                  document.getElementById('diyCancel' + result.lastmid).style.display = 'block';
+                  document.getElementById('diySuccess' + result.lastmid).style.display = 'block';
+                  var tpxz = "{$reply['tpxz']}";
+                  if (result.photosarrnum < tpxz) {
+                    afteradd(result.addlastmid);
+                  }
+                  //return false;
+
+                } else {
+                  fmloadding('.overlay_container', result.msg);
+                  //alert(result.msg);
+                  if (result.flag == 3) {
+                    setTimeout(function () {
+                      window.location.href = result.linkurl;
+                    },1000)
+                  }
+                  return false;
+                }
+                return
+              }
+            };
+            xhr.send(JSON.stringify(data)); // 发送base64
+            //rst.base64 = null;
+            //xhr.Response.End();
+          }, 100);
+
+        })
+
+            .catch(function (err) {
+                // 万一出错了，这里可以捕捉到错误信息
+                // 而且以上的then都不会执行
+                //console.log(err);
+                alert(err);
+            });
+        // 也可以传入图片路径：lrz('../demo.jpg', ...
+
+    }
+
+
+
+  function changeone(photo, mid) {
+
+    var preview = 'preview' + mid,
+      pic = document.getElementById(preview),
+      file = document.getElementById(photo);
+
+    var ext=file.value.substring(file.value.lastIndexOf(".")+1).toLowerCase();
+    //alert(ext);
+     // gif在IE浏览器暂时无法显示
+     if(ext!='png'&&ext!='jpg'&&ext!='jpeg'){
+       fmloadding('.overlay_container', '图片的格式必须为png或者jpg或者jpeg格式！');
+       return;
+     }
+
+    var posturl = "{php echo $this->createWebUrl('upimages', array('from_user' => $from_user, 'upphotosone' => 'start','rid' => $rid))}&mid=" + mid;
+    //var mid = '0';
+    upload(file, posturl, mid);
+
+     var isIE = navigator.userAgent.match(/MSIE/)!= null,
+       isIE6 = navigator.userAgent.match(/MSIE 6.0/)!= null;
+
+     if(isIE) {
+      file.select();
+      var reallocalpath = document.selection.createRange().text;
+
+      // IE6浏览器设置img的src为本地路径可以直接显示图片
+       if (isIE6) {
+        pic.src = reallocalpath;
+       }else {
+        // 非IE6版本的IE由于安全问题直接设置img的src无法显示本地图片，但是可以通过滤镜来实现
+         pic.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='image',src=\"" + reallocalpath + "\")";
+         // 设置img的src为base64编码的透明图片 取消显示浏览器默认图片
+         pic.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+       }
+     }else {
+      html5Reader(file,mid);
+     }
+  }
+
+   function audios(audio, mid) {
+      //var music = "#" + audio;
+        //空对象然后添加
+      var file = document.getElementById(audio).files[0];
+
+      var fd = new FormData();
+
+      //fd.append(audio, $(music).val());
+      fd.append("audiotype", audio);
+      fd.append("files", file);
+
+      setTimeout(function () {
+        document.getElementById('webuploader' + mid).style.display = 'none';
+        document.getElementById('diyBar' + mid).style.display = 'block';
+
+        //XMLHttpRequest 原生方式发送请求
+        var xhr = new XMLHttpRequest();
+        xhr.upload.addEventListener('progress', function(e, m){ uploadProgress(e,mid); }, false);
+        xhr.addEventListener("load",  function(e, m){ uploadComplete(e,mid); }, false);
+        xhr.addEventListener("error", function(e, m){ uploadFailed(e,mid); }, false);
+        xhr.addEventListener("abort", function(e, m){ uploadCanceled(e,mid); }, false);
+        xhr.open("POST" ,"{php echo $this->createWebUrl('upaudios', array('from_user' => $from_user, 'upaudios' => 'start', 'rid' => $rid))}" , true);
+        xhr.send(fd);
+        //xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.onload = function(e) {
+            if (this.readyState === 4 && this.status  === 200) {
+              var result = JSON.parse(xhr.response);
+              //console.log(result);
+              //return false;
+              if (result.success == true) {
+                fmloadding('.overlay_container', result.msg);
+                setTimeout(function () {
+					window.location.reload();
+				},2000)
+                return
+              } else {
+                fmloadding('.overlay_container', result.msg);
+                  //alert(result.msg);
+                  if (result.flag == 3) {
+                    setTimeout(function () {
+                      window.location.href = result.linkurl;
+                    },1000)
+                  }
+                  return false;
+              }
+              return false;
+            }
+        };
+      });
+      return false;
+    }
+
+</script>
+
+{elseif $foo == 'pnametag'}
+
+<div class="main table-responsive">
+  <div class="alert alert-warning" role="alert">
+    注意：{if empty($regtitlearr['cmmphotosname'])}参赛主题宣言{else}{$regtitlearr['cmmphotosname']}{/if}内容不能有重复。
+  </div>
+  <form method="post" class="form-horizontal" id="form1">
+    <div class="panel panel-default">
+      <div class="panel-body table-responsive">
+        <table class="table table-hover">
+          <thead class="navbar-inner">
+          <tr>
+            <th style="width:50px;">删？</th>
+            <th style="width:100px;">id</th>
+            <th style="">{if empty($regtitlearr['cmmphotosname'])}参赛主题宣言{else}{$regtitlearr['cmmphotosname']}{/if}</th>
+          </tr>
+          </thead>
+          <tbody id="list">
+          {loop $list $item}
+          <tr>
+            <td style="vertical-align:middle;"><input type="checkbox" name="delete[]" value="{$item['id']}" /></td>
+            <td style="vertical-align:middle;">{$item['id']}</td>
+            <td><input type="text" name="title[{$item['id']}]" class="form-control" style="" value="{$item['title']}" /></td>
+          </tr>
+          {/loop}
+          </tbody>
+          <tbody style="border-top:0;">
+          <tr>
+            <td></td>
+            <td colspan="2">
+              <a href="javascript:;" onclick="addItem()"><i class="icon-plus-sign-alt"></i> 添加</a>
+            </td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <input name="token" type="hidden" value="{$_W['token']}" />
+      <input type="submit" class="btn btn-primary col-lg-1" name="submit" value="提交" />
+    </div>
+    <div>
+
+    </div>
+  </form>
+
+</div>
+<script type="text/javascript">
+
+<!--
+  function addItem() {
+    var html = '' +
+        '<tr>' +
+          '<td></td>' +
+          '<td></td>' +
+          '<td><input type="text" name="title-new[]" class="form-control title-new" style="width:85%;display:inline" value="" />' +
+          '<a href="javascript:;"  style="padding-left:20px;"onclick="deleteItem(this);"><i class=""></i>删除</a>' +
+          '</td>' +
+        '</tr>';
+    $('#list').append(html);
+  }
+  function deleteItem(o) {
+    $(o).parent().parent().remove();
+  }
+
+	require(['jquery', 'util'], function($, u){
+	  $("#form_post_users").submit(function(){
+	    var colarr=new Array();
+	    var col;
+	    var titlearr=new Array();
+	    var tit;
+	    var bool=true;
+	    $(":text[name^=title]").each(function(index){
+	      title=$(this).val().trim();
+	      if(title==""){
+	        u.message('内容不能为空.', '', 'error');
+	        bool = false;
+	      }
+
+	      if(title !=""){
+	        for(tit in titlearr){
+	          if(titlearr[tit]==content){
+	            u.message('内容重复，请设置不同的内容.', '', 'error');
+	            bool = false;
+	          }
+	        }
+	        titlearr[index+1]=content;
+	      }
+	    })
+	    if(!bool) return false;
+	  });
+	});
+//-->
+</script>
+{/if}
+{template 'web/common/footer_amaze_post'}

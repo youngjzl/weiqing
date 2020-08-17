@@ -1,0 +1,97 @@
+﻿{template 'common/header-base'}
+<div class="xiwulife_main">
+<link title="" href="../addons/xiwulife_scan/template/assets/css/style.css?{php echo time()}" rel="stylesheet" type="text/css">
+<script src="../addons/xiwulife_scan/template/assets/js/jquerysession.js"></script>
+<script src="../addons/xiwulife_scan/template/assets/js/xiwulife.js"></script>
+<style>
+</style>
+<header class="xiwulife_fixed_top">
+	<div class="xiwulife_header_list">
+		<ul class="nav navbar-nav">
+			{if $_W['role'] == ACCOUNT_MANAGE_NAME_FOUNDER}
+			<li class="li-border"><a class="mystyle-color" href="{url 'module/permission' array('m' => 'xiwulife_scan')}" target="_blank"><span class="fa fa-plus fa-lg"></span>添加操作员</a></li>
+	        {/if}
+			<li class="li-border Message_btn"><a class="mystyle-color"><span class="fa fa-bell fa-lg"></span>消息提醒 <span class="badge"></span></a></li>
+			<li class="li-border"><a class="mystyle-color" href="{url 'wxapp/version/home'}version_id={$_GPC['version_id']}" target="_blank"><span class="fa fa-tags fa-lg"></span>{$_W['account']['name']}</a></li>
+			<li class="dropdown li-border" style="min-width:120px; text-align:center"><a href="#" class="dropdown-toggle mystyle-color" data-toggle="dropdown"><i class="fa fa-user fa-lg"></i>{$_W['username']}<span class="caret"></span></a>
+			<ul class="dropdown-menu">
+	          {if $_W['role'] == ACCOUNT_MANAGE_NAME_FOUNDER}
+	          <li><a href="{url 'user/profile/profile'}" target="_blank"><i class="fa fa-weixin fa-fw"></i>我的账号</a></li>
+	          {/if}
+	          <li><a href="{url 'user/logout'}"><i class="fa fa-sign-out fa-fw"></i>退出系统</a></li>
+	          <li></li>
+	        </ul>
+			</li>
+		</ul>
+	</div>
+</header>
+<div class="xiwulife_left">
+	<div class="logo">
+		<img class="toplogo" src="" />
+		<span class="top-title"></span>
+	</div>
+	<div class="subNavBox">
+		<div class="sBox">
+			<ul class="navContent" style="display:block">
+				<li class="{if $_GPC['do'] == 'index'}active{/if}">
+					<a href="{php echo $this->createWebUrl('index');}"><i class="fa fa-area-chart"></i><span class="sub-home">后台管理</span></a></li>
+				<li class="{if $_GPC['do'] == 'store'}active{/if}">
+					<a href="{php echo $this->createWebUrl('store');}"><i class="fa fa-home"></i></span><span class="sub-title">店铺管理</span></a></li>
+				<li class="{if $_GPC['do'] == 'xiwuuser'}active{/if}">
+					<a href="{php echo $this->createWebUrl('xiwuuser');}"><i class="fa fa-user"></i><span class="sub-title">会员中心</span></a></li>
+				<li class="{if $_GPC['do'] == 'class'}active{/if}">
+					<a href="{php echo $this->createWebUrl('class');}"><i class="fa fa-list-ul"></i><span class="sub-title">分类管理</span></a></li>
+				<li class="{if $_GPC['do'] == 'goods'}active{/if}">
+					<a href="{php echo $this->createWebUrl('goods');}"><i class="fa fa-reorder"></i><span class="sub-title">商品管理</span></a></li>
+				<li class="{if $_GPC['do'] == 'order'}active{/if}">
+					<a href="{php echo $this->createWebUrl('order');}"><i class="fa fa-file-text"></i><span class="sub-title">订单管理</span></a></li>
+				<li class="{if $_GPC['do'] == 'evaluate'}active{/if}">
+					<a href="{php echo $this->createWebUrl('evaluate');}"><i class="fa fa-heart"></i><span class="sub-title">评价管理</span></a></li>
+				<li class="{if $_GPC['do'] == 'marketing'}active{/if}">
+					<a href="{php echo $this->createWebUrl('marketing');}"><i class="fa fa-credit-card"></i><span class="sub-title">营销管理</span></a></li>
+				<li class="{if $_GPC['do'] == 'program'}active{/if}">
+					<a href="{php echo $this->createWebUrl('program');}"><span class="fa fa-qrcode"></span><span class="sub-title">桌面码</span></a></li>
+				<li class="{if $_GPC['do'] == 'moban'}active{/if}">
+					<a href="{php echo $this->createWebUrl('moban');}"><span class="fa fa-comment"></span><span class="sub-title">模板消息</span></a></li>
+				<li class="{if $_GPC['do'] == 'print'}active{/if}">
+					<a href="{php echo $this->createWebUrl('print');}"><span class="fa fa-print"></span><span class="sub-title">打印机 </span></a></li>
+				<li class="{if $_GPC['do'] == 'parameter'}active{/if}">
+					<a href="{php echo $this->createWebUrl('parameter');}"><span class="fa fa-cog"></span><span class="sub-title">参数设置</span></a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="modal fade" tabindex="-1" id="alertmain" style="z-index:9999" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content orderbtn" style=" line-height:30px; background:#2EC7C9; color: #fff;  border:2px solid #2EC7C9; border-radius:7px !important;">
+      <div class="modal-body panel-body alertmain" style="font-size:18px; padding:20px; text-align:center"></div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script type="text/javascript">
+//state三种状态 loading 加载， warning 警告，  finish 完成
+function xiwualert(text,state){
+	$(".alertmain").empty();
+    $(".alertmain").append(text);
+    $('#alertmain').modal('show');
+    setTimeout(function() {
+      $('#alertmain').modal('hide');
+    }, 1500)
+}
+$(function(){
+	$.ajax({
+		type:'post',
+		data:{
+		},
+		url:"{php echo $this->createWebUrl('logo')}",
+		success:function(d) {
+			var data = $.parseJSON(d);
+			console.log(d);
+			$('.toplogo').attr('src',data.logo);
+			$('.top-title').text(data.title+'后台管理');
+		}
+	});
+})
+</script>
+{template 'xiwunews'}
+<div style="height:70px; width:100%;"></div>

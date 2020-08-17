@@ -1,0 +1,46 @@
+{template 'xiwuheader'}
+<style>
+.form-group{ margin:15px 0px !important;}
+.panel.panel-default{margin-top:15px;}
+</style>
+<div class="xiwulife_content">
+    <div class="center-back right-back">
+        <div class="container-fluid">
+            <div class="info-center">
+                <div class="page-header">
+                    <div class="pull-left">
+                        <h4>模板消息</h4>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-body addstore_box">
+                        <a href="{php echo $this->createWebUrl('moban',array('sub' => 'addmoban'));}"><button type="button" class="btn btn-success"><span class="fa fa-refresh"></span>添加模板</button></a>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-body addstore_box">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                                <th>模板标题id</th>
+                                <th>标题</th>
+                                <th>模板id</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {loop $mobanlist $item}
+                            <tr>
+                                <td>{$item['mobanid']}</td>
+                                <td>{$item['name']}</td>
+                                <td>{$item['template_id']}</td>
+                            </tr>
+                            {/loop}
+                          </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'xiwufooter'}

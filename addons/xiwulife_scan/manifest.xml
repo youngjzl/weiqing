@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://www.0598128.com" versionCode="0.6">
+	<application setting="false">
+		<name><![CDATA[【夕雾】扫码点餐]]></name>
+		<identifie><![CDATA[xiwulife_scan]]></identifie>
+		<version><![CDATA[3.2.2]]></version>
+		<type><![CDATA[business]]></type>
+		<ability><![CDATA[【夕雾】扫码点餐]]></ability>
+		<description><![CDATA[【夕雾】扫码点餐]]></description>
+		<author><![CDATA[好源码网]]></author>
+		<url><![CDATA[http://www.0598128.com]]></url>
+	</application>
+	<platform>
+		<subscribes>
+		</subscribes>
+		<handles>
+			<message type="text" />
+			<message type="image" />
+			<message type="voice" />
+			<message type="video" />
+			<message type="shortvideo" />
+			<message type="location" />
+			<message type="link" />
+			<message type="subscribe" />
+			<message type="qr" />
+			<message type="trace" />
+			<message type="click" />
+			<message type="merchant_order" />
+			<message type="user_get_card" />
+			<message type="user_del_card" />
+			<message type="user_consume_card" />
+		</handles>
+		<rule embed="true" />
+		<card embed="false" />
+		<supports>
+			<item type="wxapp" />
+		</supports>
+	</platform>
+	<bindings>
+		<menu>
+			<entry title="后台管理" do="index" state="" direct="false" />
+		</menu>
+	</bindings>
+	<install><![CDATA[CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_activity` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) NOT NULL,
+  `man` decimal(7,2) DEFAULT '0.00',
+  `jian` decimal(7,2) DEFAULT '0.00',
+  `details` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_address` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `name` varchar(90) DEFAULT NULL,
+  `tel` varchar(80) DEFAULT NULL,
+  `lat` varchar(80) DEFAULT NULL,
+  `lng` varchar(80) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `openid` varchar(150) DEFAULT NULL,
+  `xxaddress` varchar(255) DEFAULT NULL,
+  `addname` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_card` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) NOT NULL,
+  `price` decimal(7,2) DEFAULT '0.00',
+  `pic` varchar(150) DEFAULT NULL,
+  `maxmoney` decimal(7,2) DEFAULT '0.00',
+  `sharemen` varchar(32) DEFAULT NULL,
+  `lingqument` tinyint(1) DEFAULT '0',
+  `endtime` varchar(30) DEFAULT NULL,
+  `jifen` int(10) DEFAULT '0',
+  `xianzhi` int(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_class` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `classname` varchar(32) DEFAULT NULL,
+  `goods` varchar(255) DEFAULT NULL,
+  `paixu` smallint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_czmarketing` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) NOT NULL,
+  `czpay` decimal(7,2) DEFAULT '0.00',
+  `zspay` decimal(7,2) DEFAULT '0.00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_evaluate` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `openid` varchar(80) DEFAULT NULL,
+  `ordernumber` varchar(120) DEFAULT NULL,
+  `nickName` varchar(80) DEFAULT NULL,
+  `avatarUrl` varchar(150) DEFAULT NULL,
+  `evaluateimg` text,
+  `pingjia` varchar(120) DEFAULT NULL,
+  `time` varchar(80) DEFAULT NULL,
+  `state` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_formid` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `openid` varchar(150) DEFAULT NULL,
+  `formid` varchar(200) DEFAULT NULL,
+  `time` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_goods` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `title` varchar(80) DEFAULT NULL,
+  `pic` varchar(150) DEFAULT NULL,
+  `sold` int(11) DEFAULT '0',
+  `spec` text,
+  `price` decimal(7,2) DEFAULT '0.00',
+  `status` tinyint(1) DEFAULT '0',
+  `pics` varchar(255) DEFAULT NULL,
+  `text` varchar(255) DEFAULT NULL,
+  `index` tinyint(1) DEFAULT '0',
+  `goodtype` tinyint(1) DEFAULT '0',
+  `specname` varchar(80) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_itemize` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `openid` varchar(80) DEFAULT NULL,
+  `title` varchar(80) DEFAULT NULL,
+  `time` varchar(80) DEFAULT NULL,
+  `state` tinyint(1) DEFAULT '0',
+  `money` decimal(7,2) DEFAULT '0.00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_moban` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) NOT NULL,
+  `name` varchar(55) NOT NULL,
+  `mobanid` varchar(70) NOT NULL,
+  `keyword_id_list` varchar(32) NOT NULL,
+  `template_id` varchar(70) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_order` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `tablenumber` varchar(32) DEFAULT NULL,
+  `orderlist` text,
+  `ordernumber` varchar(80) DEFAULT NULL,
+  `openid` varchar(80) DEFAULT NULL,
+  `price` decimal(7,2) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT '0',
+  `time` varchar(32) DEFAULT NULL,
+  `pricetime` varchar(32) DEFAULT NULL,
+  `formid` varchar(50) DEFAULT NULL,
+  `nickName` varchar(80) DEFAULT NULL,
+  `avatarUrl` varchar(150) DEFAULT NULL,
+  `payprice` decimal(7,2) DEFAULT NULL,
+  `remarks` varchar(200) DEFAULT NULL,
+  `payment` varchar(80) DEFAULT NULL,
+  `num` int(11) DEFAULT NULL,
+  `title` varchar(80) DEFAULT NULL,
+  `evaluate` varchar(255) DEFAULT NULL,
+  `state` tinyint(1) DEFAULT '0',
+  `scannum` varchar(32) DEFAULT NULL,
+  `evaluatetime` varchar(32) DEFAULT NULL,
+  `ordertype` tinyint(1) DEFAULT '0',
+  `appointday` varchar(60) DEFAULT NULL,
+  `appointtime` varchar(60) DEFAULT NULL,
+  `pindan` enum('0','1') DEFAULT '0',
+  `men` varchar(60) DEFAULT NULL,
+  `tel` varchar(32) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `receivemoney` decimal(7,2) DEFAULT '0.00',
+  `storediscount` decimal(7,2) DEFAULT '0.00',
+  `carddiscount` decimal(7,2) DEFAULT '0.00',
+  `qucanma` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_parameter` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `themscolor` varchar(80) DEFAULT NULL,
+  `saoma` tinyint(1) DEFAULT '0',
+  `yuyue` tinyint(1) DEFAULT '0',
+  `waimai` tinyint(1) DEFAULT '0',
+  `maidan` tinyint(1) DEFAULT '0',
+  `quhao` tinyint(1) DEFAULT '0',
+  `chongzhi` tinyint(1) DEFAULT '0',
+  `waimaijvli` int(11) DEFAULT '0',
+  `storemarketing` tinyint(1) DEFAULT '0',
+  `marketingcard` tinyint(1) DEFAULT '0',
+  `wxpay` tinyint(1) DEFAULT '0',
+  `xjpay` tinyint(1) DEFAULT '0',
+  `yepay` tinyint(1) DEFAULT '0',
+  `ljpay` tinyint(1) DEFAULT '0',
+  `czmarketing` tinyint(1) DEFAULT '0',
+  `wxpaycs` tinyint(1) NOT NULL DEFAULT '0',
+  `scanprice` tinyint(1) DEFAULT '0',
+  `waimaipspay` decimal(7,2) DEFAULT '0.00',
+  `waimaixianzhi` decimal(7,2) DEFAULT '0.00',
+  `canjvpay` decimal(7,2) DEFAULT '0.00',
+  `banquan1` varchar(32) DEFAULT NULL,
+  `banquan2` varchar(32) DEFAULT NULL,
+  `indexlist` tinyint(1) DEFAULT '0',
+  `receipt` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_pindan` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `time` varchar(80) DEFAULT NULL,
+  `uniacid` int(11) DEFAULT NULL,
+  `nickname` varchar(80) DEFAULT NULL,
+  `openid` varchar(150) DEFAULT NULL,
+  `avatarUrl` varchar(150) DEFAULT NULL,
+  `cart` text,
+  `founder` varchar(150) DEFAULT NULL COMMENT '(0否/1是)',
+  `state` tinyint(1) DEFAULT '0',
+  `price` decimal(7,2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_print` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `title` varchar(150) DEFAULT NULL,
+  `number` varchar(200) DEFAULT NULL,
+  `key` varchar(250) DEFAULT NULL,
+  `default` varchar(10) DEFAULT '0' COMMENT '0是/1否',
+  `method` varchar(10) DEFAULT '0',
+  `printnum` varchar(32) DEFAULT NULL,
+  `style` varchar(32) DEFAULT NULL,
+  `printtype` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_program` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `number` varchar(32) DEFAULT NULL,
+  `url` varchar(150) DEFAULT NULL,
+  `filename` varchar(80) DEFAULT NULL,
+  `title` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_receive` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `nickname` varchar(90) DEFAULT NULL,
+  `money` decimal(7,2) DEFAULT '0.00',
+  `openid` varchar(90) DEFAULT NULL,
+  `maxmoney` decimal(7,2) DEFAULT '0.00',
+  `state` varchar(10) DEFAULT '0' COMMENT '使用状态（0否/1是）',
+  `receive` tinyint(1) DEFAULT '0' COMMENT '领取状态（0否/1是）',
+  `time` varchar(32) DEFAULT NULL,
+  `cardid` int(10) DEFAULT NULL,
+  `starttime` int(10) DEFAULT NULL,
+  `endtime` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_remind` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `ordernumber` varchar(120) DEFAULT NULL,
+  `title` varchar(80) DEFAULT NULL,
+  `avatarUrl` varchar(150) DEFAULT NULL,
+  `time` varchar(80) DEFAULT NULL,
+  `state` tinyint(1) DEFAULT '0',
+  `class` varchar(80) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_store` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `title` varchar(80) DEFAULT NULL,
+  `text` varchar(150) DEFAULT NULL,
+  `logo` varchar(150) DEFAULT NULL,
+  `tel` varchar(32) DEFAULT NULL,
+  `address` varchar(150) DEFAULT NULL,
+  `lat` varchar(50) DEFAULT NULL COMMENT '精度',
+  `lng` varchar(50) DEFAULT NULL,
+  `details` text COMMENT '详情',
+  `scanprice` varchar(32) DEFAULT NULL,
+  `pics` text,
+  `qucanma` smallint(3) DEFAULT '0',
+  `starttime` varchar(32) DEFAULT NULL,
+  `endtime` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_xiwu_scan_user` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) DEFAULT NULL,
+  `nickname` varchar(100) DEFAULT NULL,
+  `openid` varchar(150) DEFAULT NULL,
+  `avatarUrl` varchar(200) DEFAULT NULL,
+  `password` varchar(32) DEFAULT NULL,
+  `tel` varchar(32) DEFAULT NULL,
+  `balance` decimal(7,2) DEFAULT '0.00',
+  `jifen` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+]]></install>
+	<uninstall><![CDATA[DROP TABLE IF EXISTS `ims_xiwu_scan_activity`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_address`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_card`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_class`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_czmarketing`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_evaluate`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_formid`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_goods`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_itemize`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_moban`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_order`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_parameter`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_pindan`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_print`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_program`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_receive`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_remind`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_store`;
+DROP TABLE IF EXISTS `ims_xiwu_scan_user`;
+]]></uninstall>
+	<upgrade><![CDATA[upgrade.php]]></upgrade>
+</manifest>

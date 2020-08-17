@@ -1,0 +1,109 @@
+{template 'xiwuheader'}
+<div class="xiwulife_content">
+	<div class="center-back right-back">
+		<div class="container-fluid">
+			<div class="info-center">
+				<div class="page-header">
+					<div class="pull-left">
+						<h4>商品管理</h4>
+					</div>
+				</div>
+                 <div class="panel panel-success">
+                    <div class="panel-body">
+                        <div class="search-box row">
+                            <form action="{php echo $this->createWebUrl('goods')}" method="post" class="form-horizontal" role="form">
+                            <div class="col-md-2">
+                                <div class="input-group">
+                                  <span class="input-group-addon" id="basic-addon1">状态:</span>
+                                    <select class="form-control" name="static">
+                                        <option value="0">上架</option>
+                                        <option value="1">下架</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group">
+                                  <input type="text" name="sousuo" class="form-control" placeholder="请输入商品名称">
+                                  <span class="input-group-btn">
+                                    <button class="btn btn-success"><span class="fa fa-search fa-lg"></span> 搜索</button>
+                                  </span>
+                                </div><!-- /input-group -->
+                            </div>
+                            </form>
+                            <div class="col-md-8">
+                                <div class="btn-group pull-right" role="group" aria-label="...">
+                                    <a href="{php echo $this->createWebUrl('goods',array('sub' => 'addgoods'));}"><button type="button" class="btn btn-success"><span class="fa fa-plus"></span>添加商品</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<div class="panel panel-success">
+                    <div class="table-responsive panel-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="15%">商品名</th>
+                                    <th width="15%">商品图</th>
+                                    <th width="15%">价格</th>
+                                    <th width="15%">销量</th>
+                                    <th width="15%">状态</th>
+                                    <th width="25%">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>[{$item['id']}]{$item['title']}</td>
+                                <td><img width="30" src="{php echo tomedia($item['pic']);}" /></td>
+                                <td class="list-money">￥{$item['price']}</td>
+                                <td>{$item['sold']}件</td>
+                                <td>
+                                    {if $item['status'] == 0}
+                                    <span class="btn-info" style="padding:2px 5px;">上架</span>
+                                    {else}
+                                    <span class="btn-danger" style="padding:2px 5px;">下架</span>
+                                    {/if}
+                                </td>
+                                <td>
+                                <div class="btn-group pull-left" role="group" aria-label="...">
+                                    {if $item['status'] == 0}
+                                    <a href="{php echo $this->createWebUrl('goods',array('sub' => 'off','id' => $item['id']));}">
+                                        <button type="button" class="btn btn-warning"><span class="fa fa-download"></span>下架</button>
+                                    </a>
+                                    {else}
+                                    <a href="{php echo $this->createWebUrl('goods',array('sub' => 'on','id' => $item['id']));}">
+                                        <button type="button" class="btn btn-info"><span class="fa fa-upload"></span>上架</button>
+                                    </a>
+                                    {/if}
+                                    <a href="{php echo $this->createWebUrl('goods',array('sub' => 'addgoods','id' => $item['id']));}">
+                                        <button type="button" class="btn btn-success"><span class="fa fa-pencil"></span>编辑</button>
+                                    </a>
+                                    <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('goods',array('sub' => 'delete','id' => $item['id']));}">
+                                        <button type="button" class="btn btn-danger"><span class="fa fa-trash fa-lg"></span>删除</button>
+                                    </a>
+                                </div>
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="pull-right">
+                                            <nav>
+                                            {$pager}
+                                            </nav>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+{template 'xiwufooter'}

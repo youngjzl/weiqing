@@ -1,0 +1,224 @@
+{template 'web/common/header_amaze_post'}
+{if $op == 'tags'}
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption">
+	                <span class="font-green bold"><span class="am-icon-object-group"></span> 分组排名</span>
+	                <span class="am-badge"><i class="am-icon-object-group"></i> {$tagname}</span>
+	                <a class="am-badge" href="{php echo $this->createWebUrl('tags',array('rid'=>$rid, 'tagpid' => $_GPC['category']['parentid'] , 'tagid' => $_GPC['category']['childid'], 'tagtid' => $_GPC['category']['threecs'], 'from' =>$_GPC['do'], 'op' =>'tags', 'type' => 'tags'))}"><i class="am-icon-bookmark"></i> 选择分组</a>
+	            </div>
+				<div class="actions">
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" data-toggle="tooltip" data-placement="bottom" href="{php echo $this->createWebUrl('rankinglist', array('rid' => $rid))}"  title="参赛者排行"><i class="am-icon-calendar"></i> 参赛者排行</a>
+					<a class="am-btn am-btn-primary am-btn-sm btn-loading-template btn" data-toggle="tooltip" data-placement="bottom" href="{php echo $this->createWebUrl('rankinglist', array('rid' => $rid, 'op' => 'tags'))}"  title="分组排行"><i class="am-icon-calendar"></i> 分组排行</a>
+				</div>
+	        </div>
+	        <div class="am-tabs tpl-index-tabs" data-am-tabs>
+					<div class="am-tabs-bd">
+						<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+							<div id="wrapperA" class="wrapper wrapper-h-auto">
+								<form method="post" class="form-horizontal" id="formfans">
+									<input type="hidden" name="op" value="del" />
+									<div class="tpl-scrollable" style="min-height: 200px;">
+										<table class="am-table am-table-hover tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th >ID</th>
+													<th >分组名称</th>
+													<th>排名</th>
+													<th >总票数</th>
+												</tr>
+											</thead>
+											<tbody >
+												<tr>
+												{loop $list_praise $key $row}
+													{php $pm = $key+1+(($pindex-1)*$psize);}
+													{if ($pm <=3)}{php $pm_icon_bg = 'am-badge-danger am-text-default';$pm_icon="am-icon-modx";}{else}{php $pm_icon_bg = 'am-badge-primary';$pm_icon="am-icon-envira";}{/if}
+														<td>
+															<span class="am-badge am-badge-warning">{$row['id']}</span>
+														</td>
+														<td>
+															<div class="">
+																<span>
+																	<img src="{php echo tomedia($row['images'])}" alt="{$row['title']}" class="user-pic am-img-thumbnail am-circle am-img-responsive" style="border-radius: 5px;">
+																	<a class="font-yellow font-yellow-size" data-toggle="tooltip"  href="javascript:;">
+																		<span>{$row['title']}  </span><span class="am-badge am-badge-default am-badge-xs"> {php echo $this->gettagname_tag($row['parentid'], $rid, 'tag')}</span>
+																	</a>
+																</span>
+															</div>
+														</td>
+														<td>
+															<span class="am-badge {$pm_icon_bg} am-round"><i class="{$pm_icon}"></i> {$pm}</span>
+														</td>
+														<td>
+															<span class="am-badge am-badge-success">{$row['piaoshu']}</span>
+														</td>
+													</tr>
+												{/loop}
+												<tr>
+													<td colspan="9" style="line-height: 10em;">
+														<div style="text-align: center;">{$pager}</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+	    </div>
+	</div>
+</div>
+{else}
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-search"></span> 排序方式
+	            </div>
+	        </div>
+	        <div class="tpl-block">
+	            <div class="am-g">
+	                <div class="tpl-form-body tpl-form-line">
+	                    <form class="am-form tpl-form-line-form" action="./index.php"  method="get" data-am-validator>
+	                    		<fieldset>
+								<input type="hidden" name="c" value="site" />
+								<input type="hidden" name="a" value="entry" />
+								<input type="hidden" name="m" value="fm_photosvote" />
+								<input type="hidden" name="do" value="rankinglist" />
+								<input type="hidden" name="rid" value="{$_GPC['rid']}" />
+		                        	<div class="am-form-group">
+		                            	<label for="user-intro" class="am-u-sm-3 am-form-label">排序方式 <span class="tpl-form-line-small-title">Order</span></label>
+	                                	<div class="am-u-sm-9">
+	                                		<div class="am-btn-toolbar">
+											<div class="am-btn-group am-btn-group-sm">
+												<button type="submit" name="indexpxf" class="am-btn {if $_GPC['indexpxf'] == -1}am-btn-warning{else}am-btn-default{/if}" value="-1"><i class="am-icon-search"></i> 最新升序</button>
+												<button type="submit" name="indexpx" class="am-btn {if $_GPC['indexpx'] == -1}am-btn-warning{else}am-btn-default{/if}" value="-1"><i class="am-icon-search"></i> 最新降序</button>
+												<button type="submit" name="indexpxf" class="am-btn {if $_GPC['indexpxf'] == 1}am-btn-warning{else}am-btn-default{/if}" value="1"><i class="am-icon-search"></i> 人气升序</button>
+												<button type="submit" name="indexpx" class="am-btn {if $_GPC['indexpx'] == 1}am-btn-warning{else}am-btn-default{/if}" value="1"><i class="am-icon-search"></i> 人气降序</button>
+												<button type="submit" name="indexpxf" class="am-btn {if $_GPC['indexpxf'] == 2}am-btn-warning{else}am-btn-default{/if}" value="2"><i class="am-icon-search"></i> 投票数升序</button>
+												<button type="submit" name="indexpx" class="am-btn {if $_GPC['indexpx'] == 2}am-btn-warning{else}am-btn-default{/if}" value="2"><i class="am-icon-search"></i> 投票数降序</button>
+											</div>
+		                        			</div>
+		                            </div>
+		                        </div>
+
+				            		<!--div class="am-form-group">
+	                                	<label for="user-intro" class="am-u-sm-3 am-form-label">投票时间 <span class="tpl-form-line-small-title">Time</span></label>
+	                                	<div class="am-u-sm-9">
+	                                		{php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d', $starttime),'endtime'=>date('Y-m-d', $endtime)));}
+	                                </div>
+	                           	</div>
+		                        <div class="am-form-group">
+		                            <div class="am-u-sm-9 am-u-sm-push-3">
+		                                <!--button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success "><i class="am-icon-search"></i> 开始搜索</button->
+		                                <a class="am-btn am-btn-success tpl-btn-bg-color-success " href="{php echo $this->createWebUrl('downloadph',array('rid'=>$rid, 'indexpxf' =>$_GPC['indexpxf'], 'indexpx' =>$_GPC['indexpx'], 'start_time' =>$starttime, 'end_time'=>$endtime,'title'=>$r['title'], 'uniacid'=>$r['uniacid'], 'tagid'=>$tagid, 'tagpid' => $tagpid))}"><i class="am-icon-download"></i> 导出</a>
+		                            </div>
+		                        </div-->
+	                        </fieldset>
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption">
+	                <span class="font-green bold"><span class="am-icon-users"></span> 参赛者排名</span>
+	                <span class="am-badge"><i class="am-icon-object-group"></i> {$tagname}</span>
+	                <a class="am-badge" href="{php echo $this->createWebUrl('tags',array('rid'=>$rid, 'tagpid' => $_GPC['category']['parentid'] , 'tagid' => $_GPC['category']['childid'], 'tagtid' => $_GPC['category']['threecs'], 'from' =>$_GPC['do'], 'op' =>'tags'))}"><i class="am-icon-bookmark"></i> 选择分组</a>
+	            </div>
+				<div class="actions">
+					<a class="am-btn am-btn-default am-btn-sm" href="{php echo $this->createWebUrl('downloadph',array('rid'=>$rid, 'indexpxf' =>$_GPC['indexpxf'], 'indexpx' =>$_GPC['indexpx'], 'start_time' =>$starttime, 'end_time'=>$endtime,'title'=>$r['title'], 'uniacid'=>$r['uniacid'], 'tagid'=>$tagid, 'tagpid' => $tagpid))}" data-toggle="tooltip" data-placement="bottom"  title="导出" style="margin-left: 3.3rem;"><i class="am-icon-download"></i> 导出</a>
+				</div>
+				<div class="actions">
+					<a class="am-btn am-btn-primary am-btn-sm btn-loading-template btn" data-toggle="tooltip" data-placement="bottom" href="{php echo $this->createWebUrl('rankinglist', array('rid' => $rid))}"  title="参赛者排行"><i class="am-icon-calendar"></i> 参赛者排行</a>
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" data-toggle="tooltip" data-placement="bottom" href="{php echo $this->createWebUrl('rankinglist', array('rid' => $rid, 'op' => 'tags'))}"  title="分组排行"><i class="am-icon-calendar"></i> 分组排行</a>
+				</div>
+	        </div>
+	        <div class="am-tabs tpl-index-tabs" data-am-tabs>
+					<div class="am-tabs-bd">
+						<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+							<div id="wrapperA" class="wrapper wrapper-h-auto">
+								<form method="post" class="form-horizontal" id="formfans">
+									<input type="hidden" name="op" value="del" />
+									<div class="tpl-scrollable" style="min-height: 200px;">
+										<table class="am-table am-table-hover tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th >UID / 参赛者</th>
+													<th>排名</th>
+													<th >组别</th>
+													<th >票数</th>
+													<th >人气</th>
+													<th >时间</th>
+												</tr>
+											</thead>
+											<tbody >
+												<tr>
+												{loop $list_praise $key $row}
+													{php $level = intval($this->fmvipleavel($rid, $uniacid, $row['from_user']));$pm = $key+1+(($pindex-1)*$psize);}
+													{if ($pm <=3)}{php $pm_icon_bg = 'am-badge-danger am-text-default';$pm_icon="am-icon-modx";}{else}{php $pm_icon_bg = 'am-badge-primary';$pm_icon="am-icon-envira";}{/if}
+														<td>
+															<div class="">
+																<span class="am-badge am-badge-warning am-round">{$row['uid']}</span>
+																<span>
+																	<img src="{php echo $this->getname($row['rid'],$row['from_user'],'4','avatar')}" alt="{php echo $this->getname($row['rid'],$row['from_user'],'20')}" class="user-pic am-img-thumbnail am-circle am-img-responsive" style="border-radius: 5px;">
+																	<a class="font-yellow font-yellow-size" data-toggle="tooltip"  href="{php echo $this->createWebUrl('provevote', array('status' => '1', 'member' => 1, 'foo' => 'post', 'rid' => $rid, 'from_user' => $row['from_user']))}">
+																		<span {if $un}class="active"{/if}>{php echo $this->getname($row['rid'],$row['from_user'],'10')}</span>
+																		<span class="level level_{$level}">{$level}</span>
+																	</a>
+																</span>
+															</div>
+														</td>
+														<td>
+															<span class="am-badge {$pm_icon_bg} am-round"><i class="{$pm_icon}"></i> {$pm}</span>
+														</td>
+														<td>
+															<span class="am-badge am-badge-default">{php echo $this->gettagname($row['tagid'],$row['tagpid'],$row['tagtid'],$rid);}</span>
+														</td>
+														<td>
+															<span class="am-badge am-badge-success">{php echo $row['photosnum'] + $row['xnphotosnum']}</span>
+														</td>
+														<td>
+															<span class="am-badge am-badge-warning">{php echo $row['hits'] + $row['xnhits']}</span>
+														</td>
+														<td>
+															<span class="am-badge am-badge-info am-text-xs" data-toggle="tooltip" title="报名时间">
+																<i class="am-icon-calendar"></i> {php echo date('Y-m-d H:i:s', $row['createtime']);}
+															</span>
+														</td>
+													</tr>
+												{/loop}
+												<tr>
+													<td colspan="9" style="line-height: 10em;">
+														<div style="text-align: center;">{$pager}</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+	    </div>
+	</div>
+</div>
+
+
+{/if}
+{template 'web/common/footer_amaze_post'}

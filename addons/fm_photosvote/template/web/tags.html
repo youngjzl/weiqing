@@ -1,0 +1,310 @@
+{template 'web/common/header_amaze_post'}
+
+{if $op == 'post'}
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-search"></span> 分组详细设置
+	            </div>
+	        </div>
+	        <div class="tpl-block">
+	            <div class="am-g">
+	                <div class="tpl-form-body tpl-form-line">
+	                    <form id="form_tags" class="am-form tpl-form-line-form form" action=""  method="post" data-am-validator>
+							<input type="hidden" name="parentid" value="{$parent['id']}" />
+	                    		<fieldset>
+
+	                    			<input type="hidden" name="icon" class="form-control" value="{$_GPC['icon']}" />
+	                    			{if !empty($parentid)}
+		                    			<div class="am-form-group">
+		                                	<label for="fm_arent" class="am-u-sm-3 am-form-label">上级分组 <span class="tpl-form-line-small-title">Parent</span></label>
+		                                	<div class="am-u-sm-9">
+		                                		<div class="form-control-static">{$parent['title']}</div>
+		                                </div>
+		                           	</div>
+		                         {/if}
+		                        	<div class="am-form-group">
+		                            <label for="fm_displayorder" class="am-u-sm-3 am-form-label">排序 <span class="tpl-form-line-small-title">Displayorder</span></label>
+		                            <div class="am-u-sm-9">
+		                            		<input type="text" name="displayorder" class="tpl-form-input" value="{$category['displayorder']}" />
+
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_title" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle  color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填" ></span>分组名称 <span class="tpl-form-line-small-title">Title</span></label>
+		                            <div class="am-u-sm-9">
+		                            		<input type="text" name="title" class="tpl-form-input" id="fm_title" value="{$category['title']}" required/>
+		                            </div>
+		                        	</div>
+
+		                        	<div class="am-form-group">
+		                            <label for="fm_description" class="am-u-sm-3 am-form-label">分组描述 <span class="tpl-form-line-small-title">Description</span></label>
+		                            <div class="am-u-sm-9">
+		                            		<input type="text" name="description" class="tpl-form-input" value="{$category['description']}" />
+		                            </div>
+		                        	</div>
+		                        	<div class="am-form-group">
+		                            <label for="fm_displayorder" class="am-u-sm-3 am-form-label">分组图片 <span class="tpl-form-line-small-title">Picture</span></label>
+		                            <div class="am-u-sm-9">
+		                            		{php echo tpl_form_field_image('images',$category['images']);}
+		                            </div>
+		                        	</div>
+		                        <div class="am-form-group">
+		                        		<div class="am-u-sm-9 am-u-sm-push-3">
+										<input type="hidden" name="token" value="{$_W['token']}" />
+		                             	<input type="submit" name="submit" value="提交" class="am-btn am-btn-primary tpl-btn-bg-color-success " />
+		                            </div>
+		                        </div>
+	                        </fieldset>
+	                    </form>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+{elseif $op == 'display'}
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-download"></span> 分组导入
+	            </div>
+				<div class="actions">
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" data-toggle="tooltip" data-placement="bottom" href="http://nvshensoft.oss-cn-shenzhen.aliyuncs.com/tags.xls" title="导入格式"><i class="am-icon-download"></i> 导入格式</a>
+				</div>
+	        </div>
+	        <div class="tpl-block">
+	            <div class="am-g">
+	                <div class="tpl-form-body tpl-form-line">
+	                    <form class="am-form tpl-form-line-form" action="" method="post" enctype="multipart/form-data"  data-am-validator>
+	                    		<fieldset>
+	                        	<div class="am-form-group">
+	                            <label for="zh-search" class="am-u-sm-3 am-form-label"><span class="am-icon-codepen"></span> 数据导入 <span class="tpl-form-line-small-title">Explain</span></label>
+	                            <div class="am-u-sm-9">
+	                            		<div class="am-form-group am-form-file">
+										<div class="input-group">
+								  			<input type="hidden" name="leadExcel" value="true">
+											<button type="button" class="am-btn am-btn-default am-btn-sm">
+											<i class="am-icon-cloud-upload"></i> 选择要上传的文件</button>
+											<input id="upload_tags" name="inputExcel" type="file">
+			                            		<input name="submitdr" type="submit" class="am-btn am-btn-primary am-btn-sm" value="开始导入">
+											<input type="hidden" name="token" value="{$_W['token']}" />
+			                            </div>
+									</div>
+									<div id="file-list"></div>
+									<script>
+									  $(function() {
+									    $('#upload_tags').on('change', function() {
+									      var fileNames = '';
+									      $.each(this.files, function() {
+									        fileNames += '<span class="am-badge">' + this.name + '</span> ';
+									      });
+									      $('#file-list').html(fileNames);
+									    });
+									  });
+									</script>
+	                            </div>
+	                       	</div>
+	                        </fieldset>
+	                    </form>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-object-group"></span> 分组管理
+	            </div>
+				<div class="actions">
+					<a class="am-btn am-btn-danger am-btn-sm btn-loading-template btn" data-toggle="tooltip" data-placement="bottom" href="#" onclick="drop_confirm('清空分组数据后无法恢复，您确定要清空分组吗?', '{php echo $this->createWebUrl('tags',array('rid'=>$rid, 'op' => 'deleteall'))}');" title="清空分组"><i class="fa fa-remove"></i> 清空分组</a>
+				</div>
+	        </div>
+	        <div class="am-tabs tpl-index-tabs" data-am-tabs>
+					<div class="am-tabs-bd">
+						<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+							<div id="wrapperA" class="wrapper wrapper-h-auto">
+								<form method="post" class="am-form tpl-form-line-form" id="formtags">
+									<input type="hidden" name="op" value="del" />
+									<div class="tpl-scrollable" style="min-height: 200px;">
+										<table class="am-table am-table-hover tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th width="100">显示顺序</th>
+													<th >分组名称</th>
+													<th >分组图片</th>
+													<th>操作</th>
+												</tr>
+											</thead>
+											<tbody class="">
+												{loop $category $row}
+													<tr>
+														<td>
+															<div class="">
+																<input type="text" class="form-control" name="displayorder[{$row['id']}]" value="{$row['displayorder']}">
+															</div>
+														</td>
+														<td>
+															<div class="am-cate-a">
+																{$row['title']}&nbsp;&nbsp;
+																{if empty($row['parentid'])}
+																	<a class="am-badge am-badge-info" href="{php echo $this->createWeburl('tags', array('op'=>'post', 'parentid' => $row['id'],'rid'=>$rid, 'icon' => '2'))}" title="添加子分组"><i class="am-icon-plus"></i> 添加子分组</a>
+																{/if}
+															</div>
+														</td>
+														<td>
+															<img src="{php echo tomedia($row['images'])}" alt="{$row['title']}" class="user-pic am-img-thumbnail am-circle am-img-responsive" style="border-radius: 5px;">
+														</td>
+														<td>
+															<div class="am-btn-toolbar">
+																<div class="am-btn-group am-btn-group-xs">
+																	<a class="am-btn am-btn-default btn " data-toggle="tooltip" data-placement="top" href="{php echo $this->createWebUrl('tags', array('op'=>'post','rid'=>$rid,'id' => $row['id'], 'icon' => '1'));}" title="编辑此分组" target="_blank"><i class="am-icon-edit"></i> 编辑</a>
+																	<a class="am-btn am-btn-danger btn " data-toggle="tooltip" data-placement="top" href="{php echo $this->createWebUrl('tags', array('op'=>'delete','rid'=>$rid,'id' => $row['id']));}" onclick="return confirm('确认删除此分组吗？');return false;" title="删除此分组"><i class="am-icon-times"></i> 删除</a>
+																</div>
+															</div>
+														</td>
+													</tr>
+													{loop $children[$row['id']] $rowp}
+														<tr>
+															<td>
+																<div class="">
+																	<input type="text" class="form-control" name="displayorder[{$rowp['id']}]" value="{$rowp['displayorder']}">
+																</div>
+															</td>
+															<td>
+																<div class="am-cate-b">
+																	{$rowp['title']}&nbsp;&nbsp;
+																		<a class="am-badge am-badge-info" href="{php echo $this->createWeburl('tags', array('op'=>'post', 'parentid' => $rowp['id'],'rid'=>$rid, 'icon' => '3'))}"><i class="am-icon-plus" title="添加子分组"></i> 添加子分组</a>
+																</div>
+															</td>
+															<td>
+																<img src="{php echo tomedia($rowp['images'])}" alt="{$rowp['title']}" class="user-pic am-img-thumbnail am-circle am-img-responsive" style="border-radius: 5px;">
+															</td>
+															<td>
+																<div class="am-btn-toolbar">
+																	<div class="am-btn-group am-btn-group-xs">
+																		<a class="am-btn am-btn-default btn " data-toggle="tooltip" data-placement="top" href="{php echo $this->createWebUrl('tags', array('op'=>'post','rid'=>$rid,'id' => $rowp['id'], 'parentid' => $rowp['parentid'], 'icon' => '2'));}" title="编辑此分组" target="_blank"><i class="am-icon-edit"></i> 编辑</a>
+																		<a class="am-btn am-btn-danger btn " data-toggle="tooltip" data-placement="top" href="{php echo $this->createWebUrl('tags', array('op'=>'delete','rid'=>$rid,'id' => $rowp['id']));}" onclick="return confirm('确认删除此分组吗？');return false;" title="删除此分组"><i class="am-icon-times"></i> 删除</a>
+																	</div>
+																</div>
+															</td>
+														</tr>
+														{loop $children[$rowp['id']] $rowps}
+															<tr>
+																<td>
+																	<div class="">
+																		<input type="text" class="form-control" name="displayorder[{$rowps['id']}]" value="{$rowps['displayorder']}">
+																	</div>
+																</td>
+																<td>
+																	<div class="am-cate-c">
+																		{$rowps['title']}&nbsp;&nbsp;
+																	</div>
+																</td>
+																<td>
+																	<img src="{php echo tomedia($rowps['images'])}" alt="{$rowps['title']}" class="user-pic am-img-thumbnail am-circle am-img-responsive" style="border-radius: 5px;">
+																</td>
+																<td>
+																	<div class="am-btn-toolbar">
+																		<div class="am-btn-group am-btn-group-xs">
+																			<a class="am-btn am-btn-default btn " data-toggle="tooltip" data-placement="top" href="{php echo $this->createWebUrl('tags', array('op'=>'post','rid'=>$rid,'id' => $rowps['id'], 'parentid' => $rowps['parentid'], 'icon' => '3'));}" title="编辑此分组" target="_blank"><i class="am-icon-edit"></i> 编辑</a>
+																			<a class="am-btn am-btn-danger btn " data-toggle="tooltip" data-placement="top" href="{php echo $this->createWebUrl('tags', array('op'=>'delete','rid'=>$rid,'id' => $rowps['id']));}" onclick="return confirm('确认删除此分组吗？');return false;" title="删除此分组"><i class="am-icon-times"></i> 删除</a>
+																		</div>
+																	</div>
+																</td>
+															</tr>
+
+														{/loop}
+													{/loop}
+
+												{/loop}
+												<a href="{php echo $this->createWeburl('tags', array('op'=>'post','rid'=>$rid, 'icon' => '1'))}"><i class="fa fa-plus-circle" title="添加新分组"></i> 添加新分组</a>
+												<tr>
+													<td colspan="1">
+						                                <div class="am-btn-toolbar">
+															<div class="am-btn-group am-btn-group-sm">
+																<a class="am-btn am-btn-primary btn" href="{php echo $this->createWeburl('tags', array('op'=>'post','rid'=>$rid, 'icon' => '1'))}"><i class="am-icon-plus-circle" title="添加新分组"></i> 添加新分组</a>
+						                                		</div>
+						                                </div>
+													</td>
+
+													<td colspan="3" style="line-height: 6em;">
+														<div style="text-align: left;">
+															<div class="am-btn-toolbar">
+																<div class="am-btn-group am-btn-group-sm">
+																	<input name="token" type="hidden" value="{$_W['token']}" />
+						                                				<input type="submit" name="submit" class="am-btn am-btn-success btn" value="提交" data-toggle="tooltip" data-placement="top" title="提交">
+							                                		</div>
+							                                </div>
+
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+	    </div>
+	</div>
+</div>
+{elseif $op == 'tags'}
+<div class="main">
+	<div class="category">
+		<form action="index.php" method="get">
+			<input type="hidden" name="i" value="{$uniacid}" />
+			<input type="hidden" name="c" value="site" />
+			<input type="hidden" name="a" value="entry" />
+			<input type="hidden" name="m" value="{$_GPC['m']}" />
+			<input type="hidden" name="do" value="{$_GPC['from']}" />
+			<input type="hidden" name="op" value="{$_GPC['type']}" />
+			<input type="hidden" name="rid" value="{$rid}" />
+		<div class="panel panel-default">
+		<div class="panel-body table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>当前分组： <span >{$tagname}</span><span class="pull-right"><a href="{php echo $this->createWebUrl($_GPC['from'], array('rid' => $rid))}" class="btn  btn-danger" style="background-color: #e2216f;  font-size: 12px;">全部分组</a></span></th>
+				</tr>
+			</thead>
+			<tbody>
+			<style type="text/css">
+			li {    list-style: none;}
+			</style>
+				<tr>
+					<td class="text-left">
+
+          				<style>.col-md-6 {width: 33%;}</style>
+						{php echo fm_form_category_2level('category', $parent, $children, $tagpid, $tagid, $tagtid)}
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+		</div>
+		</div>
+			<div class="form-group col-sm-12">
+				<input name="submit" type="submit" class="btn btn-primary col-lg-1" value="提交">
+				<input type="hidden" name="token" value="{$_W['token']}" />
+			</div>
+		</form>
+	</div>
+</div>
+{/if}
+{template 'web/common/footer_amaze_post'}

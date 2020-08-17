@@ -1,0 +1,233 @@
+{template 'web/common/header_amaze_post'}
+
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-search"></span> 筛选
+	            </div>
+	        </div>
+	        <div class="tpl-block">
+	            <div class="am-g">
+	                <div class="tpl-form-body tpl-form-line">
+	                    <form class="am-form tpl-form-line-form" action="./index.php"  method="get" data-am-validator>
+	                    		<fieldset>
+							<input type="hidden" name="c" value="site" />
+							<input type="hidden" name="a" value="entry" />
+							<input type="hidden" name="m" value="fm_photosvote" />
+							<input type="hidden" name="do" value="message" />
+							<input type="hidden" name="rid" value="{$_GPC['rid']}" />
+	                        	<div class="am-form-group">
+	                            <label for="fm-search" class="am-u-sm-3 am-form-label">综合搜索 <span class="tpl-form-line-small-title">Search</span></label>
+	                            <div class="am-u-sm-9">
+	                                <input type="text" name="keyword" value="{$_GPC['keyword']}" class="tpl-form-input" id="zh-search" minlength="1"  placeholder="请输入 昵称 或者 评论内容 或者 IP" />
+	                                <div class="am-alert am-alert-warning alert alert-dismissible" role="alert">
+	                                		<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="right: 0;"><span aria-hidden="true">&times;</span></button>
+									  	{if (!empty($_GPC['time']['start']))}在 {php echo date('Y-m-d', $starttime)} - {php echo date('Y-m-d', $endtime)}之间，{/if}系统搜索到 {$total} 条{if $keyword}包含 “{$keyword}” 的相关{/if}数据......
+									</div>
+	                            </div>
+	                        </div>
+	                        <div class="am-form-group">
+                                	<label for="user-intro" class="am-u-sm-3 am-form-label">是否删除 <span class="tpl-form-line-small-title">Isdel</span></label>
+                                	<div class="am-u-sm-9">
+                                		<label class="am-radio-inline">
+		            						<input  name="isdel" id="isdel" type="radio" value="1" placeholder="" {if $_GPC['isdel'] == '1'}checked="checked" {/if}> 已删除</label>
+                                		<label class="am-radio-inline">
+		            						<input  name="isdel" id="isdel" type="radio" value="-1" placeholder="" {if $_GPC['isdel'] == '-1'}checked="checked" {/if}> 正常</label>
+                                </div>
+                           	</div>
+
+			            		<div class="am-form-group">
+                                	<label for="user-intro" class="am-u-sm-3 am-form-label">评论时间 <span class="tpl-form-line-small-title">Time</span></label>
+                                	<div class="am-u-sm-9">
+                                		{php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d', $starttime),'endtime'=>date('Y-m-d', $endtime)));}
+                                </div>
+                           	</div>
+	                        <div class="am-form-group">
+	                            <div class="am-u-sm-9 am-u-sm-push-3">
+	                                <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success "><i class="am-icon-search"></i> 开始搜索</button>
+	                            </div>
+	                        </div>
+	                        </fieldset>
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                {if $_GPC['zan'] == '1'}<span class="am-icon-thumbs-o-up"></span> 点赞{else}<span class="am-icon-comments"></span> 评论{/if}管理
+	            </div>
+				<div class="actions">
+					<a class="am-btn am-btn-danger am-btn-sm btn-loading-template btn" data-toggle="tooltip" data-placement="bottom" href="#" onclick="drop_confirm('清空投票数据后无法恢复，您确定要清空数据吗?', '{php echo $this->createWebUrl('deleteallmessage',array('rid'=>$rid))}');" title="清空评论数据后无法恢复，请谨慎操作"><i class="am-icon-remove"></i> 清空数据</a>
+					<!--<a class="am-btn am-btn-danger am-btn-sm btn-loading-template btn" data-toggle="tooltip" data-placement="bottom" href="#" onclick="drop_confirm('清空投票数据后无法恢复，您确定要清空数据吗?', '{php echo $this->createWebUrl('deleteallmessage',array('rid'=>$rid,'type'=>'sec'))}');" title="清空评论数据后无法恢复，请谨慎操作"><i class="am-icon-remove"></i> 清除搜索数据</a>-->
+				</div>
+				<div class="actions">
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" data-toggle="tooltip" data-placement="bottom" href="{php echo $this->createWebUrl('addmessage',array('rid'=>$rid))}"  title="预设评论管理"><i class="am-icon-calendar"></i> 预设</a>
+	            {if $_GPC['zan'] == '1'}
+	            		<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('message',array('rid'=>$rid))}" data-toggle="tooltip" data-placement="bottom"  title="评论" style="margin-right: 3.3rem;"><i class="am-icon-comment"></i> 评论</a>
+				{else}
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('message',array('rid'=>$rid, 'zan'=>1))}" data-toggle="tooltip" data-placement="bottom"  title="点赞" style="margin-right: 3.3rem;"><i class="am-icon-thumbs-o-up"></i> 点赞</a>
+
+				{/if}
+				</div>
+	        </div>
+	        <div class="am-tabs tpl-index-tabs" data-am-tabs>
+					<div class="am-tabs-bd">
+						<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+							<div id="wrapperA" class="wrapper wrapper-h-auto">
+								<form method="post" class="form-horizontal" id="formfans">
+									<input type="hidden" name="op" value="del" />
+									<div class="tpl-scrollable" style="min-height: 200px;">
+										<table class="am-table am-table-hover tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th style="min-width: 300px;"><input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"> 评论人</th>
+													<th style="min-width: 300px;">内容</th>
+													<th style="width: 150px;">时间 / 信息</th>
+													<th >被评论人</th>
+													<th >状态</th>
+													<th >操作</th>
+												</tr>
+											</thead>
+											<tbody >
+												{loop $messages $row}
+													{php $iparr = iunserializer($row['iparr']);$row['content'] = $this->emotion($row['content']);$level = intval($this->fmvipleavel($rid, $uniacid, $row['from_user']));$tlevel = intval($this->fmvipleavel($rid, $uniacid, $row['tfrom_user']));$alevel = intval($this->fmvipleavel($rid, $uniacid, $row['afrom_user']));}
+													{if $keyword}
+														<style>
+															.active {background:#FFFC00; color:red;}
+														</style>
+														{php $un = stristr($this->getname($row['rid'],$row['from_user'],'20'),$keyword);$rn = stristr($row['nickname'],$keyword); $fn = stristr($fuser['nickname'],$keyword)}
+													{/if}
+												<tr>
+													<td>
+														<div class="">
+															<input type="checkbox" name="uid[]" value="{$row['id']}" class="">
+															<span class="am-badge am-badge-warning am-round">{$row['id']}</span>
+															<span>
+																<img src="{php echo $this->getname($row['rid'],$row['from_user'],'4','avatar')}" alt="{php echo $this->getname($row['rid'],$row['from_user'],'20')}" class="user-pic am-img-thumbnail am-circle am-img-responsive" style="border-radius: 5px;">
+																<a class="font-yellow font-yellow-size" data-toggle="tooltip"  href="{php echo $this->createWebUrl('votemembers', array('op' => 'edit', 'rid' => $rid, 'from_user' => $row['from_user']))}">
+																	<span {if $un}class="active"{/if}>{php echo $this->getname($row['rid'],$row['from_user'],'10')}</span>
+																	<span class="level level_{$level}">{$level}</span>
+																</a>
+															</span>
+														</div>
+													</td>
+													<td>
+														<span {if !empty($keyword)}{if stristr($row['content'],$keyword)}class="active"{/if}{/if}>{if $row['zan'] ==1}👍 赞了一个 ~~~{else}{$row['content']}{/if}</span>
+													</td>
+													<td>
+														<span class="am-badge am-badge-info am-text-xs" data-toggle="tooltip" title="评论时间">
+															<i class="am-icon-calendar"></i> {php echo date('Y-m-d H:i:s', $row['createtime']);}
+														</span>
+														<span class="am-badge am-badge-info am-text-xs {if strstr($keyword, $row['ip'])}active{/if}"  data-toggle="tooltip" title="评论IP">{$row['ip']}</span>
+														<span class="am-badge am-badge-info am-text-xs"  data-toggle="tooltip" title="评论地区">{if is_array($iparr)}{$iparr['country']} | {$iparr['province']} | {$iparr['city']} | {$iparr['ist']}{else}{$row['iparr']}{/if}</span>
+													</td>
+													<td>
+														<img src="{php echo $this->getname($row['rid'],$row['tfrom_user'],'4','avatar')}" alt="{php echo $this->getname($row['rid'],$row['tfrom_user'],'10')}" class="user-pic am-img-thumbnail am-circle am-img-responsive" style="border-radius: 5px;">
+														<a class="font-yellow font-yellow-size" data-toggle="tooltip" title="评论给 {php echo $this->getname($row['rid'],$row['tfrom_user'],'10')}"  href="{php echo $this->createWebUrl('provevote', array('status' => '1', 'member' => 1, 'foo' => 'post', 'rid' => $rid, 'from_user' => $row['tfrom_user']))}">
+															<span {if $fn}class="active"{/if}>{php echo $this->getname($row['rid'],$row['tfrom_user'],'10')}</span>
+															<span class="level level_{$tlevel}">{$tlevel}</span>
+														</a>
+													</td>
+													<td>
+														{if $row['is_del'] == 1}
+															<a href="javascript:;" class="am-badge am-badge-danger" data-toggle="tooltip" data-placement="top" title="取消关注而被删除的评论">已删</a>
+														{else}
+															<a href="javascript:;" class="am-badge am-badge-success" data-toggle="tooltip" data-placement="top" title="正常评论">正常</a>
+
+														{/if}
+													</td>
+													<td>
+														<div class="am-btn-toolbar">
+															<div class="am-btn-group am-btn-group-sm">
+																<a data="{$row['status']}" class="am-btn {if $row['status']==1}am-btn-default{else} am-btn-danger {/if} am-btn-sm manage" data-toggle="tooltip" data-placement="top" href="javascript:;" onclick="setProperty(this,{$row['id']},'shenhe')" title="点击审核评论" target="_blank">{if $row['status']==1}<i class="am-icon-star"></i> 已审核{else}<i class="am-icon-star-o"></i> 未审核{/if}</a>
+															</div>
+														</div>
+													</td>
+												</tr>
+												{/loop}
+												<tr>
+													<td style="line-height: 8.2em;">
+								                        <div class="am-form-group">
+								                            <div class="am-u-sm-11 am-u-sm-push-1">
+								                            		<input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+								                                <input name="token" type="hidden" value="{$_W['token']}" />
+								                                <input type="submit" name="submit" class="am-btn am-btn-danger" value="删除选中的评论">
+
+								                            </div>
+								                        </div>
+													</td>
+													<td colspan="9" style="line-height: 10em;">
+														<div style="text-align: center;">{$pager}</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+	    </div>
+	</div>
+</div>
+<div id="guanbi" class="hide">
+	<span type="button" class="pull-right btn btn-primary" data-dismiss="modal" aria-hidden="true">关闭</span>
+</div>
+<script>
+	require(['jquery', 'util'], function($, u){
+		$('#formfans').submit(function(){
+		    if($(":checkbox[name='uid[]']:checked").size() > 0){
+			    var check = $(":checkbox[name='uid[]']:checked");
+			    if( confirm("确认要删除选择的评论记录?")){
+		            var id = new Array();
+				    var rid = {$rid};
+		            check.each(function(i){
+			            id[i] = $(this).val();
+		            });
+		            $.post('{php echo $this->createWebUrl('deletemsg')}', {idArr:id,rid:rid},function(data){
+			        if (data.errno ==0){
+						location.reload();
+			        } else {
+				        alert(data.error);
+			        }
+		            },'json');
+		        }
+		    }else{
+		        u.message('没有选择评论', '', 'error');
+		        return false;
+		    }
+	    });
+	});
+
+	function setProperty(obj,id,type){
+
+		$.post("{php echo $this->createWebUrl('settuijian')}"
+			,{id:id,type:type, data: obj.getAttribute("data")}
+			,function(d){
+				console.log(obj.getAttribute("data"));
+				if(type=='shenhe'){
+					$(obj).html($(obj).html().replace("...",""));
+					$(obj).html( d.data=='1'?'<i class="fa fa-star"></i>已审核':'<i class="fa fa-star-o"></i>未审核');
+					$(obj).attr("data",d.data);
+					if(d.result==1){
+						$(obj).toggleClass("btn-info");
+					}
+				}
+
+			}
+			,"json"
+		);
+	}
+</script>
+{template 'web/common/footer_amaze_post'}

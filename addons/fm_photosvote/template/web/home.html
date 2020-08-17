@@ -1,0 +1,515 @@
+{template 'web/common/header_amaze'}
+	<div class="row">
+		<div class="am-u-md-12 am-u-sm-12 row-mb">
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title">
+					<div class="tpl-caption font-yellow ">
+						<i class="am-icon-desktop"></i>
+						<span >活动进度</span>
+					</div>
+
+					<div class="actions-hd">
+						<ul class="actions-btn">
+							<li class="green"><a href="{php echo $this->createWebUrl('start');}" target="_blank"><i class="am-icon-plus-square"></i> 添加活动</a></li>
+							<li class="blue"><a href="{php echo $this->createWebUrl('index')}" target="_blank"><i class="am-icon-plus-square"></i> 管理活动</a></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="am-tabs tpl-index-tabs" data-am-tabs>
+					<ul class="am-tabs-nav am-nav am-nav-tabs">
+						<li class="am-active">
+							<a href="#tab1">进行中 <span class="am-badge tpl-badge-primary am-round">{$total_list}</span></a>
+						</li>
+						<li>
+							<a href="#tab2">已完成 <span class="am-badge tpl-badge-success am-round">{php echo ($total_list_all - $total_list)}</span></a>
+						</li>
+					</ul>
+
+					<div class="am-tabs-bd">
+						<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+							<div id="wrapperhdysh" class="wrapper wrapper-h" style="overflow-y: auto;">
+								<div id="scroller" class="scroller">
+									<div class="tpl-scrollable" style="min-height: 200px;">
+										<table class="am-table tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th width="150px">活动</th>
+													<th width="350px">进度</th>
+													<th ></th>
+													<th>数据</th>
+													<th>操作</th>
+												</tr>
+											</thead>
+											<tbody id="html_hdysh">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="am-tab-panel am-fade" id="tab2">
+							<div id="wrapperhdwsh" class="wrapper wrapper-h" style="overflow-y: auto;">
+								<div id="scroller" class="scroller">
+									<div class="tpl-scrollable" style="min-height: 200px;">
+										<table class="am-table tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th width="150px">活动</th>
+													<th width="350px">进度（已结束）</th>
+													<th >数据</th>
+													<th>操作</th>
+												</tr>
+											</thead>
+											<tbody id="html_hdwsh">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="am-u-md-7 am-u-sm-12 row-mb">
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title">
+					<div class="tpl-caption font-green ">
+						<i class="am-icon-cloud-download"></i>
+						<span> 数据分析</span>
+					</div>
+					<div class="actions">
+						<ul class="actions-btn">
+							<li class="yellow" id="refresh_alldata"><i class="am-icon-refresh"></i></li>
+							<li class="blue-on moreon"><a class="more" href="{php echo $this->createWebUrl('statistics', array('rid' => $rid))}"> 查看详情<i class="m-icon-swapright m-icon-white"></i></a></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="tpl-echarts" id="tpl-alldata" >
+
+				</div>
+			</div>
+		</div>
+		<div class="am-u-md-5 am-u-sm-12 row-mb">
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title">
+					<div class="tpl-caption font-yellow ">
+						<i class="am-icon-bar-chart"></i>
+						<span >动态</span>
+					</div>
+				</div>
+
+				<div class="am-tabs tpl-index-tabs" data-am-tabs>
+					<ul class="am-tabs-nav am-nav am-nav-tabs">
+						<li class="am-active">
+							<a href="#tab1">排行榜</a>
+						</li>
+						<li>
+							<a href="#tab2">充值榜</a>
+						</li>
+						<li>
+							<a href="#tab3">礼物榜</a>
+						</li>
+						<li>
+							<a href="#tab4">积分榜</a>
+						</li>
+					</ul>
+
+					<div class="am-tabs-bd">
+						<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+							<div id="wrapperA" class="wrapper">
+								<div id="scroller" class="scroller">
+									<div class="tpl-scrollable">
+										<div class="number-stats">
+											<div class="stat-number am-fl am-u-md-6">
+												<div class="title am-text-right"> 人数 </div>
+												<div class="number am-text-right am-text-warning"> {php echo ($this->getshuju('1') - $total_regsh_all)} </div>
+											</div>
+											<div class="stat-number am-fr am-u-md-6">
+												<div class="title"> 总票数 </div>
+												<div class="number am-text-success"> {php echo $this->getshuju('6')} </div>
+											</div>
+
+										</div>
+										<table class="am-table tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th >参赛者</th>
+													<th >排名</th>
+													<th>票数</th>
+													<th width="100px">活动</th>
+												</tr>
+											</thead>
+											<tbody id="html_rank">
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="am-tab-panel am-fade" id="tab2">
+							<div id="wrapperB" class="wrapper">
+								<div id="scroller" class="scroller">
+									<div class="tpl-scrollable">
+										<div class="number-stats">
+											<div class="stat-number am-fl am-u-md-6">
+												<div class="title am-text-right"> 人数 </div>
+												<div class="number am-text-right am-text-warning"> {php echo $this->getshuju('10')} </div>
+											</div>
+											<div class="stat-number am-fr am-u-md-6">
+												<div class="title"> 总充值 </div>
+												<div class="number am-text-success"> {php echo $this->getjifen()} </div>
+											</div>
+
+										</div>
+										<table class="am-table tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th >参赛者</th>
+													<th >排名</th>
+													<th>积分</th>
+													<th width="150px">活动</th>
+												</tr>
+											</thead>
+											<tbody id = "html_charge">
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="am-tab-panel am-fade" id="tab3">
+							<div id="wrapperC" class="wrapper">
+								<div id="scroller" class="scroller">
+									<div class="tpl-scrollable">
+										<div class="number-stats">
+											<div class="stat-number am-fl am-u-md-6">
+												<div class="title am-text-right"> 人数 </div>
+												<div class="number am-text-right am-text-warning"> {php echo ($this->getshuju('1') - $total_regsh_all)} </div>
+											</div>
+											<div class="stat-number am-fr am-u-md-6">
+												<div class="title"> 总礼物 </div>
+												<div class="number am-text-success"> {php echo $this->getshuju('5')} </div>
+											</div>
+
+										</div>
+										<table class="am-table tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th >参赛者</th>
+													<th >排名</th>
+													<th>礼物数</th>
+													<th width="150px">活动</th>
+												</tr>
+											</thead>
+											<tbody id="html_gift">
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="am-tab-panel am-fade" id="tab4">
+							<div id="wrapperD" class="wrapper">
+								<div id="scroller" class="scroller">
+									<div class="tpl-scrollable">
+										<div class="number-stats">
+											<div class="stat-number am-fl am-u-md-6">
+												<div class="title am-text-right"> 人数 </div>
+												<div class="number am-text-right am-text-warning"> {php echo $this->getshuju('10')} </div>
+											</div>
+											<div class="stat-number am-fr am-u-md-6">
+												<div class="title"> 总积分 </div>
+												<div class="number am-text-success"> {php echo $this->getjifen()} </div>
+											</div>
+
+										</div>
+										<table class="am-table tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th >参赛者</th>
+													<th >排名</th>
+													<th>积分</th>
+													<th width="150px">活动</th>
+												</tr>
+											</thead>
+											<tbody id="html_jifen">
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="am-u-md-6 am-u-sm-12 row-mb ">
+			<div class="tpl-portlet shebeibg">
+				<div class="tpl-portlet-title font-sblue-border">
+					<div class="tpl-caption font-sblue ">
+						<i class="am-icon-mobile"></i>
+						<span> 设备统计</span>
+					</div>
+					<div class="actions">
+						<ul class="actions-btn">
+							<li class="yellow" id="refresh_shebei"><i class="am-icon-refresh"></i></li>
+							<li class="blue-on moreon"><a class="more" href="{php echo $this->createWebUrl('statistics', array('rid' => $rid))}"> 查看详情<i class="m-icon-swapright m-icon-white"></i></a></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="tpl-echarts" id="tpl-shebei">
+
+				</div>
+			</div>
+		</div>
+		<div class="am-u-md-6 am-u-sm-12 row-mb">
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title">
+					<div class="tpl-caption font-purple">
+						<i class="am-icon-clone"></i>
+						<span> 投票动态</span>
+					</div>
+					<div class="actions">
+						<ul class="actions-btn">
+							<li class="yellow" id="refresh_vote"><i class="am-icon-refresh"></i></li>
+							<li class="purple-on moreon"><a class="more" href="{php echo $this->createWebUrl('statistics', array('rid' => $rid))}"> 查看更多<i class="m-icon-swapright m-icon-white"></i></a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tpl-scrollable">
+					<div class="number-stats">
+						<div class="stat-number am-fl am-u-md-6">
+							<div class="title am-text-right"> 人数 </div>
+							<div class="number am-text-right am-text-warning"> {php echo $this->getshuju('1')} </div>
+						</div>
+						<div class="stat-number am-fr am-u-md-6">
+							<div class="title"> 总票数 </div>
+							<div class="number am-text-success"> {php echo $this->getshuju('6')} </div>
+						</div>
+
+					</div>
+
+					<table class="am-table tpl-table">
+						<thead>
+							<tr class="tpl-table-uppercase">
+								<th >投票人</th>
+								<th >投给</th>
+								<th>票数</th>
+								<th>时间</th>
+								<th width="100px">活动</th>
+							</tr>
+						</thead>
+						<tbody id="html_vote">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+
+		<div class="am-u-md-4 am-u-sm-12 row-mb">
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title">
+					<div class="tpl-caption font-green">
+						<i class="am-icon-user"></i>
+						<span> 最新报名</span>
+					</div>
+					<div class="actions">
+						<ul class="actions-btn">
+							<li class="yellow" id="refresh_newreg"><i class="am-icon-refresh"></i></li>
+							<li class="green-on moreon"><a class="more" href="{php echo $this->createWebUrl('statistics', array('rid' => $rid))}"> 查看更多<i class="m-icon-swapright m-icon-white"></i></a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tpl-scrollable">
+					<table class="am-table tpl-table">
+						<thead>
+							<tr class="tpl-table-uppercase">
+								<th style="min-width: 100px;">报名人</th>
+								<th>报名时间</th>
+								<th>所属活动</th>
+							</tr>
+						</thead>
+						<tbody id = 'html_newreg'>
+						</tbody>
+					</table>
+				</div>
+
+
+
+			</div>
+		</div>
+		<div class="am-u-md-4 am-u-sm-12 row-mb">
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title">
+					<div class="tpl-caption font-green">
+						<i class="am-icon-user-plus"></i>
+						<span> 最新审核</span>
+					</div>
+					<div class="actions">
+						<ul class="actions-btn">
+							<li class="yellow" id="refresh_newwsh"><i class="am-icon-refresh"></i></li>
+							<li class="green-on moreon"><a class="more" href="{php echo $this->createWebUrl('statistics', array('rid' => $rid))}"> 查看更多<i class="m-icon-swapright m-icon-white"></i></a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tpl-scrollable">
+
+					<table class="am-table tpl-table">
+						<thead>
+							<tr class="tpl-table-uppercase">
+								<th style="min-width: 100px;">报名人</th>
+								<th>报名时间</th>
+								<th>所属活动</th>
+							</tr>
+						</thead>
+						<tbody id="html_newwsh">
+
+						</tbody>
+					</table>
+				</div>
+
+
+
+			</div>
+		</div>
+		<div class="am-u-md-4 am-u-sm-12 row-mb">
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title">
+					<div class="tpl-caption font-green">
+						<i class="am-icon-users"></i>
+						<span> 最新粉丝</span>
+					</div>
+					<div class="actions">
+						<ul class="actions-btn">
+							<li class="yellow" id="refresh_newfans"><i class="am-icon-refresh"></i></li>
+							<li class="green-on moreon"><a class="more" href="{php echo $this->createWebUrl('statistics', array('rid' => $rid))}"> 查看更多<i class="m-icon-swapright m-icon-white"></i></a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="tpl-scrollable">
+					<table class="am-table tpl-table">
+						<thead>
+							<tr class="tpl-table-uppercase">
+								<th style="min-width: 100px;">粉丝</th>
+								<th>加入时间</th>
+								<th>所属活动</th>
+							</tr>
+						</thead>
+						<tbody id="html_newfans">
+						</tbody>
+					</table>
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="am-u-md-6 am-u-sm-12 row-mb">
+
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title">
+					<div class="tpl-caption font-yellow ">
+						<i class="am-icon-comments-o"></i>
+						<span>留言</span>
+						<span class="caption-helper">{$total_message_all} 条</span>
+					</div>
+					<div class="actions">
+						<ul class="actions-btn am-hide">
+							<li class="yellow-on moreon"><a class="more" href="{php echo $this->createWebUrl('message', array('rid' => $rid))}" target="_blank"> 查看全部<i class="m-icon-swapright m-icon-white"></i></a></li>
+						</ul>
+					</div>
+				</div>
+				<div id="wrapper_comment" class="wrapper" style="overflow-y: auto;">
+					<div id="scroller" class="scroller">
+						<ul id ="html_comment" class="am-comments-list am-comments-list-flip tpl-task-list">
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="am-u-md-6 am-u-sm-12 row-mb">
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title">
+					<div class="tpl-caption font-yellow ">
+						<i class="am-icon-comment-o"></i>
+						<span>消息</span>
+						<span class="caption-helper">{$msgs['total']} 条</span>
+					</div>
+					<div class="actions">
+						<ul class="actions-btn am-hide">
+							<li class="yellow-on moreon"><a class="more" href="{php echo $this->createWebUrl('message', array('rid' => $rid))}" target="_blank"> 查看全部<i class="m-icon-swapright m-icon-white"></i></a></li>
+						</ul>
+					</div>
+				</div>
+				<div id="wrapper_msgs" class="wrapper" style="overflow-y: auto;">
+					<div id="scroller" class="scroller">
+						<ul id="html_msgs" class="am-comments-list am-comments-list-flip tpl-task-list tpl-task-remind">
+						</ul>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="am-u-md-12 am-u-sm-12 row-mb">
+			<div class="tpl-portlet" style="background-color: #404a59;">
+				<div class="tpl-portlet-title" style="border-bottom:0;">
+					<div class="tpl-caption font-red ">
+						<i class="am-icon-globe"></i>
+						<span> 投票数据统计</span>
+					</div>
+					<div class="actions">
+						<ul class="actions-btn">
+							<li class="yellow" id="refresh_earth"><i class="am-icon-refresh"></i></li>
+							<li class="red-on moreon"><a class="more" href="#"> 查看详情<i class="m-icon-swapright m-icon-white"></i></a></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="tpl-echarts" id="tpl-echarts-earth" style="min-height: 600px;">
+
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+
+</div>
+</div>
+
+<script>
+	var maptitle =  '{$_W['account']['name']} 投票位置数据';
+</script>
+</div>
+{template 'web/common/footer_amaze'}

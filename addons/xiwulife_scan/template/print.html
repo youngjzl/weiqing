@@ -1,0 +1,208 @@
+{template 'xiwuheader'}
+<style>
+.form-group{ margin:15px 0px !important;}
+.panel.panel-default{margin-top:15px;}
+</style>
+{if $_GPC['sub'] == addprint}
+<div class="xiwulife_content">
+    <div class="center-back right-back">
+        <div class="container-fluid">
+            <div class="info-center">
+                <div class="page-header">
+                    <div class="pull-left">
+                        <h4>{if $_GPC['id'] != ''}编辑{$item['title']}{else}添加打印机{/if}</h4>
+                    </div>
+                </div>
+                <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" id="form1">
+                <div class="panel panel-success">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">打印机名称</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" placeholder="" name="title" value="{$item['title']}" />
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">打印机编码</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="number" placeholder="SN码|机器码|IMEI码" value="{$item['number']}" />
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">打印机key</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="key" placeholder="API密钥" value="{$item['key']}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">打印机状态</label>
+                          <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['default'] == 0}active{/if}">
+                                    <input type="radio" name="default" value="0" autocomplete="off" {if $item['default'] == 0}checked{/if}> 打开
+                                </label>
+                                <label class="btn btn-success {if $item['default'] == 1}active{/if}">
+                                    <input type="radio" name="default" value="1" autocomplete="off" {if $item['default'] == 1}checked{/if}> 关闭
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">打印机类型</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['style'] == '58mm'}active{/if}">
+                                    <input type="radio" name="style" value="58mm" autocomplete="off" {if $item['style'] == '58mm'}checked{/if}> 58mm
+                                </label>
+                                <label class="btn btn-success {if $item['style'] == '80mm'}active{/if}">
+                                    <input type="radio" name="style" value="80mm" autocomplete="off" {if $item['style'] == '80mm'}checked{/if}> 80mm
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">打印类型</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['printtype'] == 0}active{/if}">
+                                    <input type="radio" name="printtype" value="0" autocomplete="off" {if $item['printtype'] == 0}checked{/if}> 全部打印
+                                </label>
+                                <label class="btn btn-success {if $item['printtype'] == 1}active{/if}">
+                                    <input type="radio" name="printtype" value="1" autocomplete="off" {if $item['printtype'] == 1}checked{/if}> 菜单打印
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">打印方式</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['method'] == 0}active{/if}">
+                                    <input type="radio" name="method" value="0" autocomplete="off" {if $item['method'] == 0}checked{/if}> 接单打印
+                                </label>
+                                <label class="btn btn-success {if $item['method'] == 1}active{/if}">
+                                    <input type="radio" name="method" value="1" autocomplete="off" {if $item['method'] == 1}checked{/if}> 下单打印
+                                </label>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">打印联数</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" placeholder="" name="printnum" value="{if $item['printnum']}{$item['printnum']}{else}1{/if}" />
+                            <span class="help-block">阿莫源码社区提示：注：写数字，不要带单位；（如：1），默认为1</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"></label>
+                        <div class="col-sm-6 col-xs-6">
+                            <button type="submit" class="btn btn-success btn-block" name="tijiao" value="提交">提交</button>
+                            <input type="hidden" name="token" value="{$_W['token']}" />
+                        </div>
+                    </div>
+                    <div class="panel panel-warning" style="margin:0px 15px; margin-bottom:20px;">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">注：</h3>
+                      </div>
+                      <div class="zhu_list">1. 目前仅支持飞蛾云打印机</div>
+                      <div class="zhu_list" style="margin-bottom:15px;">2. 打印机的编码和KEY在打印机底部</div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{else}
+<div class="xiwulife_content">
+    <div class="center-back right-back">
+        <div class="container-fluid">
+            <div class="info-center">
+                <div class="page-header">
+                    <div class="pull-left">
+                        <h4>打印机管理</h4>
+                    </div>
+                </div>
+                 <div class="panel panel-success">
+                    <div class="panel-heading">操作</div>
+                    <div class="panel-body">
+                        <div class="search-box row">
+                            <div class="col-md-12">
+                                <div class="btn-group pull-right" role="group" aria-label="...">
+                                    <a href="{php echo $this->createWebUrl('print',array('sub' => 'addprint'));}"><button type="button" class="btn btn-success"><span class="fa fa-plus"></span>添加打印机</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-success" {$list != ''}>
+                    <div class="table-responsive panel-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="10%">打印机名称</th>
+                                    <th width="10%">编码</th>
+                                    <th width="10%">key</th>
+                                    <th width="15%">打印方式</th>
+                                    <th width="15%">类型</th>
+                                    <th width="15%">状态</th>
+                                    <th width="25%">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>[{$item['id']}]{$item['title']}</td>
+                                <td>{$item['number']}</td>
+                                <td>{$item['key']}</td>
+                                <td>{if $item['method'] == 0}点击打印{else}下单打印{/if}</td>
+                                <td>{$item['style']}</td>
+                                <td>
+                                    {if $item['default'] == 0}
+                                    <span class="btn-info" style="padding:2px 5px;">已开启</span>
+                                    {else}
+                                    <span class="btn-danger" style="padding:2px 5px;">已关闭</span>
+                                    {/if}
+                                </td>
+                                <td>
+                                <div class="btn-group pull-left" role="group" aria-label="...">
+                                    {if $item['default'] == 0}
+                                    <a href="{php echo $this->createWebUrl('print',array('sub' => 'off','id' => $item['id']));}">
+                                        <button type="button" class="btn btn-warning"><span class="fa fa-download"></span>关闭</button>
+                                    </a>
+                                    {else}
+                                    <a href="{php echo $this->createWebUrl('print',array('sub' => 'on','id' => $item['id']));}">
+                                        <button type="button" class="btn btn-info"><span class="fa fa-upload"></span>开启</button>
+                                    </a>
+                                    {/if}
+                                    <a href="{php echo $this->createWebUrl('print',array('sub' => 'addprint','id' => $item['id']));}">
+                                        <button type="button" class="btn btn-success"><span class="fa fa-pencil"></span>编辑</button>
+                                    </a>
+                                    <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('print',array('sub' => 'delete','id' => $item['id']));}">
+                                        <button type="button" class="btn btn-danger"><span class="fa fa-trash fa-lg"></span>删除</button>
+                                    </a>
+                                </div>
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="pull-right">
+                                            <nav>
+                                            {$pager}
+                                            </nav>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{/if}
+{template 'xiwufooter'}

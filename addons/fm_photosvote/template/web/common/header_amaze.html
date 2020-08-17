@@ -1,0 +1,394 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{php if(isset($title)) $_W['page']['title'] = $title}{if !empty($_W['page']['title'])}{$_W['page']['title']}{/if}{if empty($_W['page']['copyright']['sitename'])}{if IMS_FAMILY != 'x'}{if !empty($_W['page']['title'])} - {/if}微擎 - 公众平台自助引擎 -  Powered by WE7.CC{/if}{else}{if !empty($_W['page']['title'])} - {/if}{$_W['page']['copyright']['sitename']}{/if}</title>
+	<meta name="keywords" content="{if empty($_W['page']['copyright']['keywords'])}{if IMS_FAMILY != 'x'}微擎,微信,微信公众平台,we7.cc{/if}{else}{$_W['page']['copyright']['keywords']}{/if}" />
+	<meta name="description" content="{if empty($_W['page']['copyright']['description'])}{if IMS_FAMILY != 'x'}公众平台自助引擎（www.wazyb.com），简称微擎，微擎是一款免费开源的微信公众平台管理系统，是国内最完善移动网站及移动互联网技术解决方案。{/if}{else}{$_W['page']['copyright']['description']}{/if}" />
+	<link rel="shortcut icon" href="{if !empty($_W['setting']['copyright']['icon'])}{$_W['attachurl']}{$_W['setting']['copyright']['icon']}{else}./resource/images/favicon.ico{/if}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Fmoons" />
+	<link href="./resource/css/bootstrap.min.css?v=20170426" rel="stylesheet">
+	<link href="./resource/css/common.css?v=20170426" rel="stylesheet">
+
+    <link rel="stylesheet" href="{FM_STATIC_WEB}public/web/assets/css/amazeui.min.css" />
+    <link rel="stylesheet" href="{FM_STATIC_WEB}public/web/assets/css/admin.css">
+    <link rel="stylesheet" href="{FM_STATIC_WEB}public/web/assets/css/app.css?v=1">
+    <script src="{FM_STATIC_WEB}public/web/assets/js/jquery.min.js"></script>
+    <script src="{FM_STATIC_WEB}public/web/assets/js/zclip/jquery.zclip.min.js"></script>
+	<script type="text/javascript" src="./resource/js/lib/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    	$(function(){
+  		var progress = $.AMUI.progress;
+    		progress.start();
+	});
+	if(navigator.appName == 'Microsoft Internet Explorer'){
+		if(navigator.userAgent.indexOf("MSIE 5.0")>0 || navigator.userAgent.indexOf("MSIE 6.0")>0 || navigator.userAgent.indexOf("MSIE 7.0")>0) {
+			alert('您使用的 IE 浏览器版本过低, 推荐使用 Chrome 浏览器或 IE8 及以上版本浏览器.');
+		}
+	}
+	window.sysinfo = {
+		{if !empty($_W['uniacid'])}'uniacid': '{$_W['uniacid']}',{/if}
+		{if !empty($_W['acid'])}'acid': '{$_W['acid']}',{/if}
+		{if !empty($_W['openid'])}'openid': '{$_W['openid']}',{/if}
+		{if !empty($_W['uid'])}'uid': '{$_W['uid']}',{/if}
+		'isfounder': {if !empty($_W['isfounder'])}1{else}0{/if},
+		'family': '{IMS_FAMILY}',
+		'siteroot': '{$_W['siteroot']}',
+		'siteurl': '{$_W['siteurl']}',
+		'attachurl': '{$_W['attachurl']}',
+		'attachurl_local': '{$_W['attachurl_local']}',
+		'attachurl_remote': '{$_W['attachurl_remote']}',
+		'module' : {'url' : '{if defined('MODULE_URL')}{MODULE_URL}{/if}', 'name' : '{if defined('IN_MODULE')}{IN_MODULE}{/if}'},
+		'cookie' : {'pre': '{$_W['config']['cookie']['pre']}'},
+		'account' : {php echo json_encode($_W['account'])},
+		'server' : {'php' : '{php echo phpversion()}'},
+	};
+	var link_swf = '{FM_STATIC_WEB}public/web/assets/js/zclip/ZeroClipboard.swf';
+	</script>
+    <script src="{FM_STATIC_WEB}public/web/assets/js/echarts.min.js"></script>
+    <script src="{FM_STATIC_WEB}public/web/assets/js/china.js"></script>
+
+</head>
+
+<body >
+
+	<style>
+	.modal.in .modal-dialog {
+		transform: translate(50%,-50%);
+	}
+	</style>
+    <header class="am-topbar am-topbar-inverse admin-header {if $_GPC['do'] == 'start'}header_tm{/if}" >
+        <div class="am-topbar-brand">
+            <a href="javascript:;" class="tpl-logo">
+                <img src="{FM_STATIC_WEB}public/images/logo.png" alt="fmoons">
+            </a>
+        </div>
+        <div class="am-icon-list tpl-header-nav-hover-ico am-fl am-margin-right">
+
+        </div>
+
+        <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+        <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+            <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+                <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                    <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                        <span class="am-icon-bell-o"></span> 报名审核 <span class="am-badge tpl-badge-success am-round">{php echo $this->getregsh();}</span></span>
+                    </a>
+                    <ul id="html_cshenhe" class="am-dropdown-content tpl-dropdown-content">
+                        <li class="tpl-dropdown-list-bdbc"><a href="{php echo $this->createWebUrl('index')}" class="tpl-dropdown-list-fl"><span class="am-icon-btn am-icon-bell-o tpl-dropdown-ico-btn-size tpl-badge-warning"></span> 全部活动 <span class="am-badge tpl-badge-success am-round">{php echo ($this->getregsh() - $ztotal_regsh);}</span></a></li>
+
+                    </ul>
+                </li>
+                <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                    <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                        <span class="am-icon-comments-o"></span> 留言 <span class="am-badge tpl-badge-danger am-round">{php echo $this->getmessage();}</span></span>
+                    </a>
+                    <ul id="html_msg" class="am-dropdown-content tpl-dropdown-content">
+                         <li class="tpl-dropdown-list-bdbc"><a href="{php echo $this->createWebUrl('index')}" class="tpl-dropdown-list-fl"><span class="am-icon-btn am-icon-bell-o tpl-dropdown-ico-btn-size tpl-badge-warning"></span> 全部活动留言</a></li>
+                    </ul>
+                </li>
+                <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                    <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                        <span class="am-icon-calendar"></span> 活动 <span class="am-badge tpl-badge-primary am-round">{php echo $this->getlistsum();}</span></span>
+                    </a>
+                    <ul id ='html_rhuodong' class="am-dropdown-content tpl-dropdown-content">
+                    </ul>
+                </li>
+
+                <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+
+                <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                    <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                        <span class="tpl-header-list-user-nick">{$_W['user']['username']}</span><span class="tpl-header-list-user-ico"> <img src="{php echo tomedia($_W['user']['avatar'])}"></span>
+                    </a>
+                    <ul class="am-dropdown-content">
+                        <li><a href="{url 'user/profile'}"><span class="am-icon-bell-o"></span> 我的账号</a></li>
+
+                        {if permission_check_account_user('see_system_upgrade')}
+						<li><a href="{url 'cloud/upgrade'}" target="_blank"><i class="wi wi-update color-gray"></i> 自动更新</a></li>
+						{/if}
+						{if permission_check_account_user('see_system_updatecache')}
+						<li><a href="{url 'system/updatecache'}" target="_blank"><i class="wi wi-cache color-gray"></i> 更新缓存</a></li>
+						<li class="divider"></li>
+						{/if}
+                        <li><a href="{php echo url('account/display', array('type' => 'all'))}"><span class="am-icon-exchange"></span> 切换平台</a></li>
+                        <li><a href="{url 'user/logout'}"><span class="am-icon-power-off"></span> 退出系统</a></li>
+                    </ul>
+                </li>
+                <li><a href="{url 'user/logout'}" class="tpl-header-list-link"><span class="am-icon-sign-out tpl-header-list-ico-out-size"></span></a></li>
+            </ul>
+        </div>
+    </header>
+
+
+
+
+
+
+
+    <div class="tpl-page-container tpl-page-header-fixed" >
+        <div class="tpl-left-nav tpl-left-nav-hover " style="position: fixed;z-index: 999;{if $_GPC['do']=='start' || $_GPC['do'] == 'statistics'}display: none;{/if}">
+            	<div class="tpl-left-nav-title">
+	            	{if file_exists(IA_ROOT. "/addons/". $_W['current_module']['name']. "/icon-custom.jpg")}
+				<img src="{php echo tomedia("addons/".$_W['current_module']['name']."/icon-custom.jpg")}" class="head-app-logo" onerror="this.src='./resource/images/gw-wx.gif'">
+				{else}
+				<img src="{php echo tomedia("addons/".$_W['current_module']['name']."/icon.jpg")}" class="head-app-logo" onerror="this.src='./resource/images/gw-wx.gif'">
+				{/if}
+               {$_W['current_module']['title']}
+            </div>
+            <div class="tpl-left-nav-list">
+                <ul class="tpl-left-nav-menu">
+                    <li class="tpl-left-nav-item">
+                        <a href="{php echo $this->createWebUrl('home')}" class="nav-link {if $_GPC['do']=='home' }active {/if}" target="_blank">
+                            <i class="am-icon-home"></i>
+                            <span>首页</span>
+                        </a>
+                    </li>
+                    <li class="tpl-left-nav-item">
+                        <a href="{php echo $this->createWebUrl('statistics', array('rid' => $rid))}" class="nav-link {if $_GPC['do']=='statistics' }active {/if}" target="_blank">
+                            <i class="am-icon-pie-chart"></i>
+                            <span>数据统计</span>
+                        </a>
+                    </li>
+                    <li class="tpl-left-nav-item">
+                        <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                            <i class="am-icon-desktop"></i>
+                            <span>管理中心</span>
+                            <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
+                        </a>
+                        <ul class="tpl-left-nav-sub-menu" style="display: block;">
+                            <li  {if $_GPC['do']=='index' }class="active" {/if}>
+                                <a href="{php echo $this->createWebUrl('index')}">
+                                    <i class="am-icon-angle-right"></i>
+                                    <span>活动管理</span>
+                                    <i class="tpl-left-nav-content tpl-badge-info">{php echo $this->getlistsum('2')}</i>
+                                </a>
+                             </li>
+
+                             <li  {if $_GPC['do']=='start' }class="active" {/if}>
+                                <a href="{php echo $this->createWebUrl('start');}">
+                                    <i class="am-icon-angle-right"></i>
+                                    <span>添加活动</span>
+                                    <i class="am-icon-plus-square tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="tpl-left-nav-item">
+                        <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                            <i class="am-icon-file"></i>
+                            <span>模板中心</span>
+                            <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
+                        </a>
+                        <ul class="tpl-left-nav-sub-menu">
+                            <li >
+                                <a href="{php echo $this->createWebUrl('templates', array('op' => 'display','type' => 'all'))}" {if ($_GPC['do']=='templates' && $_GPC['op']=='display') }class="active" {/if}>
+                                    <i class="am-icon-angle-right"></i>
+                                    <span>模板管理</span>
+                                    <i class="tpl-left-nav-content tpl-badge-info">{php echo $this->getlistsum('3')}</i>
+                                </a>
+
+                                <a href="{php echo $this->createWebUrl('templates', array('op' => 'post'))}"  {if ($_GPC['do']=='templates' && $_GPC['op']=='post') }class="active" {/if}>
+                                    <i class="am-icon-angle-right"></i>
+                                    <span>添加模板</span>
+                                    <i class="am-icon-plus-square tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                                </a>
+                                <a href="{php echo $this->createWebUrl('templates', array('op' => 'menu'))}"  {if ($_GPC['do']=='templates' && $_GPC['op']=='menu') }class="active" {/if}>
+                                    <i class="am-icon-angle-right"></i>
+                                    <span>底部菜单</span>
+                                    <i class="am-icon-list-ul tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                                </a>
+
+                                <a href="{php echo $this->createWebUrl('templates', array('op'=>'menu','foo'=>'post'))}"  {if ($_GPC['do']=='templates' && $_GPC['foo']=='post') }class="active" {/if}>
+                                    <i class="am-icon-angle-right"></i>
+                                    <span>添加底部菜单</span>
+                                    <i class="am-icon-plus-square tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                                </a>
+
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="tpl-left-nav-item">
+                        <a href="{php echo url('module/manage-account/setting',array('m'=>'fm_photosvote'));}" class="nav-link tpl-left-nav-link-list {if $_GPC['do'] == 'setting'}active{/if}">
+                            <i class="am-icon-key"></i>
+                            <span>全局设置</span>
+
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+		<div id = 'body' data-type="{$_GPC['do']}">
+			<div class="tpl-content-wrapper {if $_GPC['do']=='start' || $_GPC['do'] == 'statistics'}tpl-content-wrapper-hover{/if}">
+				{if $_GPC['do'] != 'start'}
+					<div class="row">
+						<div class="am-u-md-12 am-u-sm-12 row-mb">
+							<div class="tpl-portlet">
+								<div class="tpl-portlet-title fm-top-title">
+									<div class="tpl-caption font-green fm-title">
+										{if $_GPC['do'] == 'home' || $_GPC['do'] == 'index' || $_GPC['do'] == 'setting' || empty($rid)}
+											<a href="{if $_W['role'] == ACCOUNT_MANAGE_NAME_CLERK}javascript:;{else}{php echo url('account/display/switch', array('uniacid' => $_W['uniacid'], 'type' => $_W['account']['type']))}{/if}" title="{php echo $_W['account']['name']}" target="_blank">
+												<i class="wi wi-wechat"></i>{$_W['account']['name']}
+											</a>
+										{else}
+											<a href="{php echo $this->createWebUrl('index')}" title="{php echo $this->gethdname($rid,'30')}" target="_blank">
+												<i class="wi wi-wechat"></i>{php echo $this->gethdname($rid,'30')}
+											</a>
+										{/if}
+
+									</div>
+
+									<div class="actions">
+										<div class="task-title top-text" style="line-height: 28px;">
+											<span class="task-bell"><i class="am-icon-calendar"></i></span>
+											<span class="task-title-sp"> {php echo date('Y-m-d')} </span>
+										</div>
+										<div class="task-title upgrade" style="line-height: 28px;display: none;">
+
+											<span class="label label-sm label-success"><span class="task-bell"><i class="am-icon-bell-o"></i></span> 更新提示</span>
+											<span class="task-title-sp update">  </span>
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+				{/if}
+				{if $_GPC['do'] == 'home' || $_GPC['do'] == 'statistics' }
+					<div class="row" >
+						<div class="am-u-lg-2 am-u-md-6 am-u-sm-12">
+							<div class="dashboard-stat green">
+								<div class="visual">
+									<i class="am-icon-user-plus"></i>
+								</div>
+								<div class="details">
+									<div class="number"> {php echo $this->getshuju('1')} </div>
+									<div class="desc"> 报名 </div>
+								</div>
+							</div>
+						</div>
+						<div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+							<div class="dashboard-stat sblue">
+								<div class="visual">
+									<i class="am-icon-user-secret"></i>
+								</div>
+								<div class="details">
+									<div class="number"> {php echo $this->getshuju('2')} </div>
+									<div class="desc"> 参与人次 </div>
+								</div>
+							</div>
+						</div>
+						<div class="am-u-lg-2 am-u-md-6 am-u-sm-12">
+							<div class="dashboard-stat blue">
+								<div class="visual">
+									<i class="am-icon-eye"></i>
+								</div>
+								<div class="details">
+									<div class="number"> {php echo $this->getshuju('3')} </div>
+									<div class="desc"> 点击量 </div>
+								</div>
+							</div>
+						</div>
+						<div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+							<div class="dashboard-stat red">
+								<div class="visual">
+									<i class="am-icon-money"></i>
+								</div>
+								<div class="details">
+									<div class="number"> {php echo $this->getshuju('4')} </div>
+									<div class="desc"> 充值 </div>
+								</div>
+							</div>
+						</div>
+						<div class="am-u-lg-2 am-u-md-6 am-u-sm-12">
+							<div class="dashboard-stat yellow">
+								<div class="visual">
+									<i class="am-icon-gift"></i>
+								</div>
+								<div class="details">
+									<div class="number"> {php echo $this->getshuju('5')} </div>
+									<div class="desc"> 礼物数 </div>
+								</div>
+							</div>
+						</div>
+						<div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+							<div class="dashboard-stat purple">
+								<div class="visual">
+									<i class="am-icon-clone"></i>
+								</div>
+								<div class="details">
+									<div class="number"> {php echo $this->getshuju('6')} </div>
+									<div class="desc"> 投票数 </div>
+								</div>
+							</div>
+						</div>
+						<div class="am-u-lg-2 am-u-md-6 am-u-sm-12">
+							<div class="dashboard-stat yellow">
+								<div class="visual">
+									<i class="am-icon-heart-o"></i>
+								</div>
+								<div class="details">
+									<div class="number"> {php echo $this->getshuju('7')} </div>
+									<div class="desc"> 人气数 </div>
+								</div>
+							</div>
+						</div>
+						<div class="am-u-lg-2 am-u-md-6 am-u-sm-12">
+							<div class="dashboard-stat green">
+								<div class="visual">
+									<i class="am-icon-star-o"></i>
+								</div>
+								<div class="details">
+									<div class="number"> {php echo $this->getshuju('8')} </div>
+									<div class="desc"> 点赞数 </div>
+								</div>
+							</div>
+						</div>
+						<div class="am-u-lg-2 am-u-md-6 am-u-sm-12">
+							<div class="dashboard-stat purple">
+								<div class="visual">
+									<i class="am-icon-share-alt"></i>
+								</div>
+								<div class="details">
+									<div class="number"> {php echo $this->getshuju('9')} </div>
+									<div class="desc"> 分享数 </div>
+								</div>
+							</div>
+						</div>
+						<div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+							<div class="dashboard-stat blue">
+								<div class="visual">
+									<i class="am-icon-users"></i>
+								</div>
+								<div class="details">
+									<div class="number"> {php echo $this->getshuju('10')} </div>
+									<div class="desc"> 粉丝数 </div>
+								</div>
+							</div>
+						</div>
+						<div class="am-u-lg-2 am-u-md-6 am-u-sm-12 am-hide">
+							<div class="dashboard-stat sblue">
+								<div class="visual">
+									<i class="am-icon-globe"></i>
+								</div>
+								<div class="details">
+									<div class="number"> {php echo $this->getshuju('11')} </div>
+									<div class="desc"> 地区 </div>
+								</div>
+							</div>
+						</div>
+					</div>
+				{/if}

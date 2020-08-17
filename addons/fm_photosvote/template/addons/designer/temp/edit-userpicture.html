@@ -1,0 +1,27 @@
+<div class="fe-panel-editor-title">作品<span class="tips">Tips:默认显示参赛者上传图片</span></div>
+<div class="fe-panel-editor-line" >
+    <div class="fe-panel-editor-name">背景颜色</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input2" type="color" ng-model="Edit.params.bgcolor">
+    </div>
+</div>
+<div class="fe-panel-editor-line" >
+	<div class="fe-panel-editor-name">图片左右间隔</div>
+    <div class="fe-panel-editor-con">
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{edit.id}}_leftright" value="10px" ng-model="Edit.params.leftright" /> 10像素</label>
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{edit.id}}_leftright" value="12px" ng-model="Edit.params.leftright" /> 12像素</label>
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{edit.id}}_leftright" value="15px" ng-model="Edit.params.leftright" /> 15像素</label><div></div>
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{edit.id}}_leftright" value="20px" ng-model="Edit.params.leftright" /> 20像素</label>
+        <label style="cursor:pointer; margin-right: 10px;">自定义：<input class="fe-panel-editor-input2" style="line-height: 20px;" value="" ng-model="Edit.params.leftright" /></label>
+    </div>
+</div>
+<div class="fe-panel-editor-line" >
+	<div class="fe-panel-editor-name">图片上下间隔</div>
+    <div class="fe-panel-editor-con">
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{edit.id}}_height" value="10px" ng-model="Edit.params.height" /> 10像素</label>
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{edit.id}}_height" value="12px" ng-model="Edit.params.height" /> 12像素</label>
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{edit.id}}_height" value="14px" ng-model="Edit.params.height" /> 14像素</label><div></div>
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{edit.id}}_height" value="16px" ng-model="Edit.params.height" /> 16像素</label>
+        <label style="cursor:pointer; margin-right: 10px;">自定义：<input class="fe-panel-editor-input2" style="line-height: 20px;" value="" ng-model="Edit.params.height" /></label>
+    </div>
+</div>

@@ -1,0 +1,1 @@
+<?php if(!defined('IN_IA')) {exit('Access Denied');}if(!defined('FM_PHOTOSVOTE_VERSION')) {define('FM_PHOTOSVOTE_VERSION', '5.1');}if(!defined('FM_PHOTOSVOTE_TIME')) {define('FM_PHOTOSVOTE_TIME', '201903191200');}

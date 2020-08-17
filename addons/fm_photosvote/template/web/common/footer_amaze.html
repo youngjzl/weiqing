@@ -1,0 +1,34 @@
+	</div>
+</div>
+<style>
+	.daterangepicker select.ampmselect, .daterangepicker select.hourselect, .daterangepicker select.minuteselect {
+	    width: 39%;
+	    margin-bottom: 0;
+	}
+</style>
+<script src="{FM_STATIC_WEB}public/web/assets/js/amazeui.min.js"></script>
+<script src="{FM_STATIC_WEB}public/web/assets/js/iscroll.js"></script>
+<script src="{FM_STATIC_WEB}public/web/assets/js/dataTool.min.js"></script>
+<script src="{FM_STATIC_WEB}public/web/assets/js/app.js"></script>
+<script type="text/javascript">
+	    $(function () {
+	  		var progress = $.AMUI.progress;
+	    		progress.done();
+	    });
+	var html_cshenhe  = "{php echo $this->createWebUrl('Getcommon')}";
+	function getcommon() {
+		$.post(html_cshenhe,{"type":''},function(data){
+			//var html = '';
+			//console.log(data);
+	        $('#html_cshenhe').prepend(data.html_cshenhe);
+	        $('#html_rhuodong').prepend(data.html_rhuodong);
+	        $('#html_msg').prepend(data.html_msg);
+
+		 },"json");
+	}
+	$(function () {
+         getcommon();
+	});
+</script>
+</body>
+</html>

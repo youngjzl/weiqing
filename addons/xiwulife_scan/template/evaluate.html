@@ -1,0 +1,78 @@
+{template 'xiwuheader'}
+<div class="xiwulife_content">
+    <div class="center-back right-back">
+        <div class="container-fluid">
+            <div class="info-center">
+                <div class="page-header">
+                    <div class="pull-left">
+                        <h4>评价管理</h4>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="table-responsive panel-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="15%">评价人</th>
+                                    <th width="20%">内容</th>
+                                    <th width="40%">图片</th>
+                                    <th width="10%">显示状态</th>
+                                    <th width="15%">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td><img width="30" src="{$item['avatarUrl']}" /> {$item['nickName']}</td>
+                                <td>￥{$item['pingjia']}</td>
+                                <td>
+                                    {loop $item['evaluateimg'] $img}
+                                        <img height="100" src="{$img}" alt=""> 
+                                    {/loop}
+                                </td>
+                                <td>
+                                    {if $item['state'] == 0}
+                                    <span class="btn-info" style="padding:2px 5px;">显示</span>
+                                    {else}
+                                    <span class="btn-danger" style="padding:2px 5px;">隐藏</span>
+                                    {/if}
+                                </td>
+                                <td>
+                                <div class="btn-group pull-left" role="group" aria-label="...">
+                                    {if $item['state'] == 0}
+                                    <a href="{php echo $this->createWebUrl('evaluate',array('sub' => 'yincang','id' => $item['id']));}">
+                                        <button type="button" class="btn btn-warning"><span class="fa fa-download"></span>隐藏</button>
+                                    </a>
+                                    {else}
+                                    <a href="{php echo $this->createWebUrl('evaluate',array('sub' => 'xianshi','id' => $item['id']));}">
+                                        <button type="button" class="btn btn-info"><span class="fa fa-upload"></span>显示</button>
+                                    </a>
+                                    {/if}
+                                    <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('evaluate',array('sub' => 'delete','id' => $item['id']));}">
+                                        <button type="button" class="btn btn-danger"><span class="fa fa-trash fa-lg"></span>删除</button>
+                                    </a>
+                                </div>
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="pull-right">
+                                            <nav>
+                                            {$pager}
+                                            </nav>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{template 'xiwufooter'}

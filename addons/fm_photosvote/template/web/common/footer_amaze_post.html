@@ -1,0 +1,35 @@
+	</div>
+</div>
+<style>
+	.daterangepicker select.ampmselect, .daterangepicker select.hourselect, .daterangepicker select.minuteselect {
+	    width: 39%;
+	    margin-bottom: 0;
+	}
+</style>
+<script src="{FM_STATIC_WEB}public/web/assets/js/app_post.js"></script>
+<script type="text/javascript">
+
+	$(function () {
+         getcommon();
+
+	});
+
+	var html_cshenhe  = "{php echo $this->createWebUrl('Getcommon')}";
+	function getcommon() {
+		$.post(html_cshenhe,{"type":''},function(data){
+			//var html = '';
+			//console.log(data);
+	        $('#html_cshenhe').prepend(data.html_cshenhe);
+	        $('#html_msg').prepend(data.html_msg);
+	        $('#html_rhuodong').prepend(data.html_rhuodong);
+
+		 },"json");
+	}
+	function drop_confirm(msg, url){
+		if(confirm(msg)){
+			window.location = url;
+		}
+	}
+</script>
+</body>
+</html>

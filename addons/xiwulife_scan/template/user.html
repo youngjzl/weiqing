@@ -1,0 +1,169 @@
+{template 'xiwuheader'}
+<style>
+.modal-backdrop.fade.in{opacity: 0; display: none;}
+.modal.fade.in{ background: rgba(0,0,0,0.5); }
+.hahaha{padding: 0 5px}
+.ordertion{padding: 1px;}
+.ordercolor{color: #F00505}
+.mainbox .form-group{ min-height: 70px; }
+</style>
+<div class="modal fade" tabindex="-1" id="mainbox" role="dialog">
+  <div class="modal-dialog" role="document" style="width: 60%;">
+    <div class="modal-content orderbtn">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">发送优惠券</h4>
+      </div>
+      <div class="modal-body panel-body mainbox">
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">领取人</label>
+            <div class="col-sm-8 col-xs-12">
+                <input type="text" class="form-control" disabled="disabled" placeholder="" name="nickname" value="">
+            </div>
+        </div>
+        <input type="hidden" class="form-control" disabled="disabled" placeholder="" name="openid" value="">
+        <input type="hidden" class="form-control" disabled="disabled" placeholder="" name="receive" value="2">
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">优惠金额</label>
+            <div class="col-sm-8 col-xs-12">
+                <input type="text" class="form-control" placeholder="" name="money" value="">
+                <span class="help-block">填数字，如199，优惠金额不能大于满多少可用</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">满多少可用</label>
+            <div class="col-sm-8 col-xs-12">
+                <input type="text" class="form-control" placeholder="" name="maxmoney" value="">
+                <span class="help-block">填数字，如199，优惠金额不能大于满多少可用</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">到期时间</label>
+            <div class="col-sm-8 col-xs-12">
+                {php echo _tpl_form_field_date('endtime', $value = '', $withtime = false)}
+                <span class="help-block">注：不能小于当前时间</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">备注</label>
+            <div class="col-sm-8 col-xs-12">
+                <div class="col-sm-8 col-xs-12">
+                    <textarea rows="5" class="form-control" name="text"></textarea>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="tijiao()">提交</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="xiwulife_content">
+	<div class="center-back right-back">
+		<div class="container-fluid">
+			<div class="info-center">
+				<div class="page-header">
+					<div class="pull-left">
+						<h4>会员管理</h4>
+					</div>
+				</div>
+				<div class="panel panel-success">
+                    <div class="table-responsive panel-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="12%">昵称</th>
+                                    <th width="10%">余额</th>
+                                    <th width="10%">积分</th>
+                                    <th width="15%">模板消息</th>
+                                    <th width="12%">订单数量</th>
+                                    <th width="12%">优惠券</th>
+                                    <th width="15%">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {loop $userlist $item}
+                            <tr>
+                                <td id="{$item['id']}"><img width="30" src="{$item['avatarUrl']}"> {$item['nickname']}</td>
+                                <td>{$item['balance']}</td>
+                                <td>{$item['jifen']}</td>
+                                <td>{$item['formid']}条</td>
+                                <td><a href="{php echo $this->createWebUrl('order',array('openid' => $item['openid']));}">
+                                    {$item['order']}单</a>
+                                </td>
+                                <td>{$item['card']}张</a>
+                                </td>
+                                <td>
+                                    <button type="button" onclick="fasongyouhui('{$item['nickname']}','{$item['openid']}')" class="btn btn-success"><span class="fa fa-gift"></span>发送优惠券</button>
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="pull-right">
+                                            <nav>
+                                            {$pager}
+                                            </nav>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+function fasongyouhui(name,openid){
+    $('#mainbox').modal('show');
+    $('input[name=nickname]').val(name);
+    $('input[name=openid]').val(openid);
+}
+function tijiao(){
+    var nickname = $('input[name=nickname]').val();
+    var openid = $('input[name=openid]').val();
+    var receive = $('input[name=receive]').val();
+    var money = $('input[name=money]').val();
+    var maxmoney = $('input[name=maxmoney]').val();
+    var endtime = $('input[name=endtime]').val();
+    var textarea = $('textarea[name=text]').val();
+    if(Number(money) > Number(maxmoney)){
+        xiwualert('优惠金额不能大于满多少可用');
+        return;
+    }else if(money == ''){
+        xiwualert('优惠金额不能为空');
+        return;
+    }else if(maxmoney == ''){
+        xiwualert('满多少可用不能为空');
+        return;
+    }
+    var url = "{php echo $this->createWebUrl('xiwuuser',array('sub' => 'receive'));}";
+    $.ajax({
+      type: 'post',
+      data: {
+        nickname: nickname,
+        openid: openid,
+        receive: receive,
+        money: money,
+        maxmoney: maxmoney,
+        endtime:endtime,
+        text:textarea,
+      },
+      url: url,
+      success: function(d) {
+        xiwualert(d);
+        $('#mainbox').modal('hide');
+        setTimeout(function(){
+            window.location.reload();
+        },1500)
+      }
+    })
+}
+</script>
+{template 'xiwufooter'}

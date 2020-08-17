@@ -1,0 +1,698 @@
+{template 'web/common/header_amaze_post'}
+{if $op == 'display'}
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-search"></span> 筛选
+	            </div>
+	        </div>
+	        <div class="tpl-block">
+	            <div class="am-g">
+	                <div class="tpl-form-body tpl-form-line">
+	                    <form class="am-form tpl-form-line-form" action="./index.php"  method="get" data-am-validator>
+	                    		<fieldset>
+					        <input type="hidden" name="c" value="site" />
+							<input type="hidden" name="a" value="entry" />
+							<input type="hidden" name="m" value="fm_photosvote" />
+							<input type="hidden" name="do" value="votemembers" />
+							<input type="hidden" name="rid" value="{$_GPC['rid']}" />
+	                        	<div class="am-form-group">
+	                            <label for="zh-search" class="am-u-sm-3 am-form-label">综合搜索 <span class="tpl-form-line-small-title">Search</span></label>
+	                            <div class="am-u-sm-9">
+	                                <input type="text" name="keyword" value="{$_GPC['keyword']}" class="tpl-form-input" id="zh-search"  placeholder="请输入 用户编号（UID）或者昵称或者手机号码或者openid"/>
+	                                <div class="am-alert am-alert-warning alert alert-dismissible" role="alert">
+	                                		<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="right: 0;"><span aria-hidden="true">&times;</span></button>
+									  	{if (!empty($_GPC['time']['start']))}在 {php echo date('Y-m-d', $starttime)} - {php echo date('Y-m-d', $endtime)}之间，{/if}系统已搜索到 {$total} 条{if $keyword}包含 “{$keyword}” 的相关{/if}数据......
+									</div>
+	                            </div>
+	                        	</div>
+                           	<div class="am-form-group">
+                                	<label for="user-intro" class="am-u-sm-3 am-form-label">投票时间 <span class="tpl-form-line-small-title">Time</span></label>
+                                	<div class="am-u-sm-9">
+                                		{php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d', $starttime),'endtime'=>date('Y-m-d', $endtime)));}
+                                </div>
+                           	</div>
+
+
+	                        <div class="am-form-group">
+	                            <div class="am-u-sm-9 am-u-sm-push-3">
+	                                <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success "><i class="am-icon-search"></i> 开始搜索</button>
+	                            </div>
+	                        </div>
+	                        </fieldset>
+	                    </form>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-users"></span> 粉丝管理
+	            </div>
+				<div class="actions">
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('votemembers', array('rid' => $rid, 'op' => 'allxiaofei'))}" data-toggle="tooltip" data-placement="bottom"  title="充值管理" style="margin-right: 3.3rem;">
+	                		<i class="am-icon-money"></i> 充值管理
+					</a>
+				</div>
+	        </div>
+	        <div class="am-tabs tpl-index-tabs" data-am-tabs>
+					<div class="am-tabs-bd">
+						<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+							<div id="wrapperA" class="wrapper wrapper-h-auto">
+								<form method="post" class="form-horizontal" id="formfans">
+									<input type="hidden" name="op" value="del" />
+									<div class="tpl-scrollable" style="min-height: 200px;">
+										<table class="am-table am-table-hover tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th style="min-width: 300px;"><input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"> 参赛者</th>
+													<th width="350px">加入时间 / 数据</th>
+													<th width="200px">手机 / IP / 位置</th>
+													<th style="min-width: 230px;">操作</th>
+												</tr>
+											</thead>
+											<tbody id="html_hdysh" class="">
+												{loop $members $mid $row}
+													{if $keyword}
+														<style>
+															.active {background:#FFFC00; color:red;}
+														</style>
+													{/if}
+													{php $level = intval($this->fmvipleavel($rid, $uniacid, $row['from_user']));$moneys = $this->getmoneys($rid, $row['from_user']);$votes = $this->getvotes($rid, $row['from_user']);$msgs = $this->getcommentnum($rid, $uniacid, $row['from_user'])}
+													{php $jifen = $this->cxjifen($rid, $row['from_user']);$name = $this->getname($rid, $row['from_user']);$mygift = $this->getmygift($rid, $row['from_user']);}
+													{php $iparr = iunserializer($row['iparr']);}
+
+												<tr>
+													<td>
+														<div class="">
+															<input type="checkbox" name="uid[]" value="{$row['id']}" class="">
+															<span class="am-badge am-badge-warning am-round {if stristr($row['uid'],$keyword)}active{/if}">{$row['uid']}</span>
+															<span>
+																<img src="{php echo $this->getname($row['rid'],$row['from_user'],'4','avatar')}" alt="{php echo $this->getname($row['rid'],$row['from_user'],'20')}" class="user-pic am-img-thumbnail am-circle am-img-responsive" style="border-radius: 5px;">
+																<a class="font-yellow font-yellow-size"  href="{php echo $this->createWebUrl('votemembers', array('op' => 'edit', 'rid' => $rid, 'from_user' => $row['from_user']))}">
+																	<span {if stristr($this->getusernames($row['realname'], $row['nickname']),$keyword)}class="active"{/if}>{php echo $this->getname($row['rid'],$row['from_user'],'10')}</span>
+																	<span class="level level_{$level}">{$level}</span>
+																	<span class="level {if $row['sex'] == 2}female{else}male{/if}"></span>
+																</a>
+															</span>
+														</div>
+														<div class="">
+															<span ><a href="javascript::;" class="am-badge am-badge-success" data-toggle="tooltip" data-placement="top" title="所属公众号">{$acc['name']}</a>
+														<!--<span ><a href="javascript::;" class="am-badge am-badge-warning" data-toggle="tooltip" data-placement="top" title="活跃等级">{$level} 级</a></span>-->
+															<span ><a href="javascript::;" class="am-badge am-badge-success" data-toggle="tooltip" data-placement="top" title="性别">{if $row['sex'] == 1}男{elseif $row['sex'] == 2}女{else}男{/if}</a></span>
+															 {if $row['status']==1}<span ><a href="javascript::;" class="am-badge am-badge-success" data-toggle="tooltip" data-placement="top" title="是否审核">已审核</a></span>{else}<span ><a href="javascript::;" class="am-badge am-badge-warning" data-toggle="tooltip" data-placement="top" title="是否审核">未审核</a></span>{/if}
+														</div>
+													</td>
+													<td>
+														<div class="am-alert am-alert-secondary am-text-xs">
+															<i class="am-icon-calendar"></i> {php echo date('Y-m-d H:i', $row['createtime']);}
+														</div>
+			                								<div class="progress-m-top">
+			                									<a class="am-badge am-badge-warning am-round btn" data-toggle="tooltip" data-placement="top" title="积分" href="{php echo $this->createWebUrl('votemembers', array('from_user' => $row['from_user'], 'rid' => $rid, 'op'=> 'credit_record'))}"><i class="am-icon-clone"></i> 积分 {$jifen}</a>
+			                									<a class="am-badge am-badge-success am-round btn" data-toggle="tooltip" data-placement="top" title="已投票" href="{php echo $this->createWebUrl('votelog', array('from_user' => $row['from_user'], 'rid' => $rid))}"><i class="am-icon-clone"></i> 已投票 {$votes}</a>
+															<a class="am-badge am-badge-primary am-round btn" data-toggle="tooltip" data-placement="top" title="已评论" href="{php echo $this->createWebUrl('message', array('from_user' => $row['from_user'], 'rid' => $rid))}"><i class="am-icon-comment"></i> 已评论 {$msgs}</a>
+															<a class="am-badge am-badge-danger am-round btn" data-toggle="tooltip" data-placement="top" title="礼物" href="{php echo $this->createWebUrl('votemembers', array('from_user' => $row['from_user'], 'rid' => $rid, 'op'=> 'credit_record', 'foo'=> 'gift'))}"><i class="am-icon-gift"></i> 礼物 {$mygift['total']}</a>
+															<a class="am-badge am-badge-danger am-round btn" data-toggle="tooltip" data-placement="top" title="已消费" href="{php echo $this->createWebUrl('votemembers', array('from_user' => $row['from_user'], 'rid' => $rid, 'op'=> 'credit_record', 'foo'=> 'xiaofei'))}"><i class="am-icon-money"></i> 已消费 {$moneys}</a>
+
+			                								</div>
+
+													</td>
+													<td>
+														<span class="am-badge am-badge am-badge-secondary {if stristr($row['mobile'],$keyword)}active{/if}">{php echo $this->getmobile($rid,$row['from_user'])}</span>
+														<span class="am-badge am-badge">{$row['ip']}</span>
+														<span class="am-badge am-badge">{if is_array($iparr)}{$iparr['country']}{/if} | {if is_array($iparr)}{$iparr['province']}{/if} | {if is_array($iparr)}{$iparr['city']}{/if} | {if is_array($iparr)}{$iparr['ist']}{/if}</span>
+													</td>
+													<td>
+														<div class="am-btn-toolbar">
+															<div class="am-btn-group am-btn-group-sm">
+																<a class="am-btn am-btn-default btn " data-toggle="tooltip" data-placement="top" href="{php echo $this->createWebUrl('votemembers', array('op' => 'edit', 'rid' => $rid, 'from_user' => $row['from_user']))}" title="编辑查看粉丝信息" target="_blank"><i class="am-icon-edit"></i> 编辑</a>
+																<a class="am-btn am-btn-default btn" data-toggle="tooltip" data-placement="top" href="#" onclick="drop_confirm('您确定要删除该粉丝吗，删除后无法恢复，请谨慎操作?', '{php echo $this->createWebUrl('deletefans',array('type' => 'votemembers_one','id' => $row['id'], 'rid' => $row['rid']))}');" title="删除该粉丝吗，删除后无法恢复，请谨慎操作"><i class="am-icon-times"></i> 删除</a>
+
+
+															</div>
+														</div>
+													</td>
+												</tr>
+												{/loop}
+												<tr>
+													<td style="line-height: 8.2em;">
+								                        <div class="am-form-group">
+								                            <div class="am-u-sm-11 am-u-sm-push-1">
+								                            		<input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+								                                <input name="token" type="hidden" value="{$_W['token']}" />
+								                                <input type="submit" name="submit" class="am-btn am-btn-danger" value="删除选中的粉丝">
+
+								                            </div>
+								                        </div>
+													</td>
+													<td colspan="9" style="line-height: 10em;">
+														<div style="text-align: center;">{$pager}</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+	    </div>
+	</div>
+</div>
+<script>
+	require(['jquery', 'util','bootstrap'], function($, u){
+		$('#formfans').submit(function(){
+		    if($(":checkbox[name='id[]']:checked").size() > 0){
+			    var check = $(":checkbox[name='id[]']:checked");
+			    if( confirm("确认要删除选择的粉丝?")){
+		            var id = new Array();
+				    var rid = "{$rid}";
+		            check.each(function(i){
+			            id[i] = $(this).val();
+		            });
+		            $.post('{php echo $this->createWebUrl('deletefans',array('type' => 'votemembers'))}', {idArr:id,rid:rid},function(data){
+		            	//console.log(data);
+				        if (data.errno ==0){
+				        	 	u.message(data.error, data.url, 'success');
+							//location.reload();
+				        } else {
+					        alert(data.error);
+				        }
+		            },'json');
+		        }
+		    }else{
+		        u.message('没有选择粉丝', '', 'error');
+		        return false;
+		    }
+	    });
+
+
+	});
+</script>
+{elseif $op == 'edit'}
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-user"></span> 粉丝详情
+	            </div>
+	        </div>
+	        <div class="tpl-block">
+	            <div class="am-g">
+	                <div class="tpl-form-body tpl-form-line">
+	                    <form class="am-form tpl-form-line-form form" action=""  method="post" data-am-validator enctype="multipart/form-data" id="form1">
+	                    		<fieldset>
+	                    			<div class="am-form-group">
+									<label for="fm_openid" class="am-u-sm-3 am-form-label">唯一识别OPENID <span class="tpl-form-line-small-title">Openid</span></label>
+									<div class="am-u-sm-9">
+										<input type="text" class="tpl-form-input" readonly value="{$from_user}" />
+										<p class="am-form-help">请勿修改</p>
+									</div>
+								</div>
+								<div class="am-form-group">
+									<label for="fm_level" class="am-u-sm-3 am-form-label">活跃等级 <span class="tpl-form-line-small-title">Level</span></label>
+									<div class="am-u-sm-9">
+										<span class="am-badge am-badge-warning">{$level} 级</span>
+										<p class="am-form-help">活跃等级即为用户活跃度，等级由系统自动根据用户的：投票数量、拉票数、人气、点赞、转发，积分等各项参数整合分析，综合评定，人工无需操作。</p>
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_point" class="am-u-sm-3 am-form-label">用户积分 <span class="tpl-form-line-small-title">Point</span></label>
+								    <div class="am-u-sm-9">
+										<input type="text" name="jifen" class="tpl-form-input " value="{$jifen}" />
+										<p class="am-form-help">用户积分</p>
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_avatar" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 用户头像 <span class="tpl-form-line-small-title">Avatar</span></label>
+								    <div class="am-u-sm-9">
+										{php echo tpl_fans_form('avatar', $item['avatar']);}
+									</div>
+								</div>
+
+								<div class="am-form-group">
+								    <label for="fm_nickname" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 用户昵称 <span class="tpl-form-line-small-title">Nickname</span></label>
+								    <div class="am-u-sm-9">
+
+										<input type="text" name="nickname" class="tpl-form-input " value="{$item['nickname']}" required/>
+										<p class="am-form-help">用户昵称</p>
+									</div>
+								</div>
+
+								<div class="am-form-group">
+								    <label for="fm_sex" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 用户性别 <span class="tpl-form-line-small-title">Sex</span></label>
+								    <div class="am-u-sm-9">
+										<label class='am-radio-inline'>
+									        <input type='radio' name='sex' value='0' {if $item['sex']==0}checked{/if} /> 未知
+									    </label>
+										<label class='am-radio-inline'>
+									        <input type='radio' name='sex' value='1' {if $item['sex']==1}checked{/if} /> 男
+									    </label>
+										<label class='am-radio-inline'>
+									        <input type='radio' name='sex' value='2' {if $item['sex']==2}checked{/if} /> 女
+									    </label>
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_realname" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 用户姓名 <span class="tpl-form-line-small-title">Realname</span></label>
+								    <div class="am-u-sm-9">
+										<input type="text" name="realname" class="tpl-form-input" value="{$item['realname']}" required/>
+										<p class="am-form-help">用户姓名</p>
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_mobile" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 用户手机 <span class="tpl-form-line-small-title">Mobile</span></label>
+								    <div class="am-u-sm-9">
+										<input type="text" name="mobile" class="tpl-form-input" value="{$item['mobile']}" required/>
+										<p class="am-form-help">用户手机</p>
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_ip" class="am-u-sm-3 am-form-label">ip地址 <span class="tpl-form-line-small-title">IP</span></label>
+								    <div class="am-u-sm-9">
+										{$item['ip']}
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_address" class="am-u-sm-3 am-form-label">地区 <span class="tpl-form-line-small-title">Address</span></label>
+								    <div class="am-u-sm-9">
+										{php $iparr = iunserializer($item['iparr']);} {if is_array($iparr)}{$iparr['country']}{/if} | {if is_array($iparr)}{$iparr['province']}{/if} | {if is_array($iparr)}{$iparr['city']}{/if} | {if is_array($iparr)}{$iparr['ist']}{/if}
+									</div>
+								</div>
+
+
+	                        <div class="am-form-group">
+	                            <div class="am-u-sm-9 am-u-sm-push-3">
+	                                	<input type="hidden" name="token" value="{$_W['token']}" />
+		                             <input type="submit" name="submit" value="提交" class="am-btn am-btn-primary tpl-btn-bg-color-success " />
+	                            </div>
+	                        </div>
+	                        </fieldset>
+	                    </form>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+{elseif $op == 'credit_record'}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="row-fluid">
+				<div class="span8 control-group">
+					<a class="btn {if $foo  == 'credit_record'}btn-success{else}btn-default{/if}" href="{php echo $this->createWebUrl('votemembers', array( 'rid' => $rid, 'op'=> 'credit_record', 'foo' => 'credit_record','from_user' => $from_user))}" >积分日志</a>
+					<a class="btn {if $foo  == 'gift'}btn-success{else}btn-default{/if}" href="{php echo $this->createWebUrl('votemembers', array('rid' => $rid, 'op'=> 'credit_record', 'foo' => 'gift','from_user' => $from_user))}" >已有礼物</a>
+					<a class="btn {if $foo  == 'zsgift'}btn-success{else}btn-default{/if}" href="{php echo $this->createWebUrl('votemembers', array( 'rid' => $rid, 'op'=> 'credit_record', 'foo' => 'zsgift','from_user' => $from_user))}" >已赠送礼物</a>
+					<a  class="btn {if $foo  == 'xiaofei'}btn-success{else}btn-default{/if}" href="{php echo $this->createWebUrl('votemembers', array( 'rid' => $rid, 'op'=> 'credit_record', 'foo' => 'xiaofei','from_user' => $from_user))}">消费日志</a>
+				{if !empty($_GPC['tfrom_user'])}
+					<a  class="btn {if $foo  == 'mygetgift'}btn-success{else}btn-default{/if}" href="{php echo $this->createWebUrl('votemembers', array( 'rid' => $rid, 'op'=> 'credit_record', 'foo' => 'mygetgift','tfrom_user' => $tfrom_user))}">已获得的礼物</a>
+				{/if}
+				</div>
+			</div>
+		</div>
+	{if $foo == 'xiaofei'}
+			<div class=" panel-body table-responsive">
+				<table class="table table-hover">
+					<thead>
+					<tr>
+						<th style="width:150px">编号</th>
+						<th style="width:200px">名称</th>
+						<th style="width:80px">类型</th>
+						<th style="width:120px">消费人</th>
+						<th style="width:100px">手机</th>
+						<th style="width:100px">消费价格</th>
+						<th style="width:100px">数量</th>
+						<th style="width:100px">状态</th>
+						<th style="width:150px">支付时间</th>
+					</tr>
+					</thead>
+					<tbody>
+					{loop $data $da}
+					<tr>
+						<td>{$da['ordersn']}</td>
+						<td>{$da['title']}</td>
+						<td>{if $da['paytype'] == '2'}<span class="am-badge am-badge-success">投票</span>{elseif $da['paytype'] == '3'}<span class="am-badge am-badge-info">报名</span>{elseif $da['paytype'] == '6'}<span class="am-badge am-badge-info">积分充值</span>{else}<span class="am-badge am-badge-order">其他</span>{/if}</td>
+						<td><img src="{php echo tomedia($da['avatar'])}" width="30">
+							{if !empty($da['realname'])}{$da['realname']}{else}{$da['from_user']}{/if}
+						</td>
+						<td>{$da['mobile']}</td>
+						<td>{$da['price']} 元</td>
+						<td>{if $da['paytype'] == '2'}{$da['vote_times']} 票{elseif $da['paytype'] == '6'}{php echo $da['jifen']} 积分{else}{$da['vote_times']}{/if}</td>
+						<td>{if $da['status'] == '1'}<span class="am-badge am-badge-success">支付成功</span>{else}<span class="am-badge am-badge-danger">支付失败</span><br /><span class="am-badge am-badge-danger">或未支付</span>{/if}</td>
+						<td>{if !empty($da['paytime'])}{php echo date('Y-m-d H:i:s', $da['paytime'])}{else}未支付{/if}</td>
+					</tr>
+					{/loop}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{$pager}
+	{elseif $foo == 'credit_record'}
+			<div class=" panel-body table-responsive">
+				<table class="table table-hover">
+					<thead>
+					<tr>
+						<th style="width:100px">类型</th>
+						<th style="width:200px">用户</th>
+						<th style="width:100px">数量</th>
+						<th style="width:100px">模块</th>
+						<th style="width:200px">操作时间</th>
+						<th>备注</th>
+					</tr>
+					</thead>
+					<tbody>
+					{loop $data $da}
+					<tr>
+						<td>积分</td>
+						<td>{if $da['username']}{$da['username']}{else}本人{/if}</td>
+						<td>{$da['num']}</td>
+						<td>
+							{if !empty($da['module']) && !empty($modules[$da['module']]['title'])}
+								{$modules[$da['module']]['title']}
+							{else}
+								未知
+							{/if}
+						</td>
+						<td>{php echo date('Y-m-d H:i:s', $da['createtime'])}</td>
+						<td style="white-space:normal">{$da['remark']}</td>
+					</tr>
+					{/loop}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{$pager}
+	{elseif $foo == 'gift'}
+		<div class=" panel-body table-responsive">
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th style="width:100px">ID</th>
+					<th style="width:100px">礼物</th>
+					<th style="width:100px">描述</th>
+					<th style="width:80px">剩余数量</th>
+					<th style="width:100px">可兑换票数</th>
+					<th style="width:100px">兑换积分</th>
+					<th style="width:100px">兑换状态</th>
+					<th style="width:100px">使用状态</th>
+					<th style="width:200px">兑换时间</th>
+				</tr>
+				</thead>
+				<tbody>
+				{loop $data $da}
+				<tr>
+					<td>{$da['id']}</td>
+					<td><img src="{$da['images']}" height="30">{$da['title']}</td>
+					<td>{$da['des']}</td>
+					<td>{$da['giftnum']}</td>
+					<td>{$da['piaoshu']}</td>
+					<td>{$da['jifen']}</td>
+					<td>{$da['status']}</td>
+					<td>{$da['cstatus']}</td>
+					<td>{$da['time']}</td>
+				</tr>
+				{/loop}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{$pager}
+
+	{elseif $foo == 'zsgift'}
+		<div class=" panel-body table-responsive">
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th style="width:100px">ID</th>
+					<th style="width:100px">礼物</th>
+					<th style="width:100px">描述</th>
+					<th style="width:80px">已兑数量</th>
+					<th style="width:100px">可兑换票数</th>
+					<th style="width:100px">兑换积分</th>
+					<th style="width:100px">兑换状态</th>
+					<th style="width:100px">使用状态</th>
+					<th style="width:100px">已送给用户</th>
+					<th style="width:200px">兑换时间</th>
+				</tr>
+				</thead>
+				<tbody>
+				{loop $data $da}
+				<tr>
+					<td>{$da['id']}</td>
+					<td><img src="{$da['images']}" height="30">{$da['title']}</td>
+					<td>{$da['des']}</td>
+					<td>{$da['giftnum']}</td>
+					<td>{$da['piaoshu']}</td>
+					<td>{$da['jifen']}</td>
+					<td>{$da['status']}</td>
+					<td>{$da['cstatus']}</td>
+					<td>{$da['tuser']}</td>
+					<td>{$da['time']}</td>
+				</tr>
+				{/loop}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{$pager}
+	{elseif $foo == 'mygetgift'}
+		<div class=" panel-body table-responsive">
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th style="width:100px">ID</th>
+					<th style="width:100px">礼物名称</th>
+					<th style="width:100px">描述</th>
+					<th style="width:100px">获得的票数</th>
+					<th style="width:100px">赠送人</th>
+					<th style="width:200px">赠送时间</th>
+				</tr>
+				</thead>
+				<tbody>
+				{loop $data $da}
+				{if (empty($da['title']))}{php continue;}{/if}
+					<tr>
+						<td>{$da['id']}</td>
+						<td><img src="{$da['images']}" height="30">{$da['title']}</td>
+						<td>{$da['des']}</td>
+						<td>{$da['piaoshu']}</td>
+						<td>{$da['tuser']}</td>
+						<td>{$da['time']}</td>
+					</tr>
+				{/loop}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{$pager}
+	{/if}
+{elseif $op == 'allxiaofei'}
+
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-search"></span> 筛选
+	            </div>
+	        </div>
+	        <div class="tpl-block">
+	            <div class="am-g">
+	                <div class="tpl-form-body tpl-form-line">
+	                    <form class="am-form tpl-form-line-form" action="./index.php"  method="get" data-am-validator>
+	                    		<fieldset>
+					        <input type="hidden" name="c" value="site" />
+							<input type="hidden" name="a" value="entry" />
+							<input type="hidden" name="m" value="fm_photosvote" />
+							<input type="hidden" name="do" value="votemembers" />
+							<input type="hidden" name="op" value="allxiaofei" />
+							<input type="hidden" name="rid" value="{$_GPC['rid']}" />
+	                        	<div class="am-form-group">
+	                            <label for="zh-search" class="am-u-sm-3 am-form-label">综合搜索 <span class="tpl-form-line-small-title">Search</span></label>
+	                            <div class="am-u-sm-9">
+	                                <input type="text" name="keyword" value="{$_GPC['keyword']}" class="tpl-form-input" id="zh-search"  placeholder="请输入 订单编号（ORDERSN）或者 昵称 或者 openid"/>
+	                                <div class="am-alert am-alert-warning alert alert-dismissible" role="alert">
+	                                		<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="right: 0;"><span aria-hidden="true">&times;</span></button>
+									  	{if (!empty($_GPC['time']['start']))}在 {php echo date('Y-m-d', $starttime)} - {php echo date('Y-m-d', $endtime)}之间，{/if}系统已搜索到 {$total} 条{if $keyword}包含 “{$keyword}” 的相关{/if}数据......
+									</div>
+	                            </div>
+	                        	</div>
+
+	                        	<div class="am-form-group">
+                                	<label for="user-intro" class="am-u-sm-3 am-form-label">状态 <span class="tpl-form-line-small-title">Ispayvote</span></label>
+                                	<div class="am-u-sm-9">
+                                		<label class="am-radio-inline">
+		            						<input  name="ispayvote" id="ispayvote" type="radio" value="6" placeholder="" {if $_GPC['ispayvote'] == 6}checked="checked" {/if}> 支付成功，积分已充值</label>
+		            					<label class="am-radio-inline">
+					             		<input  name="ispayvote" id="ispayvote" type="radio" value="3" placeholder="" {if $_GPC['ispayvote'] == 3}checked="checked" {/if}> 支付成功，积分未充值</label>
+                                </div>
+                           	</div>
+                           	<div class="am-form-group">
+                                	<label for="user-intro" class="am-u-sm-3 am-form-label">时间 <span class="tpl-form-line-small-title">Time</span></label>
+                                	<div class="am-u-sm-9">
+                                		{php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d', $starttime),'endtime'=>date('Y-m-d', $endtime)));}
+                                </div>
+                           	</div>
+
+
+	                        <div class="am-form-group">
+	                            <div class="am-u-sm-9 am-u-sm-push-3">
+	                                <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success "><i class="am-icon-search"></i> 开始搜索</button>
+	                            </div>
+	                        </div>
+	                        </fieldset>
+	                    </form>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-money"></span> 充值管理
+	            </div>
+				<div class="actions">
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('votemembers', array('rid' => $rid))}" data-toggle="tooltip" data-placement="bottom"  title="粉丝管理" style="margin-right: 3.3rem;">
+	                		<i class="am-icon-users"></i> 粉丝管理
+					</a>
+				</div>
+	        </div>
+	        <div class="am-tabs tpl-index-tabs" data-am-tabs>
+					<div class="am-tabs-bd">
+						<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+							<div id="wrapperA" class="wrapper wrapper-h-auto">
+								<form method="post" class="form-horizontal" id="formfans">
+									<input type="hidden" name="op" value="del" />
+									<div class="tpl-scrollable" style="min-height: 200px;">
+										<table class="am-table am-table-hover tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th style="min-width: 150px;">订单号</th>
+													<th >名称 / 类型</th>
+													<th>消费人 / 消费对象</th>
+													<th >消费价格 / 数量</th>
+													<th>状态</th>
+													<th >支付时间</th>
+												</tr>
+											</thead>
+											<tbody id="html_hdysh" class="">
+												{loop $data $row}
+													{if $_GPC['ispayvote'] == 3}{php $this->cxjifen($rid, $row['from_user']);$this->recoveryorder($rid, $row['from_user']);}{/if}
+												<tr>
+													<td>
+														<div class="">
+															<span class="am-badge am-badge-warning am-round {if stristr($row['ordersn'],$keyword)}active{/if}">{$row['ordersn']}</span>
+														</div>
+													</td>
+													<td>
+														<span class="am-badge am-badge-order">{$row['title']}</span>
+														<div>
+															{if $row['paytype'] == '2'}<span class="am-badge am-badge-success">投票</span>{elseif $row['paytype'] == '3'}<span class="am-badge am-badge-info">报名</span>{elseif $row['paytype'] == '6'}<span class="am-badge am-badge-warning">{if !empty($row['giftid'])}购买礼物{else}积分充值{/if}</span>{else}<span class="am-badge am-badge-info">其他</span>{/if}
+														</div>
+
+													</td>
+													<td>
+														<div>
+															<img src="{php echo $this->getname($row['rid'],$row['from_user'],'4','avatar')}" alt="{php echo $this->getname($row['rid'],$row['from_user'],'20')}" class="user-pic am-img-thumbnail am-circle am-img-responsive" style="border-radius: 5px;">
+															<a class="font-yellow font-yellow-size"  href="{php echo $this->createWebUrl('votemembers', array('op' => 'edit', 'rid' => $rid, 'from_user' => $row['from_user']))}">
+																<span {if stristr($this->getusernames($row['realname'], $row['nickname']),$keyword)}class="active"{/if}>{php echo $this->getname($row['rid'],$row['from_user'],'10')}</span>
+															</a>
+														</div>
+														<div >
+															{if $row['paytype'] == '3'}自己{elseif empty($row['tfrom_user'])}自己{else}
+																<img src="{php echo $this->getname($row['rid'],$row['tfrom_user'],'4','avatar')}" alt="{php echo $this->getname($row['rid'],$row['from_user'],'20')}" class="user-pic am-img-thumbnail am-circle am-img-responsive" style="border-radius: 5px;">
+																<a class="font-yellow font-yellow-size"  href="{php echo $this->createWebUrl('provevote', array('status' => '1', 'member' => 1, 'foo' => 'post', 'rid' => $rid, 'from_user' => $row['tfrom_user']))}">
+																	<span {if stristr($this->getusernames($row['realname'], $row['nickname']),$keyword)}class="active"{/if}>{php echo $this->getname($row['rid'],$row['tfrom_user'],'10')}</span>
+																</a>
+															{/if}
+														</div>
+													</td>
+													<td>
+														<div><span class="am-badge am-badge-danger am-round"><i class="am-icon-money"></i> {$row['price']} 元</span></div>
+														<div><span class="am-badge am-badge-primary am-round">{if $row['paytype'] == '2'}{$row['vote_times']} 票{elseif $row['paytype'] == '6'}{php echo $row['jifen']} 积分{else}{$row['vote_times']}{/if}</span></div>
+													</td>
+													<td>
+														{if $row['status'] == '1'}
+															<span class="am-badge am-badge-success">支付成功</span>
+														{else}
+															<span class="am-badge am-badge-danger">支付失败</span><br /><span class="am-badge am-badge-danger">或未支付</span>
+														{/if}
+														<div>
+														{if $row['ispayvote'] == '6'}
+															<span class="am-badge am-badge-success">
+																{if !empty($row['giftid'])}礼物购买成功{else}积分充值成功{/if}
+															</span>
+														{elseif ($row['ispayvote'] >= '3') && $row['ispayvote'] < '6'}
+															<span class="am-badge am-badge-warning">支付成功</span><br />
+															{if !empty($row['giftid'])}
+															<span class="am-badge am-badge-warning">未购买成功</span>
+															{else}
+															<span class="am-badge am-badge-warning">积分未增加</span>
+															{/if}
+														{else}
+															{if (!empty($row['transid'])) }
+																{if $row['paytype'] == '2' }
+																	<span class="am-badge am-badge-success">付费投票成功</span>
+																{elseif $row['paytype'] == '3'}
+																	<span class="am-badge am-badge-success">付费报名成功</span>
+																{else}
+																	<span class="am-badge am-badge-success">其他付费</span>
+																{/if}
+															{else}
+																<span class="am-badge am-badge-danger">未支付</span>
+															{/if}
+														{/if}
+														</div>
+													</td>
+
+
+													<td>
+														<span class="am-badge  am-text-xs">
+															<i class="am-icon-calendar"></i> {if !empty($row['paytime'])}{php echo date('Y-m-d H:i:s', $row['paytime'])}{else}未支付{/if}
+														</span>
+													</td>
+												</tr>
+												{/loop}
+												<tr>
+													<td style="line-height: 8.2em;">
+								                        <div class="am-form-group">
+								                            <div class="am-u-sm-11 am-u-sm-push-1">
+								                            </div>
+								                        </div>
+													</td>
+													<td colspan="9" style="line-height: 10em;">
+														<div style="text-align: center;">{$pager}</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+	    </div>
+	</div>
+</div>
+{/if}
+{template 'web/common/footer_amaze_post'}

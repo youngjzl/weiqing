@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="./resource/js/lib/jquery-1.11.1.min.js"></script>
+    <script src="../addons/xiwulife_scan/template/assets/js/echarts.min.js"></script>
+    <script src="../addons/xiwulife_scan/template/assets/js/macarons.js"></script>
+</head>
+<body>
+<style type="text/css">
+.echarts_tiao{width: 100%; height: 500px; border：1px solid #000;}
+.echarts_yuan{width: 100%; height: 500px;}
+</style>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div class="echarts_tiao" id="xiaoliang"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var xiaoliang = echarts.init(document.getElementById('xiaoliang'),'macarons');
+        var url = "{url 'site/entry/echartsgoods' array('m' => 'xiwulife_scan')}";
+        var arr=[];
+        var sold = [];
+        var price = [];
+        $.ajax({
+            type : "post",
+            async : false, //同步执行
+            url: url,
+            data : {},
+            dataType : "json", //返回数据形式为json
+            success : function(json) {
+                if (json) {
+                   for(var i=0;i<json.length;i++){
+                       arr.push(json[i].title);
+                       sold.push(json[i].sold);
+                       price.push(json[i].price);
+
+                    }    
+                }
+            
+            },
+            error : function(errorMsg) {
+                alert("不好意思,图表请求数据失败啦!");
+                xiaoliang.hideLoading();
+            }
+        })
+        // 指定图表的配置项和数据
+        xiaoliang.setOption({
+            title: {
+                text: '商品销量'
+            },
+            tooltip: {},
+            legend: {
+                data:['销量','价格']
+            },
+            xAxis: {
+                data: arr
+            },
+            yAxis: {},
+            series: [{
+                name: '销量',
+                type: 'bar',
+                data: sold
+            },{
+                name: '价格',
+                type: 'bar',
+                data: price
+            }]
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,359 @@
+{template 'web/common/header_amaze'}
+{if $operation == 'display'}
+	<style>
+		.am-btn-default {
+		    color: #9c9999;
+		    background-color: #e6e6e6;
+		    border-color: #9c9999;
+		}
+		.actions-btn li {
+		    border-color: #3598dc;
+		    color: #3598dc;
+		    background: 0 0;
+		}
+	</style>
+	<div class="row">
+		<div class="am-u-md-12 am-u-sm-12 row-mb">
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title dissel">
+					<div class="tpl-caption font-green ">
+						<i class="am-icon-cloud-download"></i>
+						<span> 汇总数据分析</span>
+					</div>
+                    <div class="actions">
+                        <ul class="actions-btn">
+                        		<li id="refresh" class="yellow"><i class="am-icon-refresh"></i></li>
+                            	<!--li id="choose_rid" class="green">选择活动</li>
+                            	<li id="choose_yesterday" class="red-on">昨天</li>
+                            	<li id="choose_week" class="blue">本周</li>
+                            	<li id="choose_month" class="green">本月</li-->
+                            	<select id="js-selected" class="green" data-am-selected = "{maxHeight: 200,searchBox: 1}" placeholder ="选择活动...">
+							  		<option value="" selected>选择活动</option>
+                            		{loop $replyall $row}
+							  		<option value="{$row['rid']}">{$row['title']}</option>
+							  	{/loop}
+							</select>
+                        </ul>
+                    </div>
+				</div>
+				<div class="tpl-echarts" id="tpl-alldata" >
+				</div>
+
+				<div id="notice_alldata"></div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="am-u-md-4 am-u-sm-12 row-mb">
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title">
+					<div class="tpl-caption font-green">
+						<i class="am-icon-user-plus"></i>
+						<span> 报名统计列表</span>
+					</div>
+					<div class="actions">
+                        <ul class="actions-btn">
+                        		<li id="refresh_reg_list" class="yellow"><i class="am-icon-refresh"></i></li>
+                        </ul>
+                    </div>
+				</div>
+				<div id="wrapper_shebei" class="wrapper" style="overflow-y:auto ;">
+					<div id="scroller" class="scroller">
+						<div class="tpl-scrollable">
+							<table class="am-table tpl-table">
+								<thead>
+									<tr class="tpl-table-uppercase">
+										<th style="width: 100px;">活动</th>
+										<th style="min-width: 120px;">审核进度</th>
+										<th >已审/未审</th>
+									</tr>
+								</thead>
+								<tbody id = "html_reg_list"></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="am-u-md-8 am-u-sm-12 row-mb ">
+			<div class="tpl-portlet regbg">
+				<div class="tpl-portlet-title font-ssblue-border dissel">
+					<div class="tpl-caption font-whilt ">
+						<i class="am-icon-user-plus"></i>
+						<span> 报名统计</span>
+					</div>
+					<div class="actions">
+                        <ul class="actions-btn">
+                        		<li id="refresh_reg" class="yellow"><i class="am-icon-refresh"></i></li>
+                        		<input type="hidden" name="reg_time">
+                            	<li id="choose_yesterday_reg" class="c_reg blue am-hide">昨天</li>
+                            	<li id="choose_week_reg" class="c_reg blue am-hide">上周</li>
+                            	<li id="choose_month_reg" class="c_reg blue am-hide">本月</li>
+                            	<select id="selected_reg" class="green" data-am-selected = "{maxHeight: 200,searchBox: 1}" placeholder ="选择活动...">
+							  		<option value="" selected>选择活动</option>
+                            		{loop $replyall $row}
+							  		<option value="{$row['rid']}">{$row['title']}</option>
+							  	{/loop}
+							</select>
+                        </ul>
+                    </div>
+				</div>
+
+				<div class="tpl-echarts" id="tpl-reg">
+				</div>
+				<div id="notice_reg"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="am-u-md-4 am-u-sm-12 row-mb">
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title">
+					<div class="tpl-caption font-green">
+						<i class="am-icon-money"></i>
+						<span> 充值礼物统计列表</span>
+					</div>
+					<div class="actions">
+                        <ul class="actions-btn">
+                        		<li id="refresh_charge_list" class="yellow"><i class="am-icon-refresh"></i></li>
+                        </ul>
+                    </div>
+				</div>
+				<div id="wrapper_charge" class="wrapper" style="overflow-y:auto ;">
+					<div id="scroller" class="scroller">
+						<div class="tpl-scrollable">
+							<table class="am-table tpl-table">
+								<thead>
+									<tr class="tpl-table-uppercase">
+										<th style="width: 100px;">活动</th>
+										<th style="min-width: 120px;">充值占比</th>
+										<th >充值/礼物</th>
+									</tr>
+								</thead>
+								<tbody id = "html_charge_list"></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="am-u-md-8 am-u-sm-12 row-mb ">
+			<div class="tpl-portlet chargebg">
+				<div class="tpl-portlet-title font-ssblue-border dissel">
+					<div class="tpl-caption font-whilt ">
+						<i class="am-icon-money"></i>
+						<span> 充值统计</span>
+					</div>
+					<div class="actions">
+                        <ul class="actions-btn">
+                        		<li id="refresh_charge" class="yellow"><i class="am-icon-refresh"></i></li>
+                        		<input type="hidden" name="charge_time">
+                            	<li id="choose_yesterday_charge" class="c_charge blue am-hide">昨天</li>
+                            	<li id="choose_week_charge" class="c_charge blue am-hide">上周</li>
+                            	<li id="choose_month_charge" class="c_charge blue am-hide">本月</li>
+                            	<select id="selected_charge" class="green" data-am-selected = "{maxHeight: 200,searchBox: 1}" placeholder ="选择活动...">
+							  		<option value="" selected>选择活动</option>
+                            		{loop $replyall $row}
+							  		<option value="{$row['rid']}">{$row['title']}</option>
+							  	{/loop}
+							</select>
+                        </ul>
+                    </div>
+				</div>
+
+				<div class="tpl-echarts" id="tpl-charge">
+				</div>
+
+				<div id="notice_charge"></div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row">
+		<div class="am-u-md-6 am-u-sm-12 row-mb ">
+			<div class="tpl-portlet chargebg">
+				<div class="tpl-portlet-title font-ssblue-border dissel">
+					<div class="tpl-caption font-whilt ">
+						<i class="am-icon-comments"></i>
+						<span> 评论统计</span>
+					</div>
+					<div class="actions">
+                        <ul class="actions-btn">
+                        		<li id="refresh_comment" class="yellow"><i class="am-icon-refresh"></i></li>
+                        		<input type="hidden" name="comment_time">
+                            	<li id="choose_yesterday_comment" class="c_comment blue am-hide">昨天</li>
+                            	<li id="choose_week_comment" class="c_comment blue am-hide">上周</li>
+                            	<li id="choose_month_comment" class="c_comment blue am-hide">本月</li>
+                            	<select id="selected_comment" class="green" data-am-selected = "{maxHeight: 200,searchBox: 1}" placeholder ="选择活动...">
+							  		<option value="" selected>选择活动</option>
+                            		{loop $replyall $row}
+							  		<option value="{$row['rid']}">{$row['title']}</option>
+							  	{/loop}
+							</select>
+                        </ul>
+                    </div>
+				</div>
+				<div class="tpl-echarts" id="tpl-comment"></div>
+				<div id="notice_comment"></div>
+			</div>
+		</div>
+		<div class="am-u-md-6 am-u-sm-12 row-mb ">
+			<div class="tpl-portlet chargebg">
+				<div class="tpl-portlet-title font-ssblue-border dissel">
+					<div class="tpl-caption font-whilt ">
+						<i class="am-icon-share-alt-square"></i>
+						<span> 分享统计</span>
+					</div>
+					<div class="actions">
+                        <ul class="actions-btn">
+                        		<li id="refresh_share" class="yellow"><i class="am-icon-refresh"></i></li>
+                        		<input type="hidden" name="share_time">
+                            	<li id="choose_yesterday_share" class="c_share blue am-hide">昨天</li>
+                            	<li id="choose_week_share" class="c_share blue am-hide">上周</li>
+                            	<li id="choose_month_share" class="c_share blue am-hide">本月</li>
+                            	<select id="selected_share" class="green" data-am-selected = "{maxHeight: 200,searchBox: 1}" placeholder ="选择活动...">
+							  		<option value="" selected>选择活动</option>
+                            		{loop $replyall $row}
+							  		<option value="{$row['rid']}">{$row['title']}</option>
+							  	{/loop}
+							</select>
+                        </ul>
+                    </div>
+				</div>
+				<div class="tpl-echarts" id="tpl-share"></div>
+				<div id="notice_share"></div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="am-u-md-12 am-u-sm-12 row-mb ">
+			<div class="tpl-portlet chargebg">
+				<div class="tpl-portlet-title font-ssblue-border dissel">
+					<div class="tpl-caption font-whilt ">
+						<i class="am-icon-users"></i>
+						<span> 粉丝统计</span>
+					</div>
+					<div class="actions">
+                        <ul class="actions-btn">
+                        		<li id="refresh_fans" class="yellow"><i class="am-icon-refresh"></i></li>
+                        		<input type="hidden" name="fans_time">
+                            	<li id="choose_yesterday_fans" class="c_fans blue">昨天</li>
+                            	<li id="choose_week_fans" class="c_fans blue">上周</li>
+                            	<li id="choose_month_fans" class="c_fans blue">本月</li>
+                            	<select id="selected_fans" class="green" data-am-selected = "{maxHeight: 200,searchBox: 1}" placeholder ="选择活动...">
+							  		<option value="" selected>选择活动</option>
+                            		{loop $replyall $row}
+							  		<option value="{$row['rid']}">{$row['title']}</option>
+							  	{/loop}
+							</select>
+                        </ul>
+                    </div>
+				</div>
+				<div class="tpl-echarts" id="tpl-fans"></div>
+				<div id="notice_fans"></div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="am-u-md-8 am-u-sm-12 row-mb ">
+			<div class="tpl-portlet shebeibg">
+				<div class="tpl-portlet-title font-sblue-border dissel">
+					<div class="tpl-caption font-sblue ">
+						<i class="am-icon-mobile"></i>
+						<span> 设备统计</span>
+					</div>
+					<div class="actions">
+                        <ul class="actions-btn">
+                        		<li id="refresh_shebei" class="yellow"><i class="am-icon-refresh"></i></li>
+                            	<!--li id="choose_rid" class="green">选择活动</li>
+                            	<li id="choose_yesterday" class="red-on">昨天</li>
+                            	<li id="choose_week" class="blue">本周</li>
+                            	<li id="choose_month" class="green">本月</li-->
+                            	<select id="selected_shebei" class="green" data-am-selected = "{maxHeight: 200,searchBox: 1}" placeholder ="选择活动...">
+							  		<option value="" selected>选择活动</option>
+                            		{loop $replyall $row}
+							  		<option value="{$row['rid']}">{$row['title']}</option>
+							  	{/loop}
+							</select>
+                        </ul>
+                    </div>
+				</div>
+
+				<div class="tpl-echarts" id="tpl-shebei">
+				</div>
+				<div id="shebeiaa">
+				</div>
+			</div>
+		</div>
+		<div class="am-u-md-4 am-u-sm-12 row-mb">
+			<div class="tpl-portlet">
+				<div class="tpl-portlet-title">
+					<div class="tpl-caption font-green">
+						<i class="am-icon-mobile"></i>
+						<span> 设备统计列表</span>
+					</div>
+
+					<div class="actions">
+                        <ul class="actions-btn">
+                        		<li id="refresh_shebei_list" class="yellow"><i class="am-icon-refresh"></i></li>
+                        </ul>
+                    </div>
+				</div>
+
+				<div id="wrapper_shebei" class="wrapper" style="overflow-y:auto ;">
+					<div id="scroller" class="scroller">
+						<div class="tpl-scrollable">
+							<table class="am-table tpl-table">
+								<thead>
+									<tr class="tpl-table-uppercase">
+										<th >设备名称</th>
+										<th style="min-width: 150px;">数量</th>
+									</tr>
+								</thead>
+								<tbody id = "html_shebei_list"></tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="am-u-md-12 am-u-sm-12 row-mb ">
+			<div class="tpl-portlet votesbg">
+				<div class="tpl-portlet-title font-ssblue-border dissel">
+					<div class="tpl-caption font-whilt ">
+						<i class="am-icon-money"></i>
+						<span> 投票统计</span>
+					</div>
+					<div class="actions">
+                        <ul class="actions-btn">
+                        		<li id="refresh_votes" class="yellow"><i class="am-icon-refresh"></i></li>
+                        		<input type="hidden" name="votes_time">
+                            	<li id="choose_yesterday_votes" class="blue c_votes">昨天</li>
+                            	<li id="choose_week_votes" class="blue c_votes" >上周</li>
+                            	<li id="choose_month_votes" class="blue c_votes">本月</li>
+                            	<select id="selected_votes" class="green" data-am-selected = "{maxHeight: 200,searchBox: 1}" placeholder ="选择活动...">
+							  		<option value="" selected>选择活动</option>
+                            		{loop $replyall $row}
+							  		<option value="{$row['rid']}">{$row['title']}</option>
+							  	{/loop}
+							</select>
+                        </ul>
+                    </div>
+				</div>
+
+				<div class="tpl-echarts" id="tpl-votes" style="min-height: 700px;"></div>
+				<div id="notice_votes"></div>
+			</div>
+		</div>
+
+	</div>
+{elseif $operation == 'hzbb'}
+
+{/if}
+{template 'web/common/footer_amaze'}

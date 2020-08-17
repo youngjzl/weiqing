@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="2fa0ed0b-a053-44d5-b33a-b40a3cc86b4d" name="微擎">
+        <fileTransfer rootFolder="/www/wwwroot/kefu.lianhebafang.com" accessType="SFTP" host="118.25.66.95" port="22" sshConfigId="b2da807e-f604-4f08-bced-bbd188b53570" sshConfig="root@118.25.66.95:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,58 @@
+<style>
+{if IMS_VERSION < '1.2'}
+	.fmuh{
+		top:50px;left:0;position:fixed;
+	}
+	.fmuf {
+		background:#ff6600;
+	}
+{else}
+	.fmuh{
+		top: 70px;left: 40%;position: fixed;z-index: 1000; margin: 0 auto;
+	}
+	.fmuc {
+		display: inline-block; line-height: 28px;padding: 0 30px; background-color: #f9edbe;border: 1px solid #f0c36d;border-radius: 4px;font-size: 12px;
+	}
+	.fmuf {
+		background: #ff6600;padding: 5px 5px 6px 5px; margin-left: -5px; height: 37px;border-bottom-right-radius: 5px;border-top-right-radius: 5px;color: #fff;
+	}
+{/if}
+</style>
+
+<script type="text/javascript">
+    require(['bootstrap']);
+    {if $_W['isfounder'] && !defined('IN_MESSAGE')}
+    function check_fm_photosvote_upgrade() {
+
+        require(['util'], function (util) {
+            if (util.cookie.get('checkfmshopupgrade_sys')) {
+                return;
+            }
+            $.post('{php echo $this->createWebUrl("upgrade",array("op"=>"check"))}', function (ret) {
+
+                ret = eval("(" + ret + ")");
+
+                if (ret && ret.result == '1') {
+                    if(ret.filecount>0){
+                        var html = '<div id="fm-photosvote-upgrade-tips" class="upgrade-tips fmuh"><a href="{php echo $this->createWebUrl("upgrade")}" class="fmuc">{php echo $this->module["title"]}检测到新版本 ' + ret.version;
+                        html+=',请尽快更新！</a><span class="tips-close fmuf" onclick="check_fm_photosvote_upgrade_hide();"><i class="fa fa-times-circle"></i></span></div>';
+                        $('body').prepend(html);
+                   }
+                }
+            });
+        });
+    }
+
+    function check_fm_photosvote_upgrade_hide() {
+        require(['util'], function (util) {
+            util.cookie.set('checkfmshopupgrade_sys', 1, 3600);
+            $('#fm-photosvote-upgrade-tips').hide();
+        });
+    }
+    $(function () {
+        check_fm_photosvote_upgrade();
+    });
+    {/if}
+</script>
+
+{template 'common/footer'}

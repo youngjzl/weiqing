@@ -1,0 +1,169 @@
+{template 'xiwuheader'}
+<link rel="stylesheet" type="text/css" href="../addons/xiwulife_scan/template/assets/css/bootstrap-clockpicker.css">
+<div class="xiwulife_content">
+    <div class="center-back right-back">
+        <div class="container-fluid">
+            <div class="info-center">
+                <div class="page-header">
+                    <div class="pull-left">
+                        <h4>店铺管理</h4>
+                    </div>
+                </div>
+                <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" id="form1">
+                    <ul class="nav nav-tabs nav-toplist">
+                        <li role="presentation" class="active"><a>基本内容</a></li>
+                        <li role="presentation"><a>位置管理</a></li>
+                        <li role="presentation"><a>店铺详情</a></li>
+                    </ul>
+                    <div class="panel-body addstore_box">
+                        <span class="active">
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">店铺名称</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="form-control" placeholder="" name="title" value="{$item['title']}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">店铺介绍</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <textarea rows="5" class="form-control" name="text">{$item['text']}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">店铺logo</label>
+                            <div class="col-sm-8 col-xs-12">
+                                {php echo tpl_form_field_image('logo', $item['logo']);}
+                                <span class="help-block">注：建议分辨率为200*200，否则会出现变形</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">营业时间</label>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="input-group clockpicker">
+                                    <span class="input-group-addon" id="basic-addon1">开店</span>
+                                    <input type="text" class="form-control" name="starttime" value="{$item['starttime']}">
+                                    <span class="input-group-addon" id="basic-addon1"><i class="fa  fa-clock-o"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="input-group clockpicker">
+                                    <span class="input-group-addon" id="basic-addon1">关店</span>
+                                    <input type="text" class="form-control" name="endtime" value="{$item['endtime']}">
+                                    <span class="input-group-addon" id="basic-addon1"><i class="fa  fa-clock-o"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">店内环境展示</label>
+                            <div class="col-sm-6 col-xs-6">
+                                {php echo tpl_form_field_multi_image('pics',iunserializer($item['pics']));}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">店铺电话</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="form-control" placeholder="" name="tel" value="{$item['tel']}" />
+                            </div>
+                        </div>
+                        </span>
+                        <span style="display:none">
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">地图</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <div id="container" style="height:500px;"></div>
+                                <span class="help-block">找到地图上店铺位置点击，即可获取位置信息</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">经纬度</label>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">经度</span>
+                                    <input type="text" class="inp_lng form-control" placeholder="" name="lng" value="{$item['lng']}" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">纬度</span>
+                                    <input type="text" class="inp_lat form-control" placeholder="" name="lat" value="{$item['lat']}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">详细地址</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="inp_add form-control" placeholder="" name="address" value="{$item['address']}" />
+								<div style="color: red !important;">好源码网分享（www.0598128.com）</div>
+                            </div>
+                        </div>
+                        </span>
+                        <span style="display:none">
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">店铺详情</label>
+                            <div class="col-xs-12 col-sm-8">
+                                {php echo tpl_ueditor('details', $item['details'])}
+                            </div>
+                        </div>
+                        </span>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"></label>
+                            <div class="col-sm-6 col-xs-6">
+                                <button type="submit" class="btn btn-success btn-block" name="tijiao" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script charset="utf-8" src="//map.qq.com/api/js?v=2.exp&key=RZABZ-LAF3X-7CD45-ZDJ4L-6SNP6-YBB4O"></script>
+    <script type="text/javascript">
+    $(function(){
+        var center = new qq.maps.LatLng(39.916527,116.397128);
+        map = new qq.maps.Map(document.getElementById('container'),{
+            center: center,
+            zoom: 13
+        });
+        //获取城市列表接口设置中心点
+        citylocation = new qq.maps.CityService({
+            complete : function(result){
+                map.setCenter(result.detail.latLng);
+            }
+        });
+        //调用searchLocalCity();方法    根据用户IP查询城市信息。
+        citylocation.searchLocalCity();
+        //绑定单击事件添加参数
+        qq.maps.event.addListener(map, "click", function (e) {
+            if("https:" == document.location.protocol){
+                url3 = encodeURI("https://apis.map.qq.com/ws/geocoder/v1/?location=" + e.latLng.getLat() + "," + e.latLng.getLng() + "&key=RZABZ-LAF3X-7CD45-ZDJ4L-6SNP6-YBB4O&output=jsonp&&callback=?");
+            }else{
+                url3 = encodeURI("http://apis.map.qq.com/ws/geocoder/v1/?location=" + e.latLng.getLat() + "," + e.latLng.getLng() + "&key=RZABZ-LAF3X-7CD45-ZDJ4L-6SNP6-YBB4O&output=jsonp&&callback=?");
+            }
+            $('.inp_lng').val(e.latLng.getLng());
+            $('.inp_lat').val(e.latLng.getLat());
+            $.getJSON(url3, function (result) {
+                if(result.result!=undefined){
+                    $('.inp_add').val(result.result.address);
+                    xiwualert(result.result.address,'finish');
+                }else{
+                   xiwualert('未获取到当前地址信息，请手动填写！');
+                }
+
+            })
+        });
+    })
+    </script>
+    <script type="text/javascript" src="../addons/xiwulife_scan/template/assets/js/bootstrap-clockpicker.min.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        $('.clockpicker').clockpicker({placement: 'top',align: 'left'});
+        $(".nav-toplist li").click(function(){
+            $(this).addClass('active').siblings().removeClass('active');
+            var sc_kejian = $(this).index();
+            $(".addstore_box").children("span").hide().eq(sc_kejian).show();
+        });
+    })
+    </script>
+{template 'xiwufooter'}

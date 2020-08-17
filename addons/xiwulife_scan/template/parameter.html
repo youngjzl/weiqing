@@ -1,0 +1,308 @@
+{template 'xiwuheader'}
+<style>
+.form-group{ margin:15px 0px !important;}
+.panel.panel-default{margin-top:15px;}
+</style>
+<div class="xiwulife_content">
+    <div class="center-back right-back">
+        <div class="container-fluid">
+            <div class="info-center">
+                <div class="page-header">
+                    <div class="pull-left">
+                        <h4>参数设置</h4>
+                    </div>
+                </div>
+                <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" id="form1">
+                <ul class="nav nav-tabs nav-toplist">
+                    <li role="presentation" class="active"><a>小程序</a></li>
+                    <li role="presentation"><a>参数设置</a></li>
+                    <li role="presentation"><a>支付设置</a></li>
+                </ul>
+                <div class="panel addstore_box">
+                <span class="active">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">主体颜色</label>
+                        <div class="col-sm-8 col-xs-12">
+                            {php echo tpl_form_field_color('themscolor', $item['themscolor']);}
+                            <span class="help-block">注：建议不要用与白色相近的颜色，否则会出现标题栏显示</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">首页按钮样式</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['indexlist'] == 0}active{/if}">
+                                    <input type="radio" name="indexlist" value="0" autocomplete="off" {if $item['indexlist'] == 0}checked{/if}> 横向
+                                </label>
+                                <label class="btn btn-success {if $item['indexlist'] == 1}active{/if}">
+                                    <input type="radio" name="indexlist" value="1" autocomplete="off" {if $item['indexlist'] == 1}checked{/if}> 竖向
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">扫码入口</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['saoma'] == 0}active{/if}">
+                                    <input type="radio" name="saoma" value="0" autocomplete="off" {if $item['saoma'] == 0}checked{/if}> 打开
+                                </label>
+                                <label class="btn btn-success {if $item['saoma'] == 1}active{/if}">
+                                    <input type="radio" name="saoma" value="1" autocomplete="off" {if $item['saoma'] == 1}checked{/if}> 关闭
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">预约入口</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['yuyue'] == 0}active{/if}">
+                                    <input type="radio" name="yuyue" value="0" autocomplete="off" {if $item['yuyue'] == 0}checked{/if}> 打开
+                                </label>
+                                <label class="btn btn-success {if $item['yuyue'] == 1}active{/if}">
+                                    <input type="radio" name="yuyue" value="1" autocomplete="off" {if $item['yuyue'] == 1}checked{/if}> 关闭
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">外卖入口</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['waimai'] == 0}active{/if}">
+                                    <input type="radio" name="waimai" value="0" autocomplete="off" {if $item['waimai'] == 0}checked{/if}> 打开
+                                </label>
+                                <label class="btn btn-success {if $item['waimai'] == 1}active{/if}">
+                                    <input type="radio" name="waimai" value="1" autocomplete="off" {if $item['waimai'] == 1}checked{/if}> 关闭
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">买单入口</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['maidan'] == 0}active{/if}">
+                                    <input type="radio" name="maidan" value="0" autocomplete="off" {if $item['maidan'] == 0}checked{/if}> 打开
+                                </label>
+                                <label class="btn btn-success {if $item['maidan'] == 1}active{/if}">
+                                    <input type="radio" name="maidan" value="1" autocomplete="off" {if $item['maidan'] == 1}checked{/if}> 关闭
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">点餐入口</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['quhao'] == 0}active{/if}">
+                                    <input type="radio" name="quhao" value="0" autocomplete="off" {if $item['quhao'] == 0}checked{/if}> 打开
+                                </label>
+                                <label class="btn btn-success {if $item['quhao'] == 1}active{/if}">
+                                    <input type="radio" name="quhao" value="1" autocomplete="off" {if $item['quhao'] == 1}checked{/if}> 关闭
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">钱包入口</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['chongzhi'] == 0}active{/if}">
+                                    <input type="radio" name="chongzhi" value="0" autocomplete="off" {if $item['chongzhi'] == 0}checked{/if}> 打开
+                                </label>
+                                <label class="btn btn-success {if $item['chongzhi'] == 1}active{/if}">
+                                    <input type="radio" name="chongzhi" value="1" autocomplete="off" {if $item['chongzhi'] == 1}checked{/if}> 关闭
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </span>
+                <span style="display:none">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">外卖配送距离</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" placeholder="" name="waimaijvli" value="{$item['waimaijvli']}" />
+                            <span class="help-block">注：写数字，不要带单位；（如：199），为0则没有距离限制，单位：千米</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">店铺优惠</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['storemarketing'] == 0}active{/if}">
+                                    <input type="radio" name="storemarketing" value="0" autocomplete="off" {if $item['storemarketing'] == 0}checked{/if}> 可用
+                                </label>
+                                <label class="btn btn-success {if $item['storemarketing'] == 1}active{/if}">
+                                    <input type="radio" name="storemarketing" value="1" autocomplete="off" {if $item['storemarketing'] == 1}checked{/if}> 不可用
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">优惠券</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['marketingcard'] == 0}active{/if}">
+                                    <input type="radio" name="marketingcard" value="0" autocomplete="off" {if $item['marketingcard'] == 0}checked{/if}> 可用
+                                </label>
+                                <label class="btn btn-success {if $item['marketingcard'] == 1}active{/if}">
+                                    <input type="radio" name="marketingcard" value="1" autocomplete="off" {if $item['marketingcard'] == 1}checked{/if}> 不可用
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">充值活动</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['czmarketing'] == 0}active{/if}">
+                                    <input type="radio" name="czmarketing" value="0" autocomplete="off" {if $item['czmarketing'] == 0}checked{/if}> 可用
+                                </label>
+                                <label class="btn btn-success {if $item['czmarketing'] == 1}active{/if}">
+                                    <input type="radio" name="czmarketing" value="1" autocomplete="off" {if $item['czmarketing'] == 1}checked{/if}> 不可用
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">自动接单</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['receipt'] == 0}active{/if}">
+                                    <input type="radio" name="receipt" value="0" autocomplete="off" {if $item['receipt'] == 0}checked{/if}> 关闭
+                                </label>
+                                <label class="btn btn-success {if $item['receipt'] == 1}active{/if}">
+                                    <input type="radio" name="receipt" value="1" autocomplete="off" {if $item['receipt'] == 1}checked{/if}> 打开
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">版权信息1</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" placeholder="" name="banquan1" value="{$item['banquan1']}" />
+                            <span class="help-block">注：显示在个人中心底部，不填则不显示</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">版权信息2</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" placeholder="" name="banquan2" value="{$item['banquan2']}" />
+                            <span class="help-block">注：显示在个人中心底部，不填则不显示</span>
+                        </div>
+                    </div>
+                </span>
+                <span style="display:none">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">现金支付</label>
+                          <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['xjpay'] == 0}active{/if}">
+                                    <input type="radio" name="xjpay" value="0" autocomplete="off" {if $item['xjpay'] == 0}checked{/if}> 打开
+                                </label>
+                                <label class="btn btn-success {if $item['xjpay'] == 1}active{/if}">
+                                    <input type="radio" name="xjpay" value="1" autocomplete="off" {if $item['xjpay'] == 1}checked{/if}> 关闭
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">微信支付</label>
+                          <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['wxpay'] == 0}active{/if}">
+                                    <input type="radio" name="wxpay" value="0" autocomplete="off" {if $item['wxpay'] == 0}checked{/if}> 打开
+                                </label>
+                                <label class="btn btn-success {if $item['wxpay'] == 1}active{/if}">
+                                    <input type="radio" name="wxpay" value="1" autocomplete="off" {if $item['wxpay'] == 1}checked{/if}> 关闭
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">微信支付测试</label>
+                          <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['wxpaycs'] == 0}active{/if}">
+                                    <input type="radio" name="wxpaycs" value="0" autocomplete="off" {if $item['wxpaycs'] == 0}checked{/if}> 打开
+                                </label>
+                                <label class="btn btn-success {if $item['wxpaycs'] == 1}active{/if}">
+                                    <input type="radio" name="wxpaycs" value="1" autocomplete="off" {if $item['wxpaycs'] == 1}checked{/if}> 关闭
+                                </label>
+                            </div>
+                            <span class="help-block">注：打开后微信支付金额会变为0.01元</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">余额支付</label>
+                          <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['yepay'] == 0}active{/if}">
+                                    <input type="radio" name="yepay" value="0" autocomplete="off" {if $item['yepay'] == 0}checked{/if}> 打开
+                                </label>
+                                <label class="btn btn-success {if $item['yepay'] == 1}active{/if}">
+                                    <input type="radio" name="yepay" value="1" autocomplete="off" {if $item['yepay'] == 1}checked{/if}> 关闭
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">店内点餐立即支付</label>
+                          <div class="col-sm-6 col-xs-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-success {if $item['ljpay'] == 0}active{/if}">
+                                    <input type="radio" name="ljpay" value="0" autocomplete="off" {if $item['ljpay'] == 0}checked{/if}> 打开
+                                </label>
+                                <label class="btn btn-success {if $item['ljpay'] == 1}active{/if}">
+                                    <input type="radio" name="ljpay" value="1" autocomplete="off" {if $item['ljpay'] == 1}checked{/if}> 关闭
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">外卖配送费</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" placeholder="" name="waimaipspay" value="{$item['waimaipspay']}" />
+                            <span class="help-block">注：写数字，不要带单位；（如：199），为0则不收费</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">外卖金额限制</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" placeholder="" name="waimaixianzhi" value="{$item['waimaixianzhi']}" />
+                            <span class="help-block">注：写数字，不要带单位；（如：199），为0则不收费</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">餐具费</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" placeholder="" name="scanprice" value="{$item['scanprice']}" />
+                            <span class="help-block">注：写数字，不要带单位；（如：199），为0则不收费</span>
+                        </div>
+                    </div>
+                </span>
+                <div class="form-group">
+                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"></label>
+                        <div class="col-sm-3 col-xs-3">
+                            <button type="submit" class="btn btn-success btn-block" name="tijiao" value="提交">提交</button>
+                            <input type="hidden" name="token" value="{$_W['token']}" />
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    $(function(){
+        $(".nav-toplist li").click(function(){
+            $(this).addClass('active').siblings().removeClass('active');
+            var sc_kejian = $(this).index();
+            $(".addstore_box").children("span").hide().eq(sc_kejian).show();
+        });
+    })
+    </script>
+</div>
+{template 'xiwufooter'}

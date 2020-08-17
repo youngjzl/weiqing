@@ -1,0 +1,187 @@
+{template 'xiwuheader'}
+<!-- Modal -->
+<style>
+.modal-backdrop.fade.in{opacity: 0}
+.modal.fade.in{ background: rgba(0,0,0,0.5); }
+</style>
+<div class="modal fade" id="myModal" tabindex="9999" data-backdrop="static" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">系统提示：</h4>
+      </div>
+      <div class="modal-body programbox" style="text-align:center">
+        
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" tabindex="-1" id="mainbox" role="dialog">
+  <div class="modal-dialog" role="document" style="width: 60%;">
+    <div class="modal-content orderbtn">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">请填写名称</h4>
+      </div>
+      <div class="modal-body panel-body mainbox">
+        <input type="hidden" class="form-control" placeholder="" name="id" value="">
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"></label>
+            <div class="col-sm-8 col-xs-12">
+                <input type="text" class="form-control" placeholder="" name="title" value="">
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="tijiao()">提交</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="xiwulife_content">
+	<div class="center-back right-back">
+		<div class="container-fluid">
+			<div class="info-center">
+				<div class="page-header">
+					<div class="pull-left">
+						<h4>桌面码管理</h4>
+					</div>
+				</div>
+           <div class="panel panel-success">
+              <div class="panel-heading">生成桌面码</div>
+              <div class="panel-body">
+                  <div class="search-box row">
+                      <div class="col-md-2">
+                          <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">数量:</span>
+                            <input type="text" class="form-control desknum" placeholder="请填写桌面数量" name="desknum" value="">
+                          </div><!-- /input-group -->
+                      </div>
+                      <div class="col-md-2">
+                          <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">类型:</span>
+                            <select class="form-control desktype" name="desktype">
+                            		<option value="1">小程序码</option>
+                                  <option value="2">二维码</option>
+                            </select>                                   
+                          </div>
+                      </div>
+                      <div class="col-md-4">
+                          <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">颜色:</span>
+                            {php echo tpl_form_field_color('deskcolor');}
+                          </div><!-- /input-group -->
+                      </div>
+                      <div class="col-md-4">
+                          <div class="btn-group pull-right" role="group" aria-label="...">
+                              <button onclick="program()" class="btn btn-success"><span class="fa fa-qrcode"></span>生成桌面码</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="panel panel-warning" style="margin:0px 15px; margin-bottom:20px;">
+                  <div class="panel-heading">
+                      <h3 class="panel-title">注：</h3>
+                  </div>
+                  <div class="zhu_list">1. 数量为您门店的桌子数量，默认生成一个前台二维码（请填写纯数字）</div>
+                  <div class="zhu_list">2. 类型为生成的样式，小程序码或二维码（推荐使用小程序码，识别率更高）</div>
+                  <div class="zhu_list">3. 颜色为小程序码颜色，二维码不支持更换颜色（默认为黑色）</div>
+                  <div class="zhu_list">4. 小程序码加二维码最多生成100000个，省着点用</div>
+                  <div class="zhu_list" style="margin-bottom:15px;">5. 二次生成会删除原来生成的桌面码，需重新生成，原来的码也可以使用，不需要替换</div>
+              </div>
+          </div>
+	        <div class="panel panel-success" {if $programlist == ''}style="display:none"{/if}>
+              <div class="panel-heading">我的桌面码</div>
+              <div class="table-responsive panel-body">
+                  <div class="row">
+                    {loop $programlist $programlist}
+                    <div class="col-sm-6 col-md-2" id="{$programlist['id']}">
+                      <div class="thumbnail">
+                        <img src="{$programlist['url']}" alt="...">
+                        <div class="caption">
+                          <p style="height:20px;">{$programlist['title']}</p>
+                          <a title="下载（{$programlist['number']}号桌）" href="{$programlist['url']}" download="{$programlist['filename']}">
+                          <button class="btn btn-warning button_width">下载({$programlist['number']}号桌)</button></a>
+                          <button class="btn btn-warning button_width" onclick="xiugai('{$programlist['id']}','{$programlist['title']}')">修改名称</button>
+                        </div>
+                      </div>
+                    </div>
+                    {/loop}
+                  </div>
+              </div>
+	        </div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+function xiugai(id,title){
+    $('#mainbox').modal('show');
+    $('input[name=id]').val(id);
+    $('input[name=title]').val(title);
+}
+function tijiao(){
+    var title = $('input[name=title]').val();
+    var id = $('input[name=id]').val();
+    if(title == ''){
+        xiwualert('名称不能为空');
+        return;
+    }
+    var url = "{php echo $this->createWebUrl('program',array('sub' => 'title'));}";
+    $.ajax({
+      type: 'post',
+      data: {
+        id:id,
+        title: title,
+      },
+      url: url,
+      success: function(d) {
+        xiwualert(d);
+        $('#mainbox').modal('hide');
+        setTimeout(function(){
+             window.location.reload();
+        },1500)
+      }
+    })
+}
+function program(){
+    var url = "{url 'site/entry/program' array('m' => 'xiwulife_scan','sub' => 'program')}";
+    var html = '';
+  var desknum = $('.desknum').val();
+  var desktype = $('.desktype option:selected').val();
+  var deskcolor = $('input[name=deskcolor]').val();
+  if (desknum == '') {
+    $(".programbox").empty();
+    html = '<img src="../addons/xiwulife_scan/template/assets/img/gantan.jpg" style="width: 100px; height:100px; margin: 10px auto;" /><p>桌子数量不能为空</p>';
+    $(".programbox").append(html);
+    $('#myModal').modal('show');
+    setTimeout(function() {
+      $('#myModal').modal('hide')
+    }, 1500)
+  } else {
+    $(".programbox").empty();
+    html = '<img src="../addons/xiwulife_scan/template/assets/img/timg.gif" style="width: 140px; height:100px; margin: 10px auto;" /><p>生成中，请稍后...</p>';
+    $(".programbox").append(html);
+    $('#myModal').modal('show');
+    $.ajax({
+      type: 'post',
+      data: {
+        desknum: desknum,
+        desktype: desktype,
+        deskcolor: deskcolor,
+      },
+      url: url,
+      success: function(d) {
+        $(".programbox").empty();
+        html = '<img src="../addons/xiwulife_scan/template/assets/img/dui.jpg" style="width: 100px; height:100px; margin: 10px auto;" /><p>生成成功</p>';
+        $(".programbox").append(html);
+        setTimeout(function() {
+          window.location.reload()
+        }, 1000)
+      }
+    })
+  }
+}
+</script>
+{template 'xiwufooter'}

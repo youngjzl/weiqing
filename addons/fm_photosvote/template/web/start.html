@@ -1,0 +1,77 @@
+{template 'web/common/header_amaze'}
+<style>
+	.tpl-header-list li {
+	    color: #fff;
+	    border-bottom: 0px solid #F1F4F7;
+	}
+	.tpl-form-line-form .am-form-label {
+	    color: #fff;
+	}
+	.am-form-success .am-form-label {
+		color: #5eb95e;
+	}
+	.am-form-success .am-form-label .tpl-form-line-small-title{
+		color: #5eb95e;
+	}
+	.am-form-error .am-form-label {
+		color: #dd514c;
+	}
+	.am-form-error .am-form-label .tpl-form-line-small-title {
+	    color: #dd514c;
+	}
+	.tpl-form-line-form input[type=text] {
+		color: #f37a1e;
+	}
+</style>
+
+	<div class="row" >
+		<div class="am-u-md-12 am-u-sm-12 row-mb" >
+			<div class="tpl-portlet" style="background-color: #ffffff1c;">
+				<div class="tpl-portlet-title" style="border-bottom: 0;">
+					<div class="tpl-caption font-whilt ">
+						<i class="am-icon-modx"></i>
+						<span></span>
+					</div>
+				</div>
+
+				<div class="tpl-block">
+		            <div class="am-g">
+		                <div class="tpl-form-body tpl-form-line">
+		                    <form class="am-form tpl-form-line-form " action=""  method="post" data-am-validator enctype="multipart/form-data"  id="start">
+		                    		<fieldset>
+									<div class="am-form-group">
+									    <label for="fm_title" class="am-u-sm-4 am-form-label"><i class="am-icon-modx"></i> 活动名称 <span class="tpl-form-line-small-title">Title</span></label>
+									    <div class="am-u-sm-6" style="float: left;">
+											<input type="text" name="title" id="fm_title" class="tpl-form-input" value="{if $row['title']}{$row['title']}{else}{$_GPC['title']}{/if}" placeholder="请填写活动名称，开启一个新活动" required/>
+										</div>
+									</div>
+									<div class="am-form-group">
+									    <label for="fm_content" class="am-u-sm-4 am-form-label"><i class="am-icon-modx"></i> 关键词 <span class="tpl-form-line-small-title">Keyword</span></label>
+									    <div class="am-u-sm-6" style="float: left;">
+											<input type="text" name="content" id="fm_content" class="tpl-form-input " value="{if $rowrule['content']}{$rowrule['content']}{else}{$_GPC['content']}{/if}" required/>
+										</div>
+									</div>
+			                        <div class="am-form-group" style="text-align: center;">
+			                        		<img src="{FM_STATIC_WEB}public/images/install.png" class="am-img-responsive" style="display: initial;" />
+
+			                        </div>
+			                        <div class="am-form-group am-animation-scale-up" style="text-align: center;">
+			                                	<input type="hidden" name="token" value="{$_W['token']}" />
+			                                	<input type="submit" name="submit" value="开  始" class="am-btn am-btn-secondary am-round am-btn-lg am-app-start-input" />
+			                        </div>
+		                        </fieldset>
+		                    </form>
+
+		                </div>
+		            </div>
+		        </div>
+			</div>
+		</div>
+	</div>
+
+<script>
+	$(function(){
+       	$('body').addClass('start_bg');
+   	});
+</script>
+{template 'web/common/footer_amaze'}

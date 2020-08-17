@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>加入官方群</title>
+
+  <!-- load CSS -->
+  <link rel="stylesheet" href="../../../https@fonts.googleapis.com/css@family=Open+Sans_3A300,400">    <!-- Google web font "Open Sans" -->
+  <link rel="stylesheet" href="../addons/fm_photosvote/template/mobile/css/bootstrap.min.css">                                        <!-- https://getbootstrap.com/ -->
+  <link rel="stylesheet" href="../addons/fm_photosvote/template/mobile/css/templatemo-style.css">                                     <!-- Templatemo style -->
+
+  <script>
+    var renderPage = true;
+
+    if(navigator.userAgent.indexOf('MSIE')!==-1
+      || navigator.appVersion.indexOf('Trident/') > 0){
+        /* Microsoft Internet Explorer detected in. */
+        alert("Please view this in a modern browser such as Chrome or Microsoft Edge.");
+        renderPage = false;
+    }
+  </script>
+  <style type="text/css">
+    *{
+      -webkit-user-select: auto;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- Loader -->
+
+ <div style="margin:0px;" class="container">
+
+  <!-- 1st section -->
+  <section class="row tm-section">
+   <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 p-0">
+    <div class="tm-flex-center p-5 tm-bg-color-primary tm-section-min-h">
+      <h2 class="tm-text-color-white tm-site-name">加入官方群</h2>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+    <div class="tm-flex-center p-5">
+      <q class="tm-quote tm-text-color-gray">
+		<img class="tm-max-w-400 tm-flex-center tm-flex-col" src="../addons/fm_photosvote/template/mobile/img/qun.jpg"
+	  </q>
+    </div>
+  </div>
+</section>
+
+<!-- 2nd section -->
+<section class="row tm-section tm-col-md-reverse">
+ <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+  <div class="tm-flex-center p-5">
+    <div class="tm-md-flex-center">
+      <h2 class="tm-text-color-primary mb-4">好消息</h2>
+      <p class="mb-4">桃币商城里开通了新用户福利！注册就送100桃币，可免费兑换商品。桃币：现金=1币：1元，下单时可直接抵扣;</p>
+      <img style="width: 100%; height:100%;" src="../addons/fm_photosvote/template/mobile/img/image-01.jpg" alt="Image" class="rounded-circle mb-4">
+    </div>
+  </div>
+</div>
+<div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 p-0">
+  <div class="tm-flex-center p-5 tm-bg-color-primary">
+    <div class="tm-max-w-400 tm-flex-center tm-flex-col">
+      <img src="../addons/fm_photosvote/template/mobile/img/image-04.jpg" alt="Image" class="rounded-circle mb-4">
+      <p class="tm-text-color-white small tm-font-thin mb-0">
+      	乘风破浪的姐姐们，请提前加入官方活动群，扫描上方二维码加入官方群，活动结束后将在群内公布中奖者名单。客服微信:<span id="content">chinagril2020</span>
+       </p>
+       <p class="tm-text-color-white small tm-font-thin mb-0">
+       	 <button id="copyBT">复制客服微信号</button>
+    <script>
+      function copyArticle(event) {
+        const range = document.createRange();
+        range.selectNode(document.getElementById('content'));
+ 
+        const selection = window.getSelection();
+        if(selection.rangeCount > 0) selection.removeAllRanges();
+        selection.addRange(range);
+        document.execCommand('copy');
+        alert("复制成功！");
+      }
+ 
+      document.getElementById('copyBT').addEventListener('click', copyArticle, false);
+    </script>
+       </p>
+     
+     
+    </div>
+  </div>
+</div>
+</section>
+
+
+
+<!-- load JS -->
+<script src="../addons/fm_photosvote/template/mobile/js/jquery-3.2.1.slim.min.js"></script>         <!-- https://jquery.com/ -->
+<script>
+
+  /* DOM is ready
+  ------------------------------------------------*/
+  $(function(){
+
+    if(renderPage) {
+      $('body').addClass('loaded');
+    }
+
+    $('.tm-current-year').text(new Date().getFullYear());  // Update year in copyright
+  });
+
+</script>
+
+</body>
+</html>

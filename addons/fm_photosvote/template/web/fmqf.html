@@ -1,0 +1,468 @@
+{template 'web/common/header_amaze_post'}
+{if $operation == 'display'}
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-wechat"></span> 群发 <span class="am-badge am-badge-warning"> 仅适用于认证服务号</span>
+	            </div>
+				<div class="actions">
+					{if $time > $r['end_time']}
+						<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" id="end" href="javascript:;" data-toggle="tooltip" data-placement="bottom"  title="活动结束群发投票结果" >
+		                		<i class="am-icon-expand"></i> 活动结果
+						</a>
+					{/if}
+
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('fmqf', array('rid' => $rid, 'op' => 'post' ))}" data-toggle="tooltip" data-placement="bottom"  title="添加群发" >
+	                		<i class="am-icon-plus"></i> 添加群发文章
+					</a>
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('fmqf', array('rid' => $rid, 'op' => 'display' ))}" data-toggle="tooltip" data-placement="bottom"  title="群发管理" >
+	                		<i class="am-icon-file-image-o"></i> 群发管理
+					</a>
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('fmqf', array('rid' => $rid, 'op' => 'qfusers'))}" data-toggle="tooltip" data-placement="bottom"  title="群发状态" >
+	                		<i class="am-icon-file-image-o"></i> 群发状态
+					</a>
+				</div>
+
+	        </div>
+	        <div class="am-tabs tpl-index-tabs" data-am-tabs>
+					<div class="am-tabs-bd">
+						<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+							<div id="wrapperA" class="wrapper wrapper-h-auto">
+								<form method="post" class="am-form tpl-form-line-form" id="formbanner">
+									<div class="tpl-scrollable" style="min-height: 200px;">
+										<table class="am-table am-table-hover tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th width="80">排序</th>
+													<th >标题</th>
+													<th >缩略图</th>
+													<th width="100">点击</th>
+													<th >操作</th>
+												</tr>
+											</thead>
+											<tbody >
+												{loop $list $row}
+													<tr>
+														<td>
+															<div class="am-form tpl-form-line-form">
+																<input type="text" class="tpl-form-input" name="displayorder[{$row['id']}]" value="{$row['displayorder']}">
+															</div>
+														</td>
+														<td>{$row['title']}</td>
+														<td>
+															<a href="{php echo tomedia($row['thumb'])}" target="_blank"><img src="{php echo tomedia($row['thumb'])}" alt="{$row['title']}" class="user-pic am-img-thumbnail am-circle am-img-responsive" style="border-radius: 5px;"></a>
+														</td>
+														<td>
+															<span class="am-badge am-badge-success">{$row['click']}</span>
+														</td>
+														<td>
+															<div class="am-btn-toolbar">
+																<div class="am-btn-group am-btn-group-xs">
+																	<a class="am-btn am-btn-default btn" href="javascript:;" onclick="preview_article('{$row['id']}', '{$_W['uniacid']}');return false;" data-toggle="tooltip" data-placement="top" title="预览"><i class="fa fa-search"></i> 预览</a>
+																	<a class="am-btn am-btn-default btn manage" href="javascript:void(0)" id="{$row['id']}" class="btn btn-default btn-sm manage" data-toggle="tooltip" data-placement="top" title="群发文章"><i class="fa fa-gift"></i> 群发</a>
+																	<a class="am-btn am-btn-default btn " href="{php echo $this->createWebUrl('fmqf', array('op' => 'post','rid' => $rid,'id' => $row['id']))}" title="编辑" data-toggle="tooltip" data-placement="top" ><i class="fa fa-edit"></i> 编辑</a>
+																	<a class="am-btn am-btn-danger btn" onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo url('site/article/delete', array('id' => $row['id']))}" title="删除" data-toggle="tooltip" data-placement="top"><i class="fa fa-times"></i> 删除</a>
+																</div>
+															</div>
+														</td>
+													</tr>
+												{/loop}
+												<tr>
+													<td colspan="6" style="line-height: 6em;">
+														<div style="text-align: left;">
+															<div class="am-btn-toolbar">
+																<div class="am-btn-group am-btn-group-sm">
+																	<input name="token" type="hidden" value="{$_W['token']}" />
+						                                				<input type="submit" name="submit" class="am-btn am-btn-success btn" value="提交" data-toggle="tooltip" data-placement="top" title="提交">
+							                                		</div>
+							                                </div>
+
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+	    </div>
+	</div>
+</div>
+	<script type="text/javascript">
+		require(['jquery', 'util'], function($, u){
+			$('.manage').click(function(){
+				var id = parseInt($(this).attr('id'));
+				$.get("{php echo $this->createWebUrl('fmqf', array('op' => 'fasong','rid' => $rid))}&id=" + id, function(data){
+					if(data == 'dataerr') {
+						u.message('未找指定文章', '', 'error');
+					} else {
+						var obj = u.dialog('群发消息', data, $('#guanbi').html());
+					}
+					obj.modal('show');
+				});
+			})
+			$('#end').click(function(){
+				var id = 'end';
+				$.get("{php echo $this->createWebUrl('fmqf', array('op' => 'fasong','rid' => $rid))}&id=" + id, function(data){
+					if(data == 'dataerr') {
+						u.message('错误', '', 'error');
+					} else {
+						var obj = u.dialog('群发消息', data, $('#guanbi').html());
+					}
+					obj.modal('show');
+				});
+			})
+		});
+		function preview_article(id, uniacid) {
+			require(['jquery', 'util'], function($, u){
+				var content = '<iframe width="320" scrolling="yes" height="480" frameborder="0" src="about:blank"></iframe>';
+				var footer = '<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>';
+				var dialog = u.dialog('预览文章', content, footer);
+				dialog.find('iframe').on('load', function(){
+					$('a', this.contentWindow.document.body).each(function(){
+						var href = $(this).attr('href');
+						if(href && href[0] != '#') {
+							var arr = href.split(/#/g);
+							var url = arr[0];
+							if (url.substr(0, 3) == 'www') {
+								url = 'http://' + url;
+							}
+							if(arr[1]) {
+								url += ('#' + arr[1]);
+							}
+							if (url.substr(0, 10) == 'javascript') {
+								url = url.substr(0, url.lastIndexOf('&'));
+							}
+							$(this).attr('href', url);
+						}
+					});
+				});
+				var url = '../app/index.php?c=site&a=site&do=detail&id=' + id + '&i=' + uniacid;
+				dialog.find('iframe').attr('src', url);
+				dialog.find('.modal-dialog').css({'width': '322px'});
+				dialog.find('.modal-body').css({'padding': '0', 'height': '480px'});
+				dialog.modal('show');
+			});
+		}
+	</script>
+{elseif $operation == 'post'}
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-wechat"></span> {if !empty($item['title'])}编辑{else}添加{/if}文章
+	            </div>
+				<div class="actions">
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('fmqf', array('rid' => $rid, 'op' => 'post' ))}" data-toggle="tooltip" data-placement="bottom"  title="添加文章" >
+	                		<i class="am-icon-plus"></i> 添加文章
+					</a>
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('fmqf', array('rid' => $rid, 'op' => 'display' ))}" data-toggle="tooltip" data-placement="bottom"  title="文章管理" >
+	                		<i class="am-icon-file-image-o"></i> 文章管理
+					</a>
+				</div>
+	        </div>
+	        <div class="tpl-block">
+	            <div class="am-g">
+	                <div class="tpl-form-body tpl-form-line">
+	                    <form class="am-form tpl-form-line-form form" action=""  method="post" data-am-validator enctype="multipart/form-data" id="form1">
+	                    		<fieldset>
+
+	                    			{if !empty($item)}
+		                    			<div class="am-form-group">
+									    <label for="fm_linkurl" class="am-u-sm-3 am-form-label">访问地址 <span class="tpl-form-line-small-title">Linkurl</span></label>
+									    <div class="am-u-sm-9">
+											<a href="{$_W['siteroot']}/app/index.php?c=site&a=site&do=detail&id={$item['id']}&i={$_W['uniacid']}" target="_blank">{$_W['siteroot']}/app/index.php?c=site&a=site&do=detail&id={$item['id']}&i={$_W['uniacid']}</a>
+											<p class="am-form-help">您可以根据此地址，添加回复规则，设置访问。</p>
+										</div>
+									</div>
+								{/if}
+								<div class="am-form-group">
+								    <label for="fm_displayorder" class="am-u-sm-3 am-form-label">排序 <span class="tpl-form-line-small-title">Displayorder</span></label>
+								    <div class="am-u-sm-9">
+										<input type="text" name="displayorder" class="tpl-form-input " value="{$item['displayorder']}" />
+										<p class="am-form-help">排序</p>
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_title" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 标题 <span class="tpl-form-line-small-title">Title</span></label>
+								    <div class="am-u-sm-9">
+										<input type="text" name="title" id="fm_title" class="tpl-form-input " value="{$item['title']}" required/>
+										<p class="am-form-help">文章标题</p>
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_source" class="am-u-sm-3 am-form-label">来源 <span class="tpl-form-line-small-title">Source</span></label>
+								    <div class="am-u-sm-9">
+										<input type="text" name="source" id="fm_source" class="tpl-form-input " value="{$item['source']}"/>
+										<p class="am-form-help">文章来源</p>
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_author" class="am-u-sm-3 am-form-label">作者 <span class="tpl-form-line-small-title">Author</span></label>
+								    <div class="am-u-sm-9">
+										<input type="text" name="author" id="fm_author" class="tpl-form-input " value="{$item['author']}"/>
+										<p class="am-form-help">文章作者</p>
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_thumb" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 缩略图 <span class="tpl-form-line-small-title">Picture</span></label>
+								    <div class="am-u-sm-9">
+										{php echo tpl_form_field_image('thumb', $item['thumb'])}
+										<p class="am-form-help">文章封面（图片建议尺寸：360像素 * 200像素）</p>
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_incontent" class="am-u-sm-3 am-form-label">封面图片是否显示在正文中 <span class="tpl-form-line-small-title">Incontent</span></label>
+								    <div class="am-u-sm-9">
+									    <div class="tpl-switch">
+	                                        <input type="checkbox" name='incontent' class="ios-switch bigswitch tpl-switch-btn" {if !empty($item['incontent'])} checked="checked" {/if} />
+	                                        <div class="tpl-switch-btn-view">
+	                                            <div>
+	                                            </div>
+	                                        </div>
+	                                   </div>
+										<p class="am-form-help">封面图片是否显示在正文中</p>
+	                                 </div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_description" class="am-u-sm-3 am-form-label">简介 <span class="tpl-form-line-small-title">Description</span></label>
+								    <div class="am-u-sm-9">
+								    		<textarea name="description" rows="5" class="tpl-form-input ">{$item['description']}</textarea>
+										<p class="am-form-help">文章简介</p>
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_content" class="am-u-sm-3 am-form-label"></span>内容 <span class="tpl-form-line-small-title">Content</span></label>
+								    <div class="am-u-sm-9">
+								    		{php echo tpl_ueditor('content', $item['content']);}
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_autolitpic" class="am-u-sm-3 am-form-label"></span></label>
+								    <div class="am-u-sm-9">
+								    		<p class="am-form-help"><label class="checkbox-inline"><input type="checkbox" name="autolitpic" value="1"{if empty($item['thumb'])} checked="true"{/if}>提取内容的第一个图片为缩略图</label></p>
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_linkurl" class="am-u-sm-3 am-form-label"></span>直接连接 <span class="tpl-form-line-small-title">Linkurl</span></label>
+								    <div class="am-u-sm-9">
+								    		{php echo tpl_form_field_link('linkurl', $item['linkurl']);}
+									</div>
+								</div>
+								<div class="am-form-group">
+								    <label for="fm_click" class="am-u-sm-3 am-form-label">阅读次数 <span class="tpl-form-line-small-title">Hits</span></label>
+								    <div class="am-u-sm-9">
+										<input type="text" name="click" id="fm_click" class="tpl-form-input " value="{$item['click']}"/>
+										<p class="am-form-help">阅读次数，默认为0。您可以设置一个初始值,阅读次数会在该初始值上增加。</p>
+									</div>
+								</div>
+		                        <div class="am-form-group">
+		                            <div class="am-u-sm-9 am-u-sm-push-3">
+		                                	<input type="hidden" name="token" value="{$_W['token']}" />
+			                             <input type="submit" name="submit" value="提交" class="am-btn am-btn-primary tpl-btn-bg-color-success " />
+		                            </div>
+		                        </div>
+	                        </fieldset>
+	                    </form>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+{elseif $operation == 'qfusers'}
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-search"></span> 筛选
+	            </div>
+	        </div>
+	        <div class="tpl-block">
+	            <div class="am-g">
+	                <div class="tpl-form-body tpl-form-line">
+	                    <form class="am-form tpl-form-line-form" action="./index.php"  data-am-validator>
+	                    		<fieldset>
+							<input type="hidden" name="c" value="site" />
+							<input type="hidden" name="a" value="entry" />
+							<input type="hidden" name="m" value="fm_photosvote" />
+							<input type="hidden" name="do" value="fmqf" />
+							<input type="hidden" name="op" value="qfusers" />
+							<input type="hidden" name="rid" value="{$_GPC['rid']}" />
+	                        	<div class="am-form-group">
+	                            <label for="fm-search" class="am-u-sm-3 am-form-label">综合搜索 <span class="tpl-form-line-small-title">Search</span></label>
+	                            <div class="am-u-sm-9">
+	                                <input type="text" name="keyword" value="{$_GPC['keyword']}" class="tpl-form-input" id="zh-search" minlength="1"  placeholder="请输入 openid" required/>
+
+	                                <div class="am-alert am-alert-warning alert alert-dismissible" role="alert">
+	                                		<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="right: 0;"><span aria-hidden="true">&times;</span></button>
+									  	当前系统已搜索到 {$total} 条{if $keyword}包含 “{$keyword}” 的相关{/if}数据......
+									</div>
+	                            </div>
+	                        </div>
+	                        <div class="am-form-group">
+	                            <div class="am-u-sm-9 am-u-sm-push-3">
+	                                <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success "><i class="am-icon-search"></i> 开始搜索</button>
+	                            </div>
+	                        </div>
+	                        </fieldset>
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+	        <div class="portlet-title">
+	            <div class="caption font-green bold">
+	                <span class="am-icon-wechat"></span> 群发 <span class="am-badge am-badge-warning"> 仅适用于认证服务号</span>
+	            </div>
+				<div class="actions">
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('fmqf', array('rid' => $rid, 'op' => 'post' ))}" data-toggle="tooltip" data-placement="bottom"  title="添加群发" >
+	                		<i class="am-icon-plus"></i> 添加群发文章
+					</a>
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('fmqf', array('rid' => $rid, 'op' => 'display' ))}" data-toggle="tooltip" data-placement="bottom"  title="群发管理" >
+	                		<i class="am-icon-file-image-o"></i> 群发管理
+					</a>
+					<a class="am-btn am-btn-default am-btn-sm btn-loading-template btn" href="{php echo $this->createWebUrl('fmqf', array('rid' => $rid, 'op' => 'qfusers'))}" data-toggle="tooltip" data-placement="bottom"  title="群发状态" >
+	                		<i class="am-icon-file-image-o"></i> 群发状态
+					</a>
+				</div>
+
+	        </div>
+	        <div class="am-tabs tpl-index-tabs" data-am-tabs>
+					<div class="am-tabs-bd">
+						<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+							<div id="wrapperA" class="wrapper wrapper-h-auto">
+								<form method="post" class="am-form tpl-form-line-form" id="formbanner">
+									<div class="tpl-scrollable" style="min-height: 200px;">
+										<table class="am-table am-table-hover tpl-table">
+											<thead>
+												<tr class="tpl-table-uppercase">
+													<th>粉丝</th>
+													<th >手机</th>
+													<th >发送方向</th>
+													<th width="100">状态</th>
+													<th width="100">奖品领取</th>
+													<th >时间</th>
+												</tr>
+											</thead>
+											<tbody >
+												{loop $list $row}
+												{php $loguser = $this->_getloguser($row['rid'], $row['from_user']);$tpinfo = $this->gettpinfo($rid,$row['from_user']);}
+												{php $level = intval($this->fmvipleavel($rid, $uniacid, $row['from_user']));}
+												{if $keyword}
+													<style>
+														.active {background:#FFFC00; color:red;}
+													</style>
+													{php $rn = stristr($row['nickname'],$keyword); $fn = stristr($fuser['nickname'],$keyword)}
+												{/if}
+													<tr>
+														<td>
+															<div class="">
+																<span class="am-badge am-badge-warning am-round">{$row['id']}</span>
+																<span>
+																	<img src="{php echo $this->getname($row['rid'],$row['from_user'],'4','avatar')}" alt="{php echo $this->getname($row['rid'],$row['from_user'],'20')}" class="user-pic am-img-thumbnail am-circle am-img-responsive" style="border-radius: 5px;">
+																	<a class="font-yellow font-yellow-size"  href="{php echo $this->createWebUrl('votemembers', array('op' => 'edit', 'rid' => $rid, 'from_user' => $row['from_user']))}">
+																		<span {if stristr($this->getusernames($row['realname'], $row['nickname']),$keyword)}class="active"{/if}>{php echo $this->getname($row['rid'],$row['from_user'],'10')}</span>
+																		<span class="level level_{$level}">{$level}</span>
+																	</a>
+																</span>
+															</div>
+														</td>
+														<td>
+															<span class="am-badge am-badge am-badge-secondary {if stristr($row['mobile'],$keyword)}active{/if}">{php echo $this->getmobile($rid,$row['from_user'])}</span>
+														</td>
+														<td>
+															<a href="javascript:;" class="am-badge am-badge-primary" data-toggle="tooltip" data-placement="top" title="">
+																{if $row['type'] == '-1'}
+																	全部用户（包含该公众号所有粉丝）
+																{elseif $row['type'] == '-2'}
+																	女神来了参赛选手
+																{elseif $row['type'] == '-3'}
+																	女神来了所有投票人
+																{else}
+																	{php $uidinfo = $this->getuidusers($rid, $row['type']);}
+																	{if !empty($uidinfo)}
+																		{php echo $this->getname($row['rid'],$uidinfo['from_user'],'10')}的所有投票人
+																	{else}
+																		全部用户组
+																	{/if}
+																{/if}
+															</a>
+														</td>
+														<td>
+															<span class="am-badge am-badge-default">已发送</span>
+														</td>
+														<td>
+															{if $row['status'] == '1'}
+																<span class="am-badge am-badge-warning">结果通知</span>
+															{else}
+																<span class="am-badge am-badge-default">文章群发</span>
+															{/if}
+														</td>
+
+														<!--<td>
+															<a data='{$row['status']}' ip='{$row['ip']}' class='am-btn  am-btn-default {if $row['status']==1}am-btn-primary{/if}  am-btn-xs manage' onclick="setProperty(this,{$row['id']},'qfstatus')" data-toggle="tooltip" data-placement="top" title="领取状态，点击标记">{if $row['status']==1}<i class="am-icon-star"></i> 已领取{else}<i class="am-icon-star-o"></i> 未领取{/if}</a>
+
+														</td>-->
+														<td>
+															<span class="am-badge am-badge-default">{php echo date('Y-m-d H:i:s', $row[lasttime]);}</span>
+														</td>
+													</tr>
+												{/loop}
+												<tr>
+													<td colspan="9" style="line-height: 10em;">
+														<div style="text-align: center;">{$pager}</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+	    </div>
+	</div>
+</div>
+<script type="text/javascript">
+	function setProperty(obj,id,type){
+		$(obj).html($(obj).html() + "...");
+		$.post("{php echo $this->createWebUrl('Settuijian')}"
+			,{id:id,type:type,  data: obj.getAttribute("data")}
+			,function(d){
+				if(type=='qfstatus'){
+					$(obj).html($(obj).html().replace("...",""));
+					$(obj).html( d.data=='1'?'<i class="am-icon-star"></i> 已领取':'<i class="am-icon-star-o"></i> 未领取');
+					$(obj).attr("data",d.data);
+					if(d.result==1){
+						$(obj).toggleClass("am-btn-primary");
+					}
+					//window.location.reload();
+				}
+
+			}
+			,"json"
+		);
+}
+</script>
+{/if}
+{template 'web/common/footer_amaze_post'}

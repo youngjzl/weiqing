@@ -1,0 +1,78 @@
+<div class="fe-panel-editor-title">投票区设置<span style="font-size: 12px; margin-left: 10px;"></span></div>
+
+<div class="fe-panel-editor-line" >
+    <div class="fe-panel-editor-name">默认标题</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input1" placeholder="投票区标题" ng-model="Edit.params.votetitle" />
+    </div>
+</div>
+
+<div class="fe-panel-editor-line" >
+    <div class="fe-panel-editor-name">标题颜色</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input2" type="color" ng-model="Edit.params.votetitlecolor">
+    </div>
+</div>
+<div class="fe-panel-editor-line" >
+    <div class="fe-panel-editor-name">背景颜色</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input2" type="color" ng-model="Edit.params.votebgcolor">
+    </div>
+</div>
+
+
+<div class="fe-panel-editor-line" >
+    <div class="fe-panel-editor-name">选手背景颜色</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input2" type="color" ng-model="Edit.params.votealluserbgcolor">
+    </div>
+</div>
+
+<div class="fe-panel-editor-line" >
+    <div class="fe-panel-editor-name">选手名称编号颜色</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input2" type="color" ng-model="Edit.params.voteusernamecolor">
+    </div>
+</div>
+<div class="fe-panel-editor-line" >
+    <div class="fe-panel-editor-name">得票数文字颜色</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input2" type="color" ng-model="Edit.params.votepiaoshucolor">
+    </div>
+</div>
+<div class="fe-panel-editor-line" >
+    <div class="fe-panel-editor-name">投票文字</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input1" placeholder="投Ta一票" ng-model="Edit.params.voteanname" />
+    </div>
+</div>
+
+<div class="fe-panel-editor-line" >
+    <div class="fe-panel-editor-name">投票按钮文字颜色</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input2" type="color" ng-model="Edit.params.voteancolor">
+    </div>
+</div>
+<div class="fe-panel-editor-line" >
+    <div class="fe-panel-editor-name">投票背景色(得票数与投票按钮的背景色)</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input2" type="color" ng-model="Edit.params.voteanbgcolor">
+    </div>
+</div>
+<div class="fe-panel-editor-line" >
+    <div class="fe-panel-editor-name">投票按钮背景色</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input2" type="color" ng-model="Edit.params.votesmanbgcolor">
+    </div>
+</div>
+<div class="fe-panel-editor-line" >
+    <div class="fe-panel-editor-name">投票按钮图片</div>
+    <div class="fe-panel-editor-con">
+        <div class="fe-panel-editor-del" title="移除" ng-click="delPic(Edit.id, 'voteanimg')" style="left: 0px;top: 10px;position: relative;z-index: 11111;">×</div>
+        <div class="fe-panel-editor-upload" ng-click="pageImg(Edit.id, 'voteanimg')">
+            <img ng-src="{{Edit.params.voteanimg}}" width="100%" ng-show="Edit.params.voteanimg" />
+            <div class="fe-panel-editor-upload-choose2" ng-show="Edit.params.voteanimg">重新选择图片</div>
+            <div class="fe-panel-editor-upload-choose1" ng-show="!Edit.params.voteanimg"><i class="fa fa-plus-circle"></i> 选择图片</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,160 @@
+{template 'xiwuheader'}
+<style>
+.modal-backdrop.fade.in{opacity: 0; display: none;}
+.modal.fade.in{ background: rgba(0,0,0,0.5); }
+h4{margin-top:0px; margin-bottom:8px;}
+.btn.btn-default.daterange.daterange-date{width: 100%;}
+select{width: 100%;}
+</style>
+<div class="xiwulife_content">
+	<div class="center-back right-back">
+		<div class="container-fluid">
+			<div class="info-center">
+				<div class="page-header">
+					<div class="pull-left">
+						<h4>订单管理</h4>
+					</div>
+				</div>
+                 <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">订单筛选</h3>
+                    </div>
+                    <form action="" method="get" class="form-horizontal" role="form">
+                    <input type="hidden" name="c" value="site" />
+                    <input type="hidden" name="a" value="entry" />
+                    <input type="hidden" name="m" value="xiwulife_scan" />
+                    <input type="hidden" name="do" value="order" />
+                    <div class="panel-body">
+                        <div class="search-box row">
+                            <div class="col-md-2">
+                                {php echo tpl_form_field_daterange('date', array('starttime'=>date('Y-m-d', $starttime),'endtime'=>date('Y-m-d', $endtime)),true);}
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">订单类型</span>
+                                    <select name="ordertype" id="">
+                                        <option value="" {if $_GPC['ordertype'] == ''} selected="selected" {/if}>不限</option>
+                                        <option value="0" {if $_GPC['ordertype'] == 0} selected="selected" {/if}>扫码点餐</option>
+                                        <option value="1" {if $_GPC['ordertype'] == 1} selected="selected" {/if}>预约订单</option>
+                                        <option value="2" {if $_GPC['ordertype'] == 2} selected="selected" {/if}>外卖订单</option>
+                                        <option value="3" {if $_GPC['ordertype'] == 3} selected="selected" {/if}>店内买单</option>
+                                        <option value="4" {if $_GPC['ordertype'] == 4} selected="selected" {/if}>排队取号</option>
+                                        <option value="5" {if $_GPC['ordertype'] == 5} selected="selected" {/if}>余额充值</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">订单状态</span>
+                                    <select name="status" id="">
+                                        <option value="" {if $_GPC['status'] == ''} selected="selected" {/if}>不限</option>
+                                        <option value="0" {if $_GPC['status'] == 0} selected="selected" {/if}>已下单</option>
+                                        <option value="1" {if $_GPC['status'] == 1} selected="selected" {/if}>已接单</option>
+                                        <option value="2" {if $_GPC['status'] == 2} selected="selected" {/if}>已送达</option>
+                                        <option value="3" {if $_GPC['status'] == 3} selected="selected" {/if}>已完成</option>
+                                        <option value="4" {if $_GPC['status'] == 4} selected="selected" {/if}>已取消</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">支付方式</span>
+                                    <select name="payment" id="">
+                                        <option value="" {if $_GPC['payment'] == ''} selected="selected" {/if}>不限</option>
+                                        <option value="微信支付" {if $_GPC['payment'] == "微信支付"} selected="selected" {/if}>微信支付</option>
+                                        <option value="现金支付" {if $_GPC['payment'] == "现金支付"} selected="selected" {/if}>现金支付</option>
+                                        <option value="余额支付" {if $_GPC['payment'] == '余额支付'} selected="selected" {/if}>余额支付</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">支付状态</span>
+                                    <select name="state" id="">
+                                        <option value="" {if $_GPC['payment'] == ''} selected="selected" {/if}>不限</option>
+                                        <option value="1" {if $_GPC['payment'] == 1} selected="selected" {/if}>已付款</option>
+                                        <option value="0" {if $_GPC['payment'] == 0} selected="selected" {/if}>未付款</option>
+                                        <option value="2" {if $_GPC['payment'] == 2} selected="selected" {/if}>待确认</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group">
+                                    <button class="btn btn-success"><span class="fa fa-search"></span> 搜索</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     </form>
+                </div>
+				<div class="panel panel-success">
+                    <div class="table-responsive panel-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th width="12%">订单类型</th>
+                                    <th width="15%">点餐人</th>
+                                    <th width="12%">订单价格</th>
+                                    <th width="15%">下单时间</th>
+                                    <th width="10%">订单状态</th>
+                                    <th width="12%">付款价格</th>
+                                    <th width="15%">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr title="订单号：{$item['ordernumber']}">
+                                <td id="{$item['id']}">
+                                {if $item['ordertype'] == 0}
+                                扫码点餐（{$item['tablenumber']}）
+                                {elseif $item['ordertype'] == 1}
+                                预约订单
+                                {elseif $item['ordertype'] == 2}
+                                外卖订单
+                                {elseif $item['ordertype'] == 3}
+                                店内买单
+                                {elseif $item['ordertype'] == 4}
+                                排队取号
+                                {elseif $item['ordertype'] == 5}
+                                余额充值
+                                {/if}</td>
+                                <td><img width="30" src="{$item['avatarUrl']}" /> {$item['nickName']}</td>
+                                <td>￥{$item['price']}</td>
+                                <td>{php echo date('Y-m-d H:i:s',$item['time'])}</td>
+                                <td status= "{$item['status']}">
+                                {if $item['status'] == 0}
+                                已下单{elseif $item['status'] == 1}
+                                已接单{elseif $item['status'] == 2}
+                                已送达{elseif $item['status'] == 3}
+                                已完成{/if}
+                                （{php echo $item['state'] == 1?'已付款':'未付款'}）
+                                </td>
+                                <td>￥{$item['payprice']}</td>
+                                <td>
+                                    <a href="{php echo $this->createWebUrl('order',array('sub' => 'orderdetails','id' => $item['id']));}"><button type="button" id="{$item['id']}" class="btn btn-success"><span class="fa fa-th-large"></span>详情</button> 
+                                    <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('order',array('sub' => 'delete','id' => $item['id']));}">
+                                        <button type="button" class="btn btn-danger"><span class="fa fa-trash"></span>删除</button>
+                                    </a>
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="pull-right">
+                                            <nav>
+                                            {$pager}
+                                            </nav>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{template 'xiwufooter'}

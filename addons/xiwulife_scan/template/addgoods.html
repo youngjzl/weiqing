@@ -1,0 +1,158 @@
+{template 'xiwuheader'}
+<style>
+.form-group{ margin:15px 0px !important;}
+.panel.panel-default{margin-top:15px;}
+.guigefenge{margin-right:10px;}
+.guige-delete .fa{
+	margin-right: 0;
+}
+.guige{width: 60% !important; margin-right: 2%;}
+.ziguige input{width: 31.33% !important; margin-right: 2%;}
+.ziggdelete{width: 15%; height: 34px; margin-right: 2%;}
+.guigelist .btn-group{ margin-bottom: 15px; }
+.guigebox .input-group{margin-bottom:10px; width:100%;}
+.btn-toolbar>.btn, .btn-toolbar>.btn-group, .btn-toolbar>.input-group{ margin-right: 30px; }
+</style>
+<div class="xiwulife_content">
+	<div class="center-back right-back">
+		<div class="container-fluid">
+			<div class="info-center">
+				<div class="page-header">
+					<div class="pull-left">
+						<h4><a href="{php echo $this->createWebUrl('goods');}">商品管理</a> / {if $_GPC['id'] != ''}{$item['title']}{else}添加商品{/if}</h4>
+					</div>
+				</div>
+            <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" id="form1">
+                <div class="panel panel-default">
+                    <div class="panel-body xiwu_list_box">
+                    	  <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">商品名称</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="form-control" placeholder="" name="title" value="{$item['title']}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">商品介绍</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <textarea rows="5" class="form-control" name="text">{$item['text']}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">详情图</label>
+                            <div class="col-sm-8 col-xs-12">
+                                {php echo tpl_form_field_image('pic', $item['pic']);}
+                                <span class="help-block">阿莫源码社区建议：图片比例1:1，图片大小不要超过200k</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+	                        <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label" for="">详情轮播图</label>
+	                        <div class="col-sm-6 col-xs-6">
+	                            {php echo tpl_form_field_multi_image('pics',iunserializer($item['pics']));}
+	                            <span class="help-block">注：最多上传4张图片</span>
+	                        </div>
+	                    </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-2 col-md-3 col-lg-2 control-label">状态</label>
+                            <div class="col-sm-3 col-xs-12">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-success {if $item['status'] == 0}active{/if}">
+                                        <input type="radio" name="status" value="0" autocomplete="off" {if $item['status'] == 0}checked{/if}> 上架
+                                    </label>
+                                    <label class="btn btn-success {if $item['status'] == 1}active{/if}">
+                                        <input type="radio" name="status" value="1" autocomplete="off" {if $item['status'] == 1}checked{/if}> 下架
+                                    </label>
+                                </div>
+                            </div>
+                            <label class="col-xs-12 col-sm-2 col-md-3 col-lg-2 control-label">商品类型</label>
+                            <div class="col-sm-3 col-xs-12">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-success {if $item['goodtype'] == 0}active{/if}">
+                                        <input type="radio" name="goodtype" value="0" autocomplete="off" {if $item['goodtype'] == 0}checked{/if}> 单商品
+                                    </label>
+                                    <label class="btn btn-success {if $item['goodtype'] == 1}active{/if}">
+                                        <input type="radio" name="goodtype" value="1" autocomplete="off" {if $item['goodtype'] == 1}checked{/if}> 多规格
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+	                   <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">规格</label>
+                            <input type="hidden" class="guigeli" name="spec" value="{$item['spec']}" />
+                            <div class="col-sm-8 col-xs-12 guigebox">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" style="width:65%;" name="specname" value="{$item['specname']}" placeholder="填写规格名称" />
+                                    <button type="button" class="btn btn-success addziguige">添加子规格</button>
+                                </div>
+                                {loop $item['spec'] $index $items}
+                                 <div class="input-group ziguige">
+                                    <input type="text" class="form-control ggtitle{$index}" value="{$items['title']}" placeholder="规格名称" />
+                                    <input type="text" class="form-control ggprice{$index}" value="{$items['price']}" placeholder="规格价格" />
+                                    <button type="button" class="btn btn-danger ziggdelete ziguigedelete">删除</button>
+                                </div>
+                                {/loop}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">商品价格</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="form-control" placeholder="" name="price" value="{$item['price']}">
+                                <span class="help-block">注：写整数，不要带小数点，带单位；（如：199）</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"></label>
+                            <div class="col-sm-6 col-xs-6">
+                                <button type="submit" class="btn btn-success btn-block" name="tijiao" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	//列表
+	$(".nav-tabs li").click(function(){
+		$(this).addClass('active').siblings().removeClass('active');
+		var sc_kejian = $(this).index();
+        $(".xiwu_list_box").children("span").hide().eq(sc_kejian).show();
+	});
+	//添加子规格
+	$('body').on('click', '.addziguige',function(){
+        var index = $('.ziguige').length;
+		var html = '';
+		html += '<div class="input-group ziguige">';
+		html += '<input type="text" class="form-control ggtitle'+index+'" placeholder="规格名称" />';
+		html += '<input type="text" class="form-control ggprice'+index+'" placeholder="规格价格" />';
+		html += '<button type="button" class="btn btn-danger ziggdelete ziguigedelete">删除</button>';
+		html += '</div>';
+		$(this).parent().parent().append(html);
+	})
+	//删除子规格
+	$('body').on('click', '.ziguigedelete',function(){
+  		if (confirm("此操作不可恢复，确认吗？")){
+  			$(this).parent('.input-group').remove();
+  		}
+	})
+    $('.btn-block').click(function(){
+        var index = $('.ziguige').length;
+        var arr = [];
+        arr += '[';
+        for(var i = 0; i < index; i++){
+            if(i == index - 1){
+                arr += '{"title":"'+$(".ggtitle"+i).val()+'","price":"'+$(".ggprice"+i).val()+'"}';  
+            }else{
+                arr += '{"title":"'+$(".ggtitle"+i).val()+'","price":"'+$(".ggprice"+i).val()+'"},';
+          }
+        }
+        arr += ']';
+        console.log(arr);
+        $('.guigeli').val(arr);
+    })
+})
+</script>
+{template 'xiwufooter'}

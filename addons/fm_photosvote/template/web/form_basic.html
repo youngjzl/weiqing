@@ -1,0 +1,353 @@
+			<div class="portlet-title" style="margin-bottom: 0;">
+			    <div class="caption font-green bold">
+			        关键词设置
+			    </div>
+			</div>
+			<input type="hidden" name="keywords">
+			<table class="am-table am-table-hover tpl-table we7-table table-hover">
+				<thead>
+					<tr class="tpl-table-uppercase">
+						<th>关键字</th>
+						<th>触发类型</th>
+						<th class="text-right">操作</th>
+					</tr>
+				</thead>
+				{loop $rowrule $row}
+					<tr>
+						<td><span class="font-yellow">{$row['content']}</span></td>
+						<td>
+							{if $row['type'] == 1}
+								<span class="am-badge am-badge-success">精准触发</span>
+							{elseif $row['type'] == 2}
+								<span class="am-badge am-badge-secondary">包含关键字触发</span>
+							{elseif $row['type'] == 3}
+								<span class="am-badge am-badge-warning">正则匹配关键字触发</span>
+							{/if}
+						</td>
+						<td class="text-right">
+							<a href="javascript:;" class=" am-badge am-badge-danger" id="keydel" onclick="keydel('{$row['id']}')">删除</a>
+
+						</td>
+					</tr>
+				{/loop}
+				<tr>
+					<td colspan="3" class="text-left">
+						<a class="color-gray add-new-keyword" href="javascript:;" data-toggle="modal" data-target="#addkeywordModal">
+							<span class="add-icon"><i class="wi wi-plus"></i></span>
+							<span class="text">添加关键字</span>
+						</a>
+					</td>
+				</tr>
+			</table>
+			<div class="modal fade" id="addkeywordModal" tabindex="-1" role="dialog" aria-labelledby="addkeywordsModalLabel">
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title" id="addkeywordsModalLabel">添加关键字</h4>
+						</div>
+						<div class="modal-body" style="height: 336px;">
+							<div class="am-form-group">
+								<label for="fm_point" class="am-u-sm-3 am-form-label">触发关键字</label>
+								<div class="am-u-sm-9">
+									<label for="radio1"  class="am-radio-inline" onclick="changeKeywordType(1)"><input type="radio" id="radio1" class="tpl-form-input" name="type"  value="1" onclick="changeKeywordType(1)" checked/>
+									精准触发</label>
+									<label for="radio2"  class="am-radio-inline" onclick="changeKeywordType(2)"><input type="radio" id="radio2" class="tpl-form-input" name="type"  value="2" onclick="changeKeywordType(2)"/>
+									包含关键字触发</label>
+									<label for="radio3"  class="am-radio-inline" onclick="changeKeywordType(3)"><input type="radio" id="radio3" class="tpl-form-input" name="type"  value="3" onclick="changeKeywordType(3)"/>
+									正则匹配关键字触发</label>
+								</div>
+							</div>
+							<div class="am-form-group" id="keytype1">
+								<label for="fm_point" class="am-u-sm-3 am-form-label"></label>
+								<div class="am-u-sm-9">
+									<input type="text" class="keyword-input tpl-form-input " max="30" name="content[]" value="" id="keyword-exact">
+									<span class="am-form-help">多个关键字请使用逗号隔开，如天气，今日天气</span>
+								</div>
+							</div>
+							<div style="color: red !important;">&#x672c;&#x6e90;&#x7801;&#x7531;&#xff1a;&#x8d44;&#x6e90;&#x90a6;&#x0028;&#x0077;&#x0077;&#x0077;&#x002e;&#x0077;&#x0061;&#x007a;&#x0079;&#x0062;&#x002e;&#x0063;&#x006f;&#x006d;&#x0029;&#x7834;&#x89e3;&#x53d1;&#x5e03;&#xff0c;&#x66f4;&#x591a;&#x6e90;&#x7801;&#x8d44;&#x6e90;&#x8bf7;&#x8bbf;&#x95ee;&#x8d44;&#x6e90;&#x90a6;&#x3002;</div>
+							<div class="am-form-group" id="keytype2" style="display: none;">
+								<label for="fm_point" class="am-u-sm-3 am-form-label"></label>
+								<div class="am-u-sm-9">
+
+									<input type="text" class="keyword-input tpl-form-input " name="content[]" value="" max="30" id="keyword-indistinct" >
+									<span class="am-form-help">多个关键字请使用逗号隔开，如天气，今日天气</span>
+								</div>
+							</div>
+							<div class="am-form-group" id="keytype3" style="display: none;">
+								<label for="fm_point" class="am-u-sm-3 am-form-label"></label>
+								<div class="am-u-sm-9">
+									<input type="text" class="keyword-input tpl-form-input " name="content[]" value="" max="30" id="keyword-regexp" >
+									<p class="am-form-help">
+										用户进行交谈时，对话内容符合述关键字中定义的模式才会执行这条规则。<br/>
+										注意：如果你不明白正则表达式的工作方式，请不要使用正则匹配<br/>
+										注意：正则匹配使用MySQL的匹配引擎，请使用MySQL的正则语法<br/>
+										示例：<br/>
+										^微信匹配以“微信”开头的语句<br/>
+										微信$匹配以“微信”结尾的语句<br/>
+										^微信$匹配等同“微信”的语句<br/>
+										微信匹配包含“微信”的语句<br/>
+										[0-9.-]匹配所有的数字，句号和减号<br/>
+										^[a-zA-Z_]$所有的字母和下划线<br/>
+										^[[:alpha:]]{3}$所有的3个字母的单词<br/>
+										^a{4}$aaaa<br/>
+										^a{2,4}$aa，aaa或aaaa<br/>
+										^a{2,}$匹配多于两个a的字符串<br/>
+									</p>
+								</div>
+
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+							<button type="button" class="btn btn-primary" onclick="addNewKeyword()">确定</button>
+						</div>
+					</div>
+				</div>
+			</div>
+<script>
+	function addNewKeyword(id){
+		var t = $(":radio[name='type']:checked").attr('value');
+		if (t == 1) {
+			var content = $("#keyword-exact").val();
+		}
+		if (t == 2) {
+			var content = $("#keyword-indistinct").val();
+		}
+		if (t == 3) {
+			var content = $("#keyword-regexp").val();
+		}
+		if (content == '' || content == null || content == undefined) {
+			util.message('关键字不能为空', '', 'error');
+			return false;
+		}
+		 var submitData = {
+            content : content,
+            type: $(":radio[name='type']:checked").attr('value')
+          }
+		$.post("{php echo $this->createWebUrl('start', array('op' => 'addkeyword', 'rid' => $rid))}", submitData, function(data) {
+			if (data.success == 1) {
+				util.message(data.msg, '{php echo $this->createWebUrl('system', array('op' => 'rbasic', 'rid' => $rid))}', 'success');
+			}else{
+				//console.log(data);
+				util.message(data.msg, '', 'error');
+				return false;
+			}
+		},'json');
+	}
+	function changeKeywordType(keytype) {
+		if (keytype == 1) {
+			//$('#keyword-exact').attr('name') = 'aaaaa';
+			//var bb = $('#keyword-exact').attr('name');
+			//console.log(bb);
+			$('#keytype1').show();
+			$('#keytype2').hide();
+			$('#keytype3').hide();
+			//$('#keyword-exact').show();
+			//$('#keyword-indistinct').hide();
+			//$('#keyword-regexp').hide();
+		}
+		if (keytype == 2) {
+
+			$('#keytype1').hide();
+			$('#keytype2').show();
+			$('#keytype3').hide();
+			//$('#keyword-exact').hide();
+			//$('#keyword-indistinct').show();
+			//$('#keyword-regexp').hide();
+		}
+		if (keytype == 3) {
+
+			$('#keytype1').hide();
+			$('#keytype2').hide();
+			$('#keytype3').show();
+			//$('#keyword-exact').hide();//
+			//$('#keyword-indistinct').hide();
+			//$('#keyword-regexp').show();
+		}
+
+	}
+	function keydel(id){
+		var submitData = {
+            id : id,
+          }
+		$.post("{php echo $this->createWebUrl('system', array('op' => 'rbasic', 'keydel' => 1, 'rid' => $rid))}",submitData, function(data) {
+			if (data.success == 1) {
+				util.message(data.msg, '{php echo $this->createWebUrl('system', array('op' => 'rbasic', 'rid' => $rid))}', 'success');
+			}else{
+				util.message(data.msg, '', 'error');
+				return false;
+			}
+		},'json');
+	};
+</script>
+
+
+
+<div class="portlet-title" style="margin-top: 3em;">
+    <div class="caption font-green bold">
+        基本设置
+    </div>
+</div>
+<div class="am-form-group">
+	<label for="fm_status" class="am-u-sm-3 am-form-label">活动状态 <span class="tpl-form-line-small-title">Status</span></label>
+	<div class="am-u-sm-9">
+		<input class="js-flag" type="checkbox" name="rstatus" radiotype = "status" {if $reply['status']} checked="checked" {/if} />
+
+	</div>
+</div>
+<div id="status" {if !$reply['status']}style="display:none"{/if}>
+	<div class="am-form-group">
+		<label for="fm_title" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 活动名称 <span class="tpl-form-line-small-title">Title</span></label>
+		<div class="am-u-sm-9">
+			<input type="text" class="tpl-form-input" name="title" id="fm_title" value="{$reply['title']}" required/>
+		</div>
+	</div>
+	<div class="am-form-group">
+		<label for="fm_kftel" class="am-u-sm-3 am-form-label">客服电话 <span class="tpl-form-line-small-title">Telephone</span></label>
+		<div class="am-u-sm-9">
+			<input type="number" class="tpl-form-input" name="kftel" id="fm_kftel" value="{$reply['kftel']}"/>
+		</div>
+	</div>
+	<div class="am-form-group">
+		<label for="fm_point" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 缩略图 <span class="tpl-form-line-small-title">Point</span></label>
+		<div class="am-u-sm-9">
+			{php echo tpl_form_field_image('picture', $reply['picture'])}
+		<div class="am-form-help">大图片建议尺寸：900像素 * 500像素</div>
+		</div>
+	</div>
+
+	<div class="am-form-group">
+	    <label for="fm_atime" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 活动时间 <span class="tpl-form-line-small-title">Activitytime</span></label>
+	    <div class="am-u-sm-9">
+	       	{php echo tpl_form_field_daterange('datelimit', array('start'=>date('Y-m-d H:i',$reply['start_time']),'end'=>date('Y-m-d H:i',$reply['end_time'])), true)}
+			<div class="am-form-help">活动时间要包含投票时间和报名时间</div>
+	    </div>
+	</div>
+
+	<div class="am-form-group">
+	    <label for="fm_votetime" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 投票时间 <span class="tpl-form-line-small-title">Votetime</span></label>
+	    <div class="am-u-sm-9">
+	       	{php echo tpl_form_field_daterange('tdatelimit', array('start'=>date('Y-m-d H:i',$reply['tstart_time']),'end'=>date('Y-m-d H:i',$reply['tend_time'])), true)}
+			<div class="am-form-help">投票时间必须在活动时间内</div>
+	    </div>
+	</div>
+	<div class="am-form-group">
+		<label for="fm_votetips" class="am-u-sm-3 am-form-label">投票未开始提示语 <span class="tpl-form-line-small-title">Votetips</span></label>
+		<div class="am-u-sm-9">
+			<input type="text" class="tpl-form-input" name="ttipstart" id="fm_wtips" value="{$reply['ttipstart']}" />
+		<div class="am-form-help">此设置用于投票未开始提示语</div>
+		</div>
+	</div>
+	<div class="am-form-group">
+		<label for="fm_endvotetips" class="am-u-sm-3 am-form-label">投票已结束提示语 <span class="tpl-form-line-small-title">Endvotetips</span></label>
+		<div class="am-u-sm-9">
+			<input type="text" class="tpl-form-input" name="ttipend" id="fm_endvotetips" value="{$reply['ttipend']}" />
+		<div class="am-form-help">此设置用于投票已结束提示语</div>
+		</div>
+	</div>
+	<div class="am-form-group">
+	    <label for="fm_regtime" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 报名时间 <span class="tpl-form-line-small-title">Regtime</span></label>
+	    <div class="am-u-sm-9">
+	       	{php echo tpl_form_field_daterange('bdatelimit', array('start'=>date('Y-m-d H:i',$reply['bstart_time']),'end'=>date('Y-m-d H:i',$reply['bend_time'])), true)}
+			<div class="am-form-help">报名时间必须在活动时间内</div>
+	    </div>
+	</div>
+
+	<div class="am-form-group">
+		<label for="fm_regtips" class="am-u-sm-3 am-form-label">报名未开始提示语 <span class="tpl-form-line-small-title">Regtips</span></label>
+		<div class="am-u-sm-9">
+			<input type="text" class="tpl-form-input" name="btipstart" id="fm_regtips" value="{$reply['btipstart']}" />
+		<div class="am-form-help">此设置用于报名未开始提示语</div>
+		</div>
+	</div>
+	<div class="am-form-group">
+		<label for="fm_regendtips" class="am-u-sm-3 am-form-label">报名已结束提示语 <span class="tpl-form-line-small-title">Regendtips</span></label>
+		<div class="am-u-sm-9">
+			<input type="text" class="tpl-form-input" name="btipend" id="fm_regendtips" value="{$reply['btipend']}" />
+		<div class="am-form-help">此设置用于报名已结束提示语</div>
+		</div>
+	</div>
+
+	<div class="am-form-group">
+	    <label for="fm_usercountdown" class="am-u-sm-3 am-form-label">是否开启用户投票倒计时 <span class="tpl-form-line-small-title">Usercountdown</span></label>
+	   	<div class="am-u-sm-9">
+	        <input class="js-flag" type="checkbox" name="isdaojishi" id="fm_usercountdown" radiotype = "isdaojishi" {if $reply['isdaojishi'] == 1} checked="checked"{/if}/>
+	         <div class="am-form-help">不了解熟悉此倒计时系统的请勿开启.该功能是对每个参赛者单独的投票倒计时</div>
+	    </div>
+
+	</div>
+	<div id="isdaojishi" {if !$reply['isdaojishi']}style="display:none"{/if}>
+		 <div class="am-form-group">
+			<label for="fm_uctime" class="am-u-sm-3 am-form-label">用户倒计时投票时间</label>
+		   	<div class="am-u-sm-9">
+				<div class="input-group">
+					<span class="input-group-addon">每个用户拥有</span>
+					<input type="text" class="tpl-form-input" name="votetime" id="uctime" value="{$reply['votetime']}" />
+					<span class="input-group-addon">天的投票时间</span>
+				</div>
+				<div class="am-form-help">请填写正整数，时间单位为 天</div>
+		    </div>
+		</div>
+		<div class="am-form-group">
+			<label for="fm_uctips" class="am-u-sm-3 am-form-label">投票时间结束提示语</label>
+			<div class="am-u-sm-9">
+				<input type="text" class="tpl-form-input" name="ttipvote" id="fm_uctips" value="{$reply['ttipvote']}" />
+			<div class="am-form-help">用户倒计时，投票时间结束提示语</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="am-form-group">
+		<label for="description" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 活动简介 <span class="tpl-form-line-small-title">Description</span></label>
+		<div class="am-u-sm-9">
+
+			<textarea style="height:60px;" id='description' name="description" class="tpl-form-input" cols="60" required>{$reply['description']}</textarea>
+			<div class="am-form-help">用于图文显示的简介和活动首页的简单说明</div>
+		</div>
+	</div>
+	<div class="am-form-group">
+		<label for="fm_content" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 活动详情 <span class="tpl-form-line-small-title">Content</span></label>
+		<div class="am-u-sm-9">
+			{php echo tpl_ueditor('content', $reply['content']);}
+			<div class="am-form-help">活动详细说明，用在更多中的活动详情</div>
+		</div>
+	</div>
+	<div class="am-form-group">
+		<label for="fm_stopimg" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 活动暂停图片 <span class="tpl-form-line-small-title">Stopimg</span></label>
+		<div class="am-u-sm-9">
+			{php echo tpl_form_field_image('nostart', $reply['nostart']);}
+
+			<div class="am-form-help">活动暂停图片背景图片</div>
+		</div>
+	</div>
+	<div class="am-form-group">
+		<label for="fm_startimg" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 活动未开始图片 <span class="tpl-form-line-small-title">Startimg</span></label>
+		<div class="am-u-sm-9">
+			{php echo tpl_form_field_image('stopping', $reply['stopping']);}
+		<div class="am-form-help">活动未开始图片背景图片</div>
+		</div>
+	</div>
+	<div class="am-form-group">
+		<label for="fm_endimg" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 活动已结束图片 <span class="tpl-form-line-small-title">Endimg</span></label>
+		<div class="am-u-sm-9">
+			{php echo tpl_form_field_image('end', $reply['end']);}
+		<div class="am-form-help">活动已结束图片背景图片</div>
+		</div>
+	</div>
+
+	<div class="am-form-group">
+		<label for="fm_ip" class="am-u-sm-3 am-form-label">活动开启ip <span class="tpl-form-line-small-title">IP</span></label>
+		<div class="am-u-sm-9">
+			<input type="text" class="tpl-form-input" name="ip" id="fm_ip" value="{$reply['ip']}" disabled />
+		<div class="am-form-help">系统自动获取，不用修改</div>
+		</div>
+	</div>
+	<div class="am-form-group">
+		<label for="fm_iparr" class="am-u-sm-3 am-form-label"><span class="am-icon-exclamation-circle color_F8585B btn" data-toggle="tooltip" data-placement="top" title="必填"></span> 活动开启地区 <span class="tpl-form-line-small-title">IPlocal</span></label>
+		<div class="am-u-sm-9">
+			<input type="text" class="tpl-form-input" name="iparr" id="fm_iparr" value="{$reply['iparr']}" required />
+		<div class="am-form-help">用于确定数据统计时投票的方向，填写时请填写省份（不加 省），例如：  广东、北京、新疆、重庆、湖南、上海，可不填写系统自动获取</div>
+		</div>
+	</div>
+</div>

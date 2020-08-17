@@ -1,0 +1,38 @@
+<div class="fe-panel-editor-title">投票按钮设置</div>
+<div class="fe-panel-editor-line">
+    <div class="fe-panel-editor-name">名称</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input1" placeholder="投票按钮名称" ng-model="Edit.params.title" />
+    </div>
+</div>
+<div class="fe-panel-editor-line">
+    <div class="fe-panel-editor-name">大小</div>
+    <div class="fe-panel-editor-con">
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{edit.id}}_fontsize" value="12px" ng-model="Edit.params.fontsize" /> 12像素</label>
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{edit.id}}_fontsize" value="14px" ng-model="Edit.params.fontsize" /> 14像素</label>
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{edit.id}}_fontsize" value="16px" ng-model="Edit.params.fontsize" /> 16像素</label><div></div>
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{edit.id}}_fontsize" value="18px" ng-model="Edit.params.fontsize" /> 18像素</label>
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{edit.id}}_fontsize" value="20px" ng-model="Edit.params.fontsize" /> 20像素</label>
+        <label style="cursor:pointer; margin-right: 10px;">自定义：<input class="fe-panel-editor-input2" style="line-height: 20px;" value="" ng-model="Edit.params.fontsize" /></label>
+    </div>
+</div>
+<div class="fe-panel-editor-line">
+    <div class="fe-panel-editor-name">对齐方向</div>
+    <div class="fe-panel-editor-con">
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{Edit.id}}_align" value="left" ng-model="Edit.params.align" /> 居左</label>
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{Edit.id}}_align" value="center" ng-model="Edit.params.align" /> 居中</label>
+        <label style="cursor:pointer; margin-right: 10px;"><input type="radio" name="{{Edit.id}}_align" value="right" ng-model="Edit.params.align" /> 居右</label>
+    </div>
+</div>
+<div class="fe-panel-editor-line">
+    <div class="fe-panel-editor-name">文字颜色</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input2" type="color" ng-model="Edit.params.color" />
+    </div>
+</div>
+<div class="fe-panel-editor-line">
+    <div class="fe-panel-editor-name">背景颜色</div>
+    <div class="fe-panel-editor-con">
+        <input class="fe-panel-editor-input2" type="color"  ng-model="Edit.params.bgcolor" />
+    </div>
+</div>

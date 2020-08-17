@@ -1,0 +1,86 @@
+<script>
+$(function(){
+	firstservice();
+})
+//首次加载消息
+function firstservice(){
+	$.ajax({
+		type:'post',
+		data:{
+		},
+		url:"{php echo $this->createWebUrl('firstservice')}",
+		success:function(d) {
+			var data = $.parseJSON(d);
+			var str = '';
+			$(".xiwulife_right_text ul li").remove();
+			$.each(data,function(k,v){
+				if(v.ordertype == 0 || v.ordertype == ''){
+          			var ordertype = '扫码点餐（'+v.tablenumber+'）';
+          		}else if(v.ordertype == 1){
+          			var ordertype = '预约订单';
+          		}else if(v.ordertype == 2){
+          			var ordertype = '外卖订单';
+          		}else if(v.ordertype == 3){
+          			var ordertype = '店内买单';
+          		}else if(v.ordertype == 4){
+          			var ordertype = '排队取号';
+          		}else if(v.ordertype == 5){
+          			var ordertype = '余额充值';
+          		}
+				str += '<a href="{php echo $this->createWebUrl('order',array('sub' => 'orderdetails'));}&id='+v.id+'"><li class="openorderbox button" thiseq="'+k+'" thisid="'+v.id+'"><img src="'+v.avatarUrl+'" alt=""><div class="xiwulife_right_text_box"><p class="username">'+ordertype+'</p><p class="textcount">订单金额：'+v.payprice+'元</p></div></li></a>';
+			})
+			$(".xiwulife_right_text ul").append(str);
+			Receiveservice();
+			xiaoxinum();
+		}
+	});	
+}
+//加载消息
+function Receiveservice(){
+	setInterval(function () {
+		$.ajax({
+			type:'post',
+			data:{
+			},
+			url:"{php echo $this->createWebUrl('Receiveservice')}",
+			success:function(d) {
+				var data = $.parseJSON(d);
+				if(data.status < 1){
+					var lastid = $(".xiwulife_right_text ul li").first().attr('thisid');
+					if(data.id != lastid){
+						if(data.ordertype == 0 || data.ordertype == ''){
+		          			var ordertype = '扫码点餐（'+data.tablenumber+'）';
+		          		}else if(data.ordertype == 1){
+		          			var ordertype = '预约订单';
+		          		}else if(data.ordertype == 2){
+		          			var ordertype = '外卖订单';
+		          		}else if(data.ordertype == 3){
+		          			var ordertype = '店内买单';
+		          		}else if(data.ordertype == 4){
+		          			var ordertype = '排队取号';
+		          		}else if(data.ordertype == 5){
+		          			var ordertype = '余额充值';
+		          		}
+						var str = '<a href="{php echo $this->createWebUrl('order',array('sub' => 'orderdetails'));}&id='+data.id+'"><li class="openorderbox button" thisid="'+data.id+'"><img src="'+data.avatarUrl+'"><div class="xiwulife_right_text_box"><p class="username">'+ordertype+'</p><p class="textcount">订单金额：'+data.payprice+'元</p></div></li></a>';
+						$(".xiwulife_right_text ul").prepend(str);
+						xiaoxinum();
+						$("#myaudio1")[0].play();
+					}
+				}
+			}
+		});
+	}, 2000);
+}
+//加载消息
+function xiaoxinum(){
+	var num = $(".xiwulife_right_text ul a").length;
+	$('.Message_btn .badge').text(num);
+}
+</script>
+<audio id="myaudio1" src="../addons/xiwulife_scan/template/assets/audio/message.mp3" hidden="true" style="width:0;height:0" ></audio>
+<div class="xiwulife_right">
+	<div class="xiwulife_right_text">
+		<ul>
+		</ul>
+	</div>
+</div>

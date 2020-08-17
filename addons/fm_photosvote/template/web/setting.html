@@ -1,0 +1,318 @@
+{template 'web/common/header_amaze'}
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+			<div class="portlet-title">
+	            <ul class="am-nav am-nav-pills">
+				  <li {if $_GPC['do'] == 'setting'}class="am-active"{/if}><a href="{php echo url('module/manage-account/setting',array('m'=>'fm_photosvote'));}"><span class="am-icon-scribd"></span> 系统设置</a></li>
+				  <!--li {if $_GPC['do'] == 'upgrade'}class="am-active"{/if}><a href="{php echo $this->createWebUrl('upgrade')}"><span class="am-icon-cloud-upload"></span> 在线升级</a></li-->
+				</ul>
+	        </div>
+	        <div class="tpl-block">
+	            <div class="am-g">
+	                <div class="tpl-form-body tpl-form-line">
+	                    <form class="am-form tpl-form-line-form form" action=""  method="post" data-am-validator enctype="multipart/form-data" id="form1">
+	                    		<fieldset><!--legend>dsfsdf </legend-->
+		                    			{if $status}
+									<div class="portlet-title">
+							            <div class="caption font-green bold">
+							                <span class="am-icon-wechat"></span> Oauth网页授权（如果你的公众号没有oauth2接口权限，可以借用别人的接口权限使用。借用方法如下）
+							            </div>
+							        </div>
+									<div class="am-form-group">
+									    <label for="fm_oauthtype" class="am-u-sm-3 am-form-label">借用授权方式 <span class="tpl-form-line-small-title">Oauthtype</span></label>
+									    <div class="am-u-sm-9">
+											<p>
+												<label class="am-radio-inline">
+													<input type="radio" name="oauthtype" value="3" {if $settings['oauthtype'] == 3} checked="checked"{/if}  onchange="oauthtypeone()" />不借用任何授权
+												</label>
+											</p>
+											<p>
+												<label class="am-radio-inline">
+													<input type="radio" name="oauthtype" value="0" {if $settings['oauthtype'] == 0} checked="checked"{/if} onchange="oauthtypetwo()" />采用女神系统模块授权方式
+												</label>
+											</p>
+											<p>
+												<label class="am-radio-inline">
+													<input type="radio" name="oauthtype" value="2" {if $settings['oauthtype'] == 2} checked="checked"{/if}  onchange="oauthtypetwos()" />
+													采用高级借用授权方式（使订阅号可以和服务号有相同的体验，无需回复关键字等，未做相关设置请勿开启！{if $_W['role']=='founder'}点击【<a href="http://bbs.fmoons.com/forum.php?mod=viewthread&tid=42&extra=page%3D1">设置</a>】查看设置方法)【 若有需要请到 <a href="http://bbs.fmoons.com/forum.php?mod=viewthread&tid=62&extra=" target="_black">按格式要求发帖申请</a> 】{/if}
+												</label>
+											</p>
+											<p class="am-form-help">微信授权方式选择，一般默认请选择 女神系统模块授权方式。选择后请勿再次修改</p>
+										</div>
+									</div>
+									<div class="am-form-group" id="nooauth" {if $settings['oauthtype'] == 3} style="display:none"{/if}>
+									    <label for="fm_pay" class="am-u-sm-3 am-form-label">借用支付公众号选择 <span class="tpl-form-line-small-title">Pay</span></label>
+									    <div class="am-u-sm-9">
+
+											<select name="u_uniacid" id="u_uniacid" class="tpl-form-input" data-am-selected="{searchBox: 1}">
+												{loop $wechats_all $row}
+													<option value="{$row['uniacid']}" {if $row['uniacid'] == $settings['u_uniacid']}selected="selected"{/if}>{$row['name']}</option>
+												{/loop}
+											</select>
+											<p class="am-form-help">借用支付的公众号，必须为认证服务号，用于借用支付。</p>
+										</div>
+									</div>
+									<div class="am-form-group" id="nooauth" {if $settings['oauthtype'] == 3} style="display:none"{/if}>
+									    <label for="fm_displayorder" class="am-u-sm-3 am-form-label">是否获取用户信息 <span class="tpl-form-line-small-title">Scope</span></label>
+									    <div class="am-u-sm-9">
+											<label class="am-radio-inline">
+												<input type="radio" name="oauth_scope" value="0" {if $settings['oauth_scope'] == 0} checked="checked"{/if} /> 是（snsapi_userinfo）
+											</label>
+											<label class="am-radio-inline">
+												<input type="radio" name="oauth_scope" value="1" {if $settings['oauth_scope'] == 1} checked="checked"{/if} /> 否（snsapi_base）
+											</label>
+											<p class="am-form-help">微信授权获取方式(1、snsapi_userinfo 显示微信允许授权框，获取用户信息； 2、snsapi_base 显示微信允许授权框，之获取用户openid。注意：如果选择高级借用授权，请勿选择 否（snsapi_base），否则会无法正常访问)</p>
+										</div>
+									</div>
+
+									<div id="oauthtypetwo" style="display:none">
+										<div class="am-form-group">
+										    <label for="fm_oauthtype" class="am-u-sm-3 am-form-label">AppId：</label>
+											<div class="am-u-sm-9">
+												<input type="text" class="tpl-form-input" name="appid" value="{$settings['appid']}" placeholder="认证服务号不用填写，其他均需要填写借用认证服务号的 APPID" {if $wechats['level'] == 4}readonly="readonly"{/if}/>
+											</div>
+										</div>
+										<div class="am-form-group">
+										    <label for="fm_oauthtype" class="am-u-sm-3 am-form-label">AppSecret：</label>
+											<div class="am-u-sm-9">
+												<input type="text" class="tpl-form-input" name="secret" value="{$settings['secret']}" placeholder="认证服务号不用填写，其他均需要填写借用认证服务号的 AppSecret" {if $wechats['level'] == 4}readonly="readonly"{/if}/>
+											</div>
+										</div>
+										<div class="am-form-group">
+										    <label for="fm_oauthtype" class="am-u-sm-3 am-form-label"></label>
+											<div class="am-u-sm-9">
+
+												<p class="am-form-help"><img src="{FM_STATIC_MOBILE}public/images/appidappsecret.jpg"></p>
+
+											</div>
+										</div>
+										<div class="am-form-group">
+										    <label for="fm_oauthtype" class="am-u-sm-3 am-form-label">借用说明</label>
+											<div class="am-u-sm-9">
+												<p class="am-form-help">借用说明：设置借用高级认证号的OAuth2.0网页授权的回调域名为你公众号第三方平台的全域名。如：你的域名为：www.qq.com ，你必需让借用高级认证号设置OAuth2.0网页授权的回调域名为:www.qq.com</p>
+											</div>
+										</div>
+										<div class="am-form-group">
+										    <label for="fm_oauthtype" class="am-u-sm-3 am-form-label">微信平台设置</label>
+											<div class="am-u-sm-9">
+												<p class="am-form-help"><img src="{FM_STATIC_MOBILE}public/images/mp.png" style="max-width:800px"></p>
+											</div>
+										</div>
+									</div>
+									<div id="oauthtypetwos" style="display:none">
+										{if $settings['oauthtype'] == 2}
+										<div class="am-form-group">
+										    <label for="fm_oauthtype" class="am-u-sm-3 am-form-label"></label>
+											<div class="am-u-sm-9">
+												<a href="{php echo $this->createWebUrl('getunionid')}" class="am-btn am-btn-warning" target="_blank">同步unionid粉丝</a>
+											</div>
+										</div>
+										{/if}
+
+										<div class="am-form-group">
+										    <label for="fm_oauthtype" class="am-u-sm-3 am-form-label">AppId：</label>
+											<div class="am-u-sm-9">
+												<input type="text" class="tpl-form-input" name="appida" value="{$settings['appid']}" placeholder="认证服务号不用填写，其他均需要填写借用认证服务号的 APPID" {if $wechats['level'] == 4}readonly="readonly"{/if}/>
+											</div>
+										</div>
+										<div class="am-form-group">
+										    <label for="fm_oauthtype" class="am-u-sm-3 am-form-label">AppSecret：</label>
+											<div class="am-u-sm-9">
+												<input type="text" class="tpl-form-input" name="secreta" value="{$settings['secret']}" placeholder="认证服务号不用填写，其他均需要填写借用认证服务号的 AppSecret" {if $wechats['level'] == 4}readonly="readonly"{/if}/>
+											</div>
+										</div>
+										<div class="am-form-group">
+										    <label for="fm_oauthtype" class="am-u-sm-3 am-form-label"></label>
+											<div class="am-u-sm-9">
+												<p class="am-form-help"><img src="{FM_STATIC_MOBILE}public/images/appidappsecret.jpg"></p>
+
+											</div>
+										</div>
+
+										<div class="am-form-group">
+										    <label for="fm_oauthtype" class="am-u-sm-3 am-form-label">借用说明</label>
+											<div class="am-u-sm-9">
+												<p class="am-form-help">借用说明：设置借用高级认证号的OAuth2.0网页授权的回调域名为你公众号第三方平台的全域名。如：你的域名为：www.qq.com ，你必需让借用高级认证号设置OAuth2.0网页授权的回调域名为:www.qq.com</p>
+											</div>
+										</div>
+										<div class="am-form-group">
+										    <label for="fm_oauthtype" class="am-u-sm-3 am-form-label">微信平台设置</label>
+											<div class="am-u-sm-9">
+												<p class="am-form-help"><img src="{FM_STATIC_MOBILE}public/images/mp.png" style="max-width:800px"></p>
+											</div>
+										</div>
+									</div>
+
+									<div id="oauthtypeone" style="display:none">
+										<div class="am-form-group">
+										    <label for="fm_oauthtype" class="am-u-sm-3 am-form-label">微擎本身授权方式后台设置</label>
+											<div class="am-u-sm-9">
+												<p class="am-form-help"><img src="{FM_STATIC_MOBILE}public/images/jieyong.png" style="width:800px"></p>
+											</div>
+										</div>
+									</div>
+			                        <div class="am-form-group">
+			                            <div class="am-u-sm-9 am-u-sm-push-3">
+			                                	<input type="hidden" name="token" value="{$_W['token']}" />
+				                             <input type="submit" name="submit" value="保存" class="am-btn am-btn-primary tpl-btn-bg-color-success " />
+			                            </div>
+			                        </div>
+
+			                        <div class="portlet-title">
+							            <div class="caption font-green bold">
+							                <span class="am-icon-wechat"></span> 防封设置
+							            </div>
+							        </div>
+									<div class="am-form-group">
+									    <label for="fm_displayorder" class="am-u-sm-3 am-form-label">跳转的随机链接 <span class="tpl-form-line-small-title">Linkurl</span></label>
+									    <div class="am-u-sm-9">
+											<textarea style="height:60px;" id='skipurl' name="skipurl" class="tpl-form-input" cols="60">{$settings['skipurl']}</textarea>
+											<p class="am-form-help">设置多个随机链接可以随机跳转。 格式如下aaa.xxx.com|bbb.yyy.com   不同的域名请用  |  符号分隔（注意：使用该功能，分享等一些依靠js域名，获取用户信息等的功能将无法正常使用，使用时请请选择不借用任何授权！）</p>
+										</div>
+									</div>
+		                       	{/if}
+			                        {if $_W['role']!='founder'}
+				                        <div class="portlet-title">
+								            <div class="caption font-green bold">
+								                <span class="am-icon-wechat"></span> 状态
+								            </div>
+								        </div>
+										<div class="am-form-group">
+										    <label for="fm_displayorder" class="am-u-sm-3 am-form-label">公众号 <span class="tpl-form-line-small-title">Wechat</span></label>
+										    <div class="am-u-sm-9">
+												<span class="am-badge am-badge-success">{$wechats['name']}</span>
+											</div>
+										</div>
+										<div class="am-form-group">
+										    <label for="fm_displayorder" class="am-u-sm-3 am-form-label">如有疑问，请联系芯蕊自媒体客服人员 <span class="tpl-form-line-small-title">Status</span></label>
+										    <div class="am-u-sm-9">
+										    		{if $status}<span class="am-badge am-badge-primary">{$t['m']}</span>{else}<span class="am-badge am-badge-danger">客服经理电话：18125576977</span>{/if}
+											</div>
+										</div>
+									{/if}
+
+								{if $_W['role']=='founder'}
+<!-- 									<div class="portlet-title">
+							            <div class="caption font-green bold">
+							                <span class="am-icon-wechat"></span> 模块授权 (本内容仅为超级管理员查看，其他人不显示)
+							            </div>
+							        </div>
+							        <div class="am-form-group">
+										<label for="fm_domain" class="am-u-sm-3 am-form-label">授权域名 <span class="tpl-form-line-small-title">Domain</span></label>
+										<div class="am-u-sm-9">
+											<span class="am-badge am-badge-success">{$_SERVER['HTTP_HOST']}</span>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label for="fm_module" class="am-u-sm-3 am-form-label">授权模块 <span class="tpl-form-line-small-title">Module</span></label>
+										<div class="am-u-sm-9">
+											<span class="am-badge am-badge-success">{$t['modulesname']}【{$t['modules']}】</span>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label for="fm_wechat" class="am-u-sm-3 am-form-label">公众号 <span class="tpl-form-line-small-title">Wechat</span></label>
+										<div class="am-u-sm-9">
+											<span class="am-badge am-badge-success">{$wechats['name']}</span>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label for="fm_id" class="am-u-sm-3 am-form-label">站点ID <span class="tpl-form-line-small-title">ID</span></label>
+										<div class="am-u-sm-9">
+											<input type="text" name="id" class="tpl-form-input" value="{$id}" readonly />
+											<p class="help-block">站点ID,如果为空，请到 <a href='{php echo url(' cloud/profile ')}' class="am-badge am-badge-success">站点注册</a> 绑定您的服务器</p>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label for="fm_code" class="am-u-sm-3 am-form-label">授权安全码 <span class="tpl-form-line-small-title">Code</span></label>
+										<div class="am-u-sm-9">
+											<input type="text" name="fmauthtoken" id="fmauthtoken" class="tpl-form-input" style="width:100%" value="{$onlyoauth['fmauthtoken']}" />
+											<p class="am-form-help">请联系客服将 授权域名 及 站点ID 提交给客服, 索取授权安全码，保护好您的授权安全码，避免泄漏</p>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label for="fm_status" class="am-u-sm-3 am-form-label">授权状态 <span class="tpl-form-line-small-title">Status</span></label>
+										<div class="am-u-sm-9">
+											<p class="am-form-help">{if $status}<span class="am-badge am-badge-success">{$t['m']}</span>{else}<span class="label label-danger">{$t['m']}</span>{/if}</p>
+										</div>
+									</div>
+									{if $t['module_type_yy'] == 1}
+										<div class="am-form-group">
+											<label for="fm_status" class="am-u-sm-3 am-form-label">授权进度 <span class="tpl-form-line-small-title">Time</span></label>
+											<div class="am-u-sm-9">
+												<span class="progress">
+													{if $t['sytime'] >= 100}
+														<div class="am-progress am-progress-striped am-active"><div class="am-progress-bar am-progress-bar-danger" style="width:{$t['sytime']}%">{$t['sytime']}% ( {php echo date('Y-m-d H:i:s', $t['oauthtime'])} )</div></div>
+													{else}
+	                    									<div class="am-progress am-progress-striped am-active"><div class="am-progress-bar am-progress-bar-success" style="width:{$t['sytime']}%">{$t['sytime']}% ( {php echo date('Y-m-d H:i:s', $t['oauthtime'])} )</div></div>
+	                    								{/if}
+
+	                								</span>
+											</div>
+										</div>
+									{/if}
+									<div class="am-form-group">
+										<label for="fm_contact" class="am-u-sm-3 am-form-label">联系我们 <span class="tpl-form-line-small-title">Contact</span></label>
+										<div class="am-u-sm-9">
+											<p class="am-form-help"><a href="http://wpa.qq.com/msgrd?v=3&uin=513200958&site=qq&menu=yes" class="am-badge am-badge-default" title="点击立即咨询" target="_blank">QQ: 513200958</a>
+											</p>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label for="fm_homeurl" class="am-u-sm-3 am-form-label">官方网站 <span class="tpl-form-line-small-title">URL</span></label>
+										<div class="am-u-sm-9">
+											<a href="http://www.fmoons.com" class="am-badge am-badge-default" title="点击立即咨询" target="_blank">www.fmoons.com</a>
+										</div>
+									</div> -->
+
+			                        <div class="am-form-group">
+			                            <div class="am-u-sm-9 am-u-sm-push-3">
+			                                	<input type="hidden" name="token" value="{$_W['token']}" />
+				                             <input type="submit" name="submit" value="保存" class="am-btn am-btn-primary tpl-btn-bg-color-success " />
+			                            </div>
+			                        </div>
+						        {/if}
+
+
+	                        </fieldset>
+	                    </form>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	{if $settings['oauthtype'] == 0}
+		$('#oauthtypetwo').show();
+	{/if}
+	{if $settings['oauthtype'] == 1}
+		$('#oauthtypeone').show();
+	{/if}
+
+	{if $settings['oauthtype'] == 2}
+		$('#oauthtypetwos').show();
+	{/if}
+
+	function oauthtypeone(){
+		 $('#oauthtypeone').hide();
+		 $('#oauthtypetwo').hide();
+		 $('#oauthtypetwos').hide();
+		 $('#nooauth').hide();
+	}
+	function oauthtypetwo(){
+		 $('#oauthtypeone').hide();
+		 $('#oauthtypetwo').show();
+		 $('#oauthtypetwos').hide();
+		 $('#nooauth').show();
+	}
+	function oauthtypetwos(){
+		 $('#oauthtypeone').hide();
+		 $('#oauthtypetwo').hide();
+		 $('#oauthtypetwos').show();
+		 $('#nooauth').show();
+	}
+</script>
+{template 'web/common/footer_amaze'}

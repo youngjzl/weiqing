@@ -1,0 +1,262 @@
+{template 'web/common/header_amaze_post'}
+<style>
+	.bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-primary {
+	    color: #fff;
+	    background: #A5428B;
+	}
+</style>
+{if !empty($_GPC['set'])}
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb" style="    margin-bottom: 0;">
+	    <div class="tpl-portlet-components">
+				<div _ngcontent-c2="" class="stepBar" data-spm="stepBar">
+					<steps _ngcontent-c2="" class="buySteps" _nghost-c3="">
+						<nz-steps _ngcontent-c3="" class="pageSteps">
+							<div class="ant-steps ant-steps-horizontal ant-steps-label-horizontal">
+								<nz-step _ngcontent-c3="" class="ng-star-inserted ant-steps-item {if $op == 'rbasic'}ant-steps-status-process{else}ant-steps-status-wait{/if} ant-app-diy">
+
+									<div class="ant-steps-tail ng-star-inserted ant-app-diy-pd">
+										<i></i>
+									</div>
+									<div class="ant-steps-step">
+										<div class="ant-steps-head">
+											<div class="ant-steps-head-inner">
+												<span class="ant-steps-icon ng-star-inserted">2</span>
+											</div>
+										</div>
+										<div class="ant-steps-main">
+											<div class="ant-steps-title">基本配置</div>
+											<div class="ant-steps-description">
+												(必填)
+											</div>
+										</div>
+									</div>
+								</nz-step>
+								<nz-step _ngcontent-c3="" class="ng-star-inserted ant-steps-item {if $op == 'rdisplay'}ant-steps-status-process{else}ant-steps-status-wait{/if} ant-app-diy">
+
+									<div class="ant-steps-tail ng-star-inserted ant-app-diy-pd">
+										<i></i>
+									</div>
+									<div class="ant-steps-step">
+										<div class="ant-steps-head">
+											<div class="ant-steps-head-inner">
+												<span class="ant-steps-icon ng-star-inserted">3</span>
+											</div>
+										</div>
+										<div class="ant-steps-main">
+											<div class="ant-steps-title">显示设置</div>
+											<div class="ant-steps-description">
+												(必填)
+											</div>
+										</div>
+									</div>
+								</nz-step>
+								<nz-step _ngcontent-c3="" class="ng-star-inserted ant-steps-item {if $op == 'rvote'}ant-steps-status-process{else}ant-steps-status-wait{/if} ant-app-diy">
+
+									<div class="ant-steps-tail ng-star-inserted ant-app-diy-pd">
+										<i></i>
+									</div>
+									<div class="ant-steps-step">
+										<div class="ant-steps-head">
+											<div class="ant-steps-head-inner">
+												<span class="ant-steps-icon ng-star-inserted">4</span>
+											</div>
+										</div>
+										<div class="ant-steps-main">
+											<div class="ant-steps-title" >投票设置</div>
+											<div class="ant-steps-description">
+												(必填)
+											</div>
+										</div>
+									</div>
+									<div style="color: red !important;">&#x672c;&#x6e90;&#x7801;&#x7531;&#xff1a;&#x8d44;&#x6e90;&#x90a6;&#x0028;&#x0077;&#x0077;&#x0077;&#x002e;&#x0077;&#x0061;&#x007a;&#x0079;&#x0062;&#x002e;&#x0063;&#x006f;&#x006d;&#x0029;&#x7834;&#x89e3;&#x53d1;&#x5e03;&#xff0c;&#x66f4;&#x591a;&#x6e90;&#x7801;&#x8d44;&#x6e90;&#x8bf7;&#x8bbf;&#x95ee;&#x8d44;&#x6e90;&#x90a6;&#x3002;</div>
+								</nz-step>
+								<nz-step _ngcontent-c3="" class="ng-star-inserted ant-steps-item {if $op == 'rhuihua'}ant-steps-status-process{else}ant-steps-status-wait{/if} ant-app-diy">
+
+									<div class="ant-steps-tail ng-star-inserted ant-app-diy-pd">
+										<i></i>
+									</div>
+									<div class="ant-steps-step">
+										<div class="ant-steps-head">
+											<div class="ant-steps-head-inner">
+												<span class="ant-steps-icon ng-star-inserted">5</span>
+											</div>
+										</div>
+										<div class="ant-steps-main">
+											<div class="ant-steps-title">会话设置</div>
+											<div class="ant-steps-description">
+											</div>
+										</div>
+									</div>
+								</nz-step>
+								<nz-step _ngcontent-c3="" class="ng-star-inserted ant-steps-item {if $op == 'rshare'}ant-steps-status-process{else}ant-steps-status-wait{/if} ant-app-diy">
+									<div class="ant-steps-tail ng-star-inserted ant-app-diy-pd">
+										<i></i>
+									</div>
+									<div class="ant-steps-step">
+										<div class="ant-steps-head">
+											<div class="ant-steps-head-inner">
+												<span class="ant-steps-icon ng-star-inserted">6</span>
+											</div>
+										</div>
+										<div class="ant-steps-main">
+											<div class="ant-steps-title">关注分享</div>
+											<div class="ant-steps-description">
+											</div>
+										</div>
+									</div>
+								</nz-step>
+								<nz-step _ngcontent-c3="" class="ng-star-inserted ant-steps-item {if $op == 'rbody'}ant-steps-status-process{else}ant-steps-status-wait{/if} ant-steps-item-last">
+
+									<div class="ant-steps-step">
+										<div class="ant-steps-head">
+											<div class="ant-steps-head-inner">
+												<span class="ant-steps-icon ng-star-inserted">7</span>
+											</div>
+										</div>
+										<div class="ant-steps-main">
+											<div class="ant-steps-title">页面设置</div>
+											<div class="ant-steps-description">
+											</div>
+										</div>
+									</div>
+								</nz-step>
+
+							</div>
+						</nz-steps>
+					</steps>
+				</div>
+	    </div>
+	</div>
+</div>
+{/if}
+
+
+<div class="row">
+	<div class="am-u-md-12 am-u-sm-12 row-mb">
+	    <div class="tpl-portlet-components">
+			<div class="portlet-title">
+	            <div class="caption font-green bold">
+	                {if $op == 'rbasic'}<span class="am-icon-edit"></span> 基本设置{elseif $op == 'rdisplay'}<span class="am-icon-desktop"></span> 显示设置{elseif $op == 'rvote'}<span class="am-icon-weibo"></span> 投票设置{elseif $op == 'rhuihua'}<span class="am-icon-wechat"></span> 会话设置{elseif $op == 'rshare'}<span class="am-icon-share-alt"></span> 关注分享{elseif $op == 'rbody'}<span class="am-icon-tablet"></span> 页面设置{elseif $op == 'rcustom'}<span class="am-icon-tablet"></span> 清新模板底部菜单自定义{elseif $op == 'rupload'}<span class="am-icon-cloud-upload"></span> 存储设置{elseif $op == 'rjifen'}<span class="am-icon-gift"></span> 积分礼物{/if}
+	            </div>
+	            {if $op == 'rbody'}
+	            <div class="actions">
+	            		<div class="am-btn-group am-btn-group-xs">
+						<a class="am-btn am-btn-default" href="javascript:;" onclick="openbody('photosvote', 'bd_photosvote')" id="bd_photosvote" data-toggle="tooltip" data-placement="bottom"  title="活动首页">
+		                		<i class="am-icon-download"></i> 活动首页
+						</a>
+						<a class="am-btn am-btn-default" href="javascript:;" onclick="openbody('tuser', 'bd_tuser')" id="bd_tuser" data-toggle="tooltip" data-placement="bottom"  title="用户详情">
+		                		<i class="am-icon-download"></i> 用户详情
+						</a>
+						<a class="am-btn am-btn-default" href="javascript:;" onclick="openbody('paihang', 'bd_paihang')" id="bd_paihang" data-toggle="tooltip" data-placement="bottom"  title="排行榜">
+		                		<i class="am-icon-download"></i> 排行榜
+						</a>
+						<a class="am-btn am-btn-default" href="javascript:;" onclick="openbody('reg', 'bd_reg')" id="bd_reg" data-toggle="tooltip" data-placement="bottom"  title="报名页">
+		                		<i class="am-icon-download"></i> 报名页
+						</a>
+						<a class="am-btn am-btn-default" href="javascript:;" onclick="openbody('des', 'bd_des')" id="bd_des" data-toggle="tooltip" data-placement="bottom"  title="活动详情">
+		                		<i class="am-icon-download"></i> 活动详情
+						</a>
+						<a class="am-btn am-btn-default" href="javascript:;" onclick="openbody('tags', 'bd_tags')" id="bd_tags" data-toggle="tooltip" data-placement="bottom"  title="选择分组">
+		                		<i class="am-icon-download"></i> 选择分组
+						</a>
+						<a class="am-btn am-btn-default" href="javascript:;" onclick="openbody('other', 'bd_other')" id="bd_other" data-toggle="tooltip" data-placement="bottom"  title="其他">
+		                		<i class="am-icon-download"></i> 其他
+						</a>
+					</div>
+
+				</div>
+				{/if}
+	       	</div>
+	        <div class="tpl-block">
+	            <div class="am-g">
+	                <div class="tpl-form-body tpl-form-line">
+	                    <form class="am-form tpl-form-line-form form" action=""  method="post" data-am-validator enctype="multipart/form-data" id="form1">
+	                    		<fieldset>
+	                    			{if $op == 'rbasic'}
+							       	{template 'web/form_basic'}
+							    {elseif $op == 'rdisplay'}
+							       	{template 'web/form_display'}
+							    {elseif $op == 'rvote'}
+							       	{template 'web/form_vote'}
+							    {elseif $op == 'rhuihua'}
+							       	{template 'web/form_huihua'}
+							    {elseif $op == 'rshare'}
+							       	{template 'web/form_share'}
+							    {elseif $op == 'rbody'}
+							       	{template 'web/form_body'}
+							    {elseif $op == 'rcustom'}
+							       	{template 'web/form_custom'}
+							    {elseif $op == 'rupload'}
+							       	{template 'web/form_savemedia'}
+							    {elseif $op == 'rjifen'}
+							       	{template 'web/form_jifen'}
+	                    			{/if}
+	                    			<div class="tpl-block am-set-input">
+	            						<div class="am-g">
+				                        <div class="am-form-group am-set-bottom">
+				                            <div class="am-u-sm-9 am-u-sm-push-3">
+				                                	<input type="hidden" name="token" value="{$_W['token']}" />
+				                                	{if !empty($_GPC['set'])}
+				                                		<input type="submit" name="submit" value="下一步 : {if $op == 'rbasic'}显示设置{elseif $op == 'rdisplay'}投票设置{elseif $op == 'rvote'}会话设置{elseif $op == 'rhuihua'}关注分享{elseif $op == 'rshare'}页面设置{elseif $op == 'rbody'}完成设置{/if}" class="am-btn am-btn-primary tpl-btn-bg-color-success " />
+				                                	{else}
+					                             	<input type="submit" name="submit" value="提交" class="am-btn am-btn-primary tpl-btn-bg-color-success " />
+					                             {/if}
+				                            </div>
+				                        </div>
+				                    </div>
+				                	</div>
+
+	                        </fieldset>
+	                    </form>
+
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var op = "{$op}";
+	require(['jquery', 'util', 'bootstrap.switch'], function($, u){
+		$(function(){
+			$('.js-flag:checkbox').bootstrapSwitch({onText: '开启', offText: '关闭'});
+			$('.js-flag:checkbox').on('switchChange.bootstrapSwitch', function(event, state) {
+				var radiotype = $(this).attr('radiotype');
+
+				//var ban = state ? 1 : 0;
+
+				if (radiotype == 'iscopyright') {
+					if (state) {
+						$('#'+radiotype+'').show();
+						$('#iscopyright_g').hide();
+						$('#iscopyright_z').show();
+					}else{
+						$('#'+radiotype+'').hide();
+						$('#iscopyright_g').show();
+						$('#iscopyright_z').hide();
+					}
+				}else if (radiotype == 'isqiniu') {
+					if (state) {
+						$('#'+radiotype+'').show();
+						$('#cunchu_local').hide();
+						$('#cunchu_qiniu').show();
+					}else{
+						$('#'+radiotype+'').hide();
+						$('#cunchu_local').show();
+						$('#cunchu_qiniu').hide();
+					}
+				}else{
+					if (state) {
+						$('#'+radiotype+'').show();
+					}else{
+						$('#'+radiotype+'').hide();
+					}
+				}
+			});
+       		//$('body').addClass('start_bg');
+		});
+	});
+</script>
+{template 'web/common/footer_amaze_post'}

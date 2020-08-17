@@ -1,0 +1,309 @@
+{template 'xiwuheader'}
+<style>
+.form-group{ margin:15px 0px !important;}
+.panel.panel-default{margin-top:15px;}
+</style>
+{if $_GPC['sub'] == ''}
+<div class="xiwulife_content">
+    <div class="center-back right-back">
+        <div class="container-fluid">
+            <div class="info-center">
+                <div class="page-header">
+                    <div class="pull-left">
+                        <h4>营销管理</h4>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="btn-group pull-right" role="group" aria-label="...">
+                                    <a href="{php echo $this->createWebUrl('marketing',array('sub' => 'storediscount'));}"><button type="button" class="btn btn-success"><span class="fa fa-plus"></span>店铺优惠</button></a>
+                                    <a href="{php echo $this->createWebUrl('marketing',array('sub' => 'carddiscount'));}"><button type="button" class="btn btn-success"><span class="fa fa-plus"></span>优惠券</button></a>
+                                    <a href="{php echo $this->createWebUrl('marketing',array('sub' => 'czmarketing'));}"><button type="button" class="btn btn-success"><span class="fa fa-plus"></span>充值赠送</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">店铺优惠</h3>
+                                    </div>
+                                    <table class="table table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th>满</th>
+                                        <th>减</th>
+                                        <th>操作</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                    {loop $list $item}
+                                      <tr>
+                                        <td>{$item['man']}元</td>
+                                        <td>{$item['jian']}元</td>
+                                        <td>
+                                            <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('marketing',array('sub' => 'delete', 'id' => $item['id']));}"><button type="button" class="btn btn-danger"><span class="fa fa-trash fa-lg"></span>删除</button></a>
+                                        </td>
+                                      </tr>
+                                    {/loop}
+                                    </tbody>
+                                  </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">优惠券</h3>
+                                    </div>
+                                    <table class="table table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th>满</th>
+                                        <th>减</th>
+                                        <th>剩余/张</th>
+                                        <th>领取方式</th>
+                                        <th>过期时间</th>
+                                        <th>操作</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                    {loop $cardlist $item}
+                                      <tr>
+                                        <td>{$item['maxmoney']}元</td>
+                                        <td>{$item['price']}元</td>
+                                        <td>{$item['sharemen']}张</td>
+                                        <td>{if $item['lingqument'] == 0}首页领取{else}积分兑换{/if}</td>
+                                        <td>{$item['endtime']}</td>
+                                        <td>
+                                            <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('marketing',array('sub' => 'deletecard', 'id' => $item['id']));}"><button type="button" class="btn btn-danger"><span class="fa fa-trash fa-lg"></span>删除</button></a>
+                                        </td>
+                                      </tr>
+                                    {/loop}
+                                    </tbody>
+                                  </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-warning">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">充值赠送</h3>
+                                    </div>
+                                    <table class="table table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th>冲值</th>
+                                        <th>赠送</th>
+                                        <th>操作</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                    {loop $czlist $item}
+                                      <tr>
+                                        <td>{$item['czpay']}元</td>
+                                        <td>{$item['zspay']}元</td>
+                                        <td>
+                                            <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('marketing',array('sub' => 'deletecz', 'id' => $item['id']));}"><button type="button" class="btn btn-danger"><span class="fa fa-trash fa-lg"></span>删除</button></a>
+                                        </td>
+                                      </tr>
+                                    {/loop}
+                                    </tbody>
+                                  </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{else if $_GPC['sub'] == 'storediscount'}
+<div class="xiwulife_content">
+    <div class="center-back right-back">
+        <div class="container-fluid">
+            <div class="info-center">
+                <div class="page-header">
+                    <div class="pull-left">
+                        <h4>店铺优惠</h4>
+                    </div>
+                </div>
+                <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" id="form1">
+                <div class="panel panel-success">
+                    <div class="panel-body addstore_box">
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">优惠</label>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">满</span>
+                                    <input type="text" class="inp_lng form-control" placeholder="" name="man" value="{$item['man']}" />
+                                </div>
+                                <span class="help-block">注：写数字，不要带单位；（如：199）；后面的数不能大于前面的数</span>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">减</span>
+                                    <input type="text" class="inp_lat form-control" placeholder="" name="jian" value="{$item['jian']}" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">活动详情</label>
+                            <div class="col-xs-12 col-sm-8">
+                                {php echo tpl_ueditor('details', $item['details'])}
+                            </div>
+                        </div> -->
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"></label>
+                            <div class="col-sm-6 col-xs-6">
+                                <button type="submit" class="btn btn-success btn-block" name="tijiao" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{else if $_GPC['sub'] == 'carddiscount'}
+<div class="xiwulife_content">
+    <div class="center-back right-back">
+        <div class="container-fluid">
+            <div class="info-center">
+                <div class="page-header">
+                    <div class="pull-left">
+                        <h4>优惠券</h4>
+                    </div>
+                </div>
+                <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" id="form1">
+                <div class="panel panel-success">
+                    <div class="panel-body addstore_box">
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">优惠</label>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">满</span>
+                                    <input type="text" class="inp_lng form-control" placeholder="" name="maxmoney" value="{$item['maxmoney']}" />
+                                </div>
+                                <span class="help-block">注：写数字，不要带单位；（如：199）；后面的数不能大于前面的数</span>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">减</span>
+                                    <input type="text" class="inp_lat form-control" placeholder="" name="price" value="{$item['price']}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">可领取人数</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="inp_add form-control" placeholder="" name="sharemen" value="{$item['sharemen']}" />
+                                <span class="help-block">注：写数字，不要带单位；（如：199）</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-2 col-md-3 col-lg-2 control-label">领取方式</label>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-success {if $item['lingqument'] == 0}active{/if}">
+                                        <input type="radio" name="lingqument" value="0" autocomplete="off" {if $item['lingqument'] == 0}checked{/if}> 立即领取
+                                    </label>
+                                    <label class="btn btn-success {if $item['lingqument'] == 1}active{/if}">
+                                        <input type="radio" name="lingqument" value="1" autocomplete="off" {if $item['lingqument'] == 1}checked{/if}> 积分兑换
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">领取消耗积分</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <input type="text" class="inp_add form-control" placeholder="" name="jifen" value="{$item['jifen']}" />
+                                <span class="help-block">注：写数字，不要带单位；（如：199），只有积分兑换才会消耗积分</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-2 col-md-3 col-lg-2 control-label">领取限制</label>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-success {if $item['xianzhi'] == 0}active{/if}">
+                                        <input type="radio" name="xianzhi" value="0" autocomplete="off" {if $item['xianzhi'] == 0}checked{/if}> 限制
+                                    </label>
+                                    <label class="btn btn-success {if $item['xianzhi'] == 1}active{/if}">
+                                        <input type="radio" name="xianzhi" value="1" autocomplete="off" {if $item['xianzhi'] == 1}checked{/if}> 无限制
+                                    </label>
+                                </div>
+                                <span class="help-block">注：限制为每人只领取一次，否则无限领取</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">领取后到期时间</label>
+                            <div class="col-sm-8 col-xs-12">
+                                {php echo _tpl_form_field_date('endtime', $value = $item['endtime'], $withtime = false)}
+                                <span class="help-block">注：不能小于当前时间</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"></label>
+                            <div class="col-sm-6 col-xs-6">
+                                <button type="submit" class="btn btn-success btn-block" name="tijiao" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{else if $_GPC['sub'] == 'czmarketing'}
+<div class="xiwulife_content">
+    <div class="center-back right-back">
+        <div class="container-fluid">
+            <div class="info-center">
+                <div class="page-header">
+                    <div class="pull-left">
+                        <h4>充值赠送</h4>
+                    </div>
+                </div>
+                <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" id="form1">
+                <div class="panel panel-success">
+                    <div class="panel-body addstore_box">
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">优惠</label>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">充值</span>
+                                    <input type="text" class="inp_lng form-control" placeholder="" name="czpay" value="{$item['czpay']}" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">送</span>
+                                    <input type="text" class="inp_lat form-control" placeholder="" name="zspay" value="{$item['zspay']}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"></label>
+                            <div class="col-sm-6 col-xs-6">
+                                <button type="submit" class="btn btn-success btn-block" name="tijiao" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/if}
+{template 'xiwufooter'}
