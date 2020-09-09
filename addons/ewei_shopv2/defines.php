@@ -20,7 +20,10 @@ define('EWEI_SHOPV2_DEBUG', false);
 !(defined('EWEI_SHOPV2_LOCAL')) && define('EWEI_SHOPV2_LOCAL', '../addons/ewei_shopv2/');
 !(defined('EWEI_SHOPV2_STATIC')) && define('EWEI_SHOPV2_STATIC', EWEI_SHOPV2_URL . 'static/');
 !(defined('EWEI_SHOPV2_PREFIX')) && define('EWEI_SHOPV2_PREFIX', 'ewei_shop_');
-define("EWEI_SHOPV2_AUTH_WXAPP","http://renren.weapp.cc/");
+!defined('EWEI_SHOPV2_AUTH_URL') && define('EWEI_SHOPV2_AUTH_URL','http://127.0.0.1/');
+!defined('EWEI_SHOPV2_AUTH_WXAPP') && define('EWEI_SHOPV2_AUTH_WXAPP','https://127.0.0.1/');
+!defined('EWEI_SHOPV2_NEW_AUTH_URL') && define('EWEI_SHOPV2_NEW_AUTH_URL','https://127.0.0.1/');
+//define("EWEI_SHOPV2_AUTH_WXAPP","http://renren.weapp.cc/");
 define('EWEI_SHOPV2_PLACEHOLDER', '../addons/ewei_shopv2/static/images/placeholder.png');
 
 ?>

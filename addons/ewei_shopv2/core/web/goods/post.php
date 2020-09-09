@@ -110,7 +110,6 @@ $com_virtual = com('virtual');
 
 
 if ($_W['ispost']) {
-
     if (empty($id))  {
         $goodstype = intval($_GPC['type']);
     } else {
@@ -836,7 +835,7 @@ if ($_W['ispost']) {
     $param_titles = $_POST['param_title'];
     $param_values = $_POST['param_value'];
     $param_displayorders = $_POST['param_displayorder'];
-    $len = count($param_ids);
+    $len = empty($param_ids) ? 0 : count($param_ids);
     $paramids = array();
     for ($k = 0; $k < $len; $k++) {
         $param_id = "";
@@ -870,7 +869,7 @@ if ($_W['ispost']) {
     $spec_ids = $_POST['spec_id'];
     $spec_titles = $_POST['spec_title'];
     $specids = array();
-    $len = count($spec_ids);
+    $len = empty(count($spec_ids))? 0 : count($spec_ids);
     $specids = array();
     $spec_items = array();
     for ($k = 0; $k < $len; $k++) {

@@ -116,6 +116,7 @@
         <div  style="width:80px;" >状态</div>
         {/if}
         <div class="flex1">属性</div>
+        <div  style="width:80px;" >供应链</div>
         <div style="width: 120px;">操作</div>
     </div>
     <form action="./index.php" method="get" class="form-horizontal form-search" role="form">
@@ -249,6 +250,7 @@
                     <th  style="width:80px;" >状态</th>
                     {/if}
                     <th>属性</th>
+                    <th>供应链</th>
                     <th style="width: 120px;">操作</th>
                 </tr>
 
@@ -449,6 +451,7 @@
                         {/if}
                         >不参与折扣</a>
                     </td>
+                    <td style="overflow:visible;"><span class="label label-danger">维妮</span></td>
                     <td  style="overflow:visible;position:relative">
                         {if empty($item['ishotel'])}
                         {ifp 'goods.edit|goods.view'}
@@ -552,7 +555,7 @@
                         {/if}
                     </div>
                     </td>
-                    <td colspan="5" style="text-align: right">
+                    <td colspan="7" style="text-align: right">
                         {$pager}
                     </td>
                 </tr>

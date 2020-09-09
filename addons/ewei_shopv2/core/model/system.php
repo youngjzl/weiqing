@@ -724,6 +724,7 @@ class System_EweiShopV2Model
 				'subtitle' => '商品管理',
 				'icon'     => 'goods',
 				'items'    => array(
+					array('title' => '供应商列表', 'route' => 'supplychain.category'),
 					array('title' => '出售中', 'desc' => '出售中商品管理', 'extend' => 'goods.sale', 'perm' => 'goods.main'),
 					array('title' => '已售罄', 'route' => 'out', 'desc' => '已售罄/无库存商品管理', 'perm' => 'goods.main'),
 					array('title' => '仓库中', 'route' => 'stock', 'desc' => '仓库中商品管理', 'perm' => 'goods.main'),

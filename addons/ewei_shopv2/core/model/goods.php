@@ -765,7 +765,7 @@ class Goods_EweiShopV2Model {
         global $_W;
 
         //浏览总数
-        pdo_query("update " . tablename('ewei_shop_goods') . " set viewcount=viewcount+1 where id=:id and uniacid='{$_W[uniacid]}' ", array(":id" => $goodsid));
+        pdo_query("update " . tablename('ewei_shop_goods') . " set viewcount=viewcount+1 where id=:id and uniacid='{$_W["uniacid"]}' ", array(":id" => $goodsid));
 
         //浏览记录
         $history = pdo_fetch('select id,times from ' . tablename('ewei_shop_member_history') . ' where goodsid=:goodsid and uniacid=:uniacid and openid=:openid limit 1'
@@ -1065,7 +1065,7 @@ class Goods_EweiShopV2Model {
         if(empty($member['groupid'])){
             $member['groupid']=0;
         }
-        if(count($showgroupsArr)==0){
+        if(empty($showgroupsArr) && count($showgroupsArr)==0){
             $showgroupsArr = array();
         }
         if(strpos($member['groupid'],',') !== false || strpos($showgroups,',') !== false){
