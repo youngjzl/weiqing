@@ -13,11 +13,12 @@ class Index_EweiShopV2Page extends WebPage {
         if(empty($_W['shopversion'])){
             $goodsfrom = strtolower(trim($_GPC['goodsfrom']));
             if(empty($goodsfrom)){
-                header('location: ' . webUrl('goods', array('goodsfrom'=>'sale')));
+                header('location: ' . webUrl('goods', array('goodsfrom'=>'sale','page'=>$_GPC['page'])));
             }
         }else{
+            $goodsfrom = strtolower(trim($_GPC['goodsfrom']));
             if(!empty($_GPC['goodsfrom'])){
-                header('location: ' . webUrl('goods/'. $_GPC['goodsfrom']));
+                header('location: ' . webUrl('goods/'.$goodsfrom, array('page'=>$_GPC['page'])));
             }
         }
 

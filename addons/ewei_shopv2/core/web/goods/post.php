@@ -1,7 +1,6 @@
 <?php
 /*珍贵资源 请勿转卖*/
 global $_W, $_GPC;
-
 $shopset_level = intval($_W['shopset']['commission']['level']);
 
 $id = intval($_GPC['id']);
@@ -869,7 +868,7 @@ if ($_W['ispost']) {
     $spec_ids = $_POST['spec_id'];
     $spec_titles = $_POST['spec_title'];
     $specids = array();
-    $len = empty(count($spec_ids))? 0 : count($spec_ids);
+    $len = empty($spec_ids) || empty(count($spec_ids))? 0 : count($spec_ids);
     $specids = array();
     $spec_items = array();
     for ($k = 0; $k < $len; $k++) {
@@ -1151,7 +1150,7 @@ if ($_W['ispost']) {
             pdo_update("ewei_shop_goods", array("total" => $totalstocks), array("id" => $id));
         }
     }
-    show_json(1,array('url'=>webUrl('goods/edit', array('id' => $id,'tab'=>str_replace("#tab_","",$_GPC['tab'])))));
+    show_json(1,array('url'=>webUrl('goods/edit', array('id' => $id,'tab'=>str_replace("#tab_","",$_GPC['tab']),'ismd'=>1,'page'=>$_GPC['page']))));
 }
 
 if (!empty($id)) {

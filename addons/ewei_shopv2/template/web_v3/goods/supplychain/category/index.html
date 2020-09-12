@@ -116,44 +116,61 @@
 </div>
 <div class="page-content">
     <form action="" method="get" class="form-horizontal form-search" role="form">
-        <input type="hidden" name="c" value="site" />
-        <input type="hidden" name="a" value="entry" />
-        <input type="hidden" name="m" value="ewei_shopv2" />
-        <input type="hidden" name="do" value="web" />
-        <input type="hidden" name="r"  value="goods.supplychain.category" />
-        <input type="hidden" name="supplychain"  value="{$supplychain}" />
+        <input type="hidden" name="c" value="site"/>
+        <input type="hidden" name="a" value="entry"/>
+        <input type="hidden" name="m" value="ewei_shopv2"/>
+        <input type="hidden" name="do" value="web"/>
+        <input type="hidden" name="r" value="goods.supplychain.category"/>
+        <input type="hidden" name="supplychain" value="{$supplychain}"/>
         <div class="page-toolbar">
-            <div class="input-group col-sm-6 pull-left">
-                 <span class="input-group-select">
-                    <select name="attribute" class='form-control select2' style="width:200px;" onchange="window.location=this.value;" data-placeholder="供应商列表">
-                        <option value="{php echo webUrl('goods.supplychain.category',array('supplychain' => 'wn'));}" {if empty($_GPC['supplychain'])}selected{/if}>维妮供应商</option>
-                        <option value="{php echo webUrl('goods.supplychain.category',array('supplychain' => 'an'));}" {if $_GPC['supplychain']=='an'}selected{/if}>澳安供应商</option>
+            <div class="input-group col-sm-10 pull-left">
+                <span class="input-group-select">
+                    <select name="attribute" class='form-control select2' style="width:200px;"
+                            onchange="window.location=this.value;" data-placeholder="供应商列表">
+                        <option value="{php echo webUrl('goods.supplychain.category',array('supplychain' => 'all'));}"
+                                {if empty($_GPC['supplychain'])||$_GPC['supplychain']=='all'}selected{/if}>全部</option>
+                        <option value="{php echo webUrl('goods.supplychain.category',array('supplychain' => 'wn'));}"
+                                {if $_GPC['supplychain']=='wn'}selected{/if}>维妮供应商</option>
+                        <option value="{php echo webUrl('goods.supplychain.category',array('supplychain' => 'an'));}"
+                                {if $_GPC['supplychain']=='an'}selected{/if}>澳安供应商</option>
                     </select>
                 </span>
                 <span class="input-group-select">
-                    <select multip name="select_cat" class='form-control' style="width:200px;" data-placeholder="商品分类">
-                        <option value="" {if empty($_GPC['select_cat'])}selected{/if} >商品分类</option>
-                        {loop $category $c}
-                        <option value="{$c['Name']}" {if !empty($_GPC['select_cat'])&&!empty(in_array($c['Name'],explode(',',$_GPC['select_cat'])))}choose{/if}>{$c['Name']}</option>
-                        {/loop}
-                    </select>
+                     <select multiple='' name="select_brand[]" id="select_brand" class='form-control select2'
+                             data-placeholder="选择品牌" style="width:200px;">
+                         {loop $brand $c}
+                         <option value="{$c['Brand']}" {if !empty($_GPC['select_brand'])&&!empty(in_array($c['Brand'],$_GPC['select_brand']))}selected{/if}>{$c['Brand']}</option>
+                         {/loop}
+                     </select>
                 </span>
-                <span class="input-group-select">
-                    <select name="select_deliverycode" class='form-control' style="width:200px;" data-placeholder="发货方式">
-                        <option value="" {if empty($_GPC['select_deliverycode'])}selected{/if} >发货方式</option>
-                        <option value="1" {if $_GPC['select_deliverycode']=='1'}selected{/if}>保税区发货</option>
-                        {if $_GPC['supplychain']=='an'}
-                            <option value="4" {if $_GPC['select_deliverycode']=='4'}selected{/if}>直邮</option>
-                        {else}
-                            <option value="2" {if $_GPC['select_deliverycode']=='2'}selected{/if}>香港直邮</option>
+                <span style="display: {if $_GPC['supplychain']=='all'||empty($_GPC['supplychain'])}none{else}inline{/if}"
+                      class="input-group-select">
+                     <select multiple='' name="select_cat[]" class='form-control select2' style="width:200px;"
+                             data-placeholder="商品分类">
+                         {loop $category $c}
+                         <option value="{$c['Name']}" {if !empty($_GPC['select_cat'])&&!empty(in_array($c['Name'],$_GPC['select_cat']))}selected{/if}>{$c['Name']}</option>
+                         {/loop}
+                     </select>
+                </span>
+                <span style="display: {if $_GPC['supplychain']=='all'||empty($_GPC['supplychain'])}none{else}inline{/if}"
+                      class="input-group-select">
+                        <select name="select_deliverycode" class='form-control' style="width:200px;"
+                                data-placeholder="发货方式">
+                            <option value="" {if empty($_GPC['select_deliverycode'])}selected{/if} >发货方式</option>
+                            <option value="1" {if $_GPC['select_deliverycode']=='1'}selected{/if}>保税区发货</option>
+                            {if $_GPC['supplychain']=='an'}
+                                <option value="4" {if $_GPC['select_deliverycode']=='4'}selected{/if}>直邮</option>
+                            {else}
+                                <option value="2" {if $_GPC['select_deliverycode']=='2'}selected{/if}>香港直邮</option>
                             <option value="4" {if $_GPC['select_deliverycode']=='4'}selected{/if}>海外直邮</option>
-                        {/if}
-                        <option value="5" {if $_GPC['select_deliverycode']=='5'}selected{/if}>国内发货</option>
-                        <option value="6" {if $_GPC['select_deliverycode']=='6'}selected{/if}>海外自提</option>
-                    </select>
-                </span>
-                <input type="text" class="input-sm form-control" style="width:200px;"  name='keyword' value="{$_GPC['keyword']}" placeholder="SkuNo/id/名称">
-                <span class="input-group-btn">
+                            {/if}
+                            <option value="5" {if $_GPC['select_deliverycode']=='5'}selected{/if}>国内发货</option>
+                            <option value="6" {if $_GPC['select_deliverycode']=='6'}selected{/if}>海外自提</option>
+                        </select>
+                    </span>
+                <input type="text" class="input-sm form-control" style="width:200px;" name='keyword'
+                       value="{$_GPC['keyword']}" placeholder="SkuNo/id/名称">
+                <span class="input-group-btn" style="float: left">
                     <button class="btn btn-primary" type="submit"> 搜索</button>&nbsp;
                     <button type="submit" value="1" name="export" class="btn btn-sm btn-success">导出商品</button>
                 </span>
@@ -166,10 +183,11 @@
             <table class="table table-responsive">
                 <thead class="navbar-inner">
                 <tr>
-                    <th style="width:80px;text-align:center;">{if $_GPC['supplychain']=='wn'}SkuNo{else}id{/if}</th>
+                    <th style="width:100px;text-align:center;">{if $_GPC['supplychain']=='wn'}SkuNo{else}id{/if}</th>
                     <th style="width:80px;">商品</th>
                     <th style="">&nbsp;</th>
-                    <th style="width:250px;">分类</th>
+                    <th style="width:230px;">分类</th>
+                    <th style="width:150px;">品牌</th>
                     <form action="" method="get" class="form-horizontal form-search" role="form" id="orderBy">
                         <input type="hidden" name="c" value="site"/>
                         <input type="hidden" name="a" value="entry"/>
@@ -178,7 +196,8 @@
                         <input type="hidden" name="r" value="goods.{$goodsfrom}"/>
                         <input type="hidden" name="orderby" value=""/>
                         <th class="hover_sanj" style="width: 100px;">
-                            <button type="submit" style="background: transparent;text-align: left;width: 100%;margin-left: -10px;">零售价
+                            <button type="submit"
+                                    style="background: transparent;text-align: left;width: 100%;margin-left: -10px;">成本价
                                 <span class="sorting">
                             <i class="icon icon-sanjiao2"></i>
                             <i class="icon icon-sanjiao1"></i>
@@ -186,22 +205,23 @@
                             </button>
                         </th>
                         <th class="hover_sanj" style="width: 100px;">
-                            <button type="submit" style="background: transparent;text-align: left;width: 100%;margin-left: -10px;">成本价
+                            <button type="submit"
+                                    style="background: transparent;text-align: left;width: 100%;margin-left: -10px;">零售价
                                 <span class="sorting">
-                            <i class="icon icon-sanjiao2"></i>
-                            <i class="icon icon-sanjiao1"></i>
-                        </span>
+                                    <i class="icon icon-sanjiao2"></i>
+                                    <i class="icon icon-sanjiao1"></i>
+                                </span>
                             </button>
                         </th>
                         <th class="hover_sank" style="width: 80px;">
-                            <button type="submit" style="background: transparent;text-align: left;width: 100%;margin-left: -5px;">库存
-                                <span class="sorting">
-                            <i class="icon icon-sanjiao2"></i>
-                            <i class="icon icon-sanjiao1"></i>
-                        </span></button>
+                            <button type="submit"
+                                    style="background: transparent;text-align: left;width: 100%;margin-left: -5px;">库存
+                                <span class="sorting"><i class="icon icon-sanjiao2"></i><i
+                                        class="icon icon-sanjiao1"></i></span>
+                            </button>
                         </th>
                     </form>
-                    <th>税率 ▌金额</th>
+                    <th style="width:200px;">税率 ▌金额</th>
                     <th>状态</th>
                     <th>发货方式</th>
                     <th>供应链</th>
@@ -211,11 +231,15 @@
                 <tbody>
                 {loop $list $item}
                 <tr>
-                    <td style='text-align:center;'>{if $_GPC['supplychain']=='wn'}{$item['SkuNo']}{else}{$item['id']}{/if}</td>
-                    <td title="此图片没有可能是供应链已经把此商品删除">
-                        <img src="{$item['displayImgUrls']}" style="width:72px;height:72px;padding:1px;border:1px solid #efefef;margin: 7px 0" onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'" />
+                    <td style='text-align:center;'>{if
+                        $_GPC['supplychain']=='wn'}{$item['SkuNo']}{else}{$item['id']}{/if}
                     </td>
-                    <td class='full' >
+                    <td title="此图片没有可能是供应链已经把此商品删除">
+                        <img src="{$item['displayImgUrls']}"
+                             style="width:72px;height:72px;padding:1px;border:1px solid #efefef;margin: 7px 0"
+                             onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'"/>
+                    </td>
+                    <td class='full'>
                         <span>
                             {$item['SkuName']}
                         </span>
@@ -225,22 +249,25 @@
                         <span class="label label-primary">{$item['TwoCategory']}</span>
                         <span class="label label-primary">{$item['ThreeCategory']}</span>
                     </td>
-                    <td>&yen;{$item['RetailPrice']}</td>
+                    <td><span class="label label-success">{$item['Brand']}</span></td>
                     <td>&yen;{$item['SettlePrice']}</td>
+                    <td>&yen;{$item['RetailPrice']}</td>
 
                     <td>{$item['Quantity']}</td>
                     <td>税率：{$item['Rate']} ▌金额：¥{php echo round($item['Rate']*$item['SettlePrice'],2);}</td>
                     <td style="overflow:visible;position:relative">
                         {if empty($item['Status'])}
-                            <span class="label label-danger">下架</span>
+                        <span class="label label-danger">下架</span>
                         {else}
-                            <span class="label label-primary">上架</span>
+                        <span class="label label-primary">上架</span>
                         {/if}
                     </td>
                     <td>
                         {$item['DeliveryCode']}
                     </td>
-                    <td style="overflow:visible;position:relative"><span class="label label-danger">{$item['supplychain_type']}</span></td>
+                    <td style="overflow:visible;position:relative">
+                        <span class="label label-{$item['supplychain_bg']}">{$item['supplychain_type']}</span>
+                    </td>
                 </tr>
                 {/loop}
                 <tr>
@@ -261,42 +288,39 @@
 {template 'goods/batchcates'}
 {template '_footer'}
 <script>
-    //显示分类
-    selectMultip.register();
-
     // 价格与库存点击排序
-    $('.hover_sanj').on('click',function () {
+    $('.hover_sanj').on('click', function () {
         $('.hover_sank').find('i:eq(0)').removeClass('color_red').end().find('i:eq(1)').removeClass('color_red');
         var xiao = $(this).find('i:eq(0)').hasClass('color_red');
         var da = $(this).find('i:eq(1)').hasClass('color_red');
-        if(!xiao && !da) {
+        if (!xiao && !da) {
             $(this).find('i:eq(0)').addClass('color_red');
             //价格倒叙
             $('input[name=orderby]').val('price1');
-        }else if(xiao && !da) {
+        } else if (xiao && !da) {
             $(this).find('i:eq(0)').removeClass('color_red').end().find('i:eq(1)').addClass('color_red');
             //价格正序
             $('input[name=orderby]').val('price2');
-        }else if(!xiao && da) {
+        } else if (!xiao && da) {
             $(this).find('i:eq(1)').removeClass('color_red').end().find('i:eq(0)').addClass('color_red');
             //价格倒叙
             $('input[name=orderby]').val('price1');
         }
     });
 
-    $('.hover_sank').on('click',function () {
+    $('.hover_sank').on('click', function () {
         $('.hover_sanj').find('i:eq(0)').removeClass('color_red').end().find('i:eq(1)').removeClass('color_red');
         var xiao = $(this).find('i:eq(0)').hasClass('color_red');
         var da = $(this).find('i:eq(1)').hasClass('color_red');
-        if(!xiao && !da) {
+        if (!xiao && !da) {
             $(this).find('i:eq(0)').addClass('color_red');
             //库存倒叙
             $('input[name=orderby]').val('total1');
-        }else if(xiao && !da) {
+        } else if (xiao && !da) {
             $(this).find('i:eq(0)').removeClass('color_red').end().find('i:eq(1)').addClass('color_red');
             //库存正序
             $('input[name=orderby]').val('total2');
-        }else if(!xiao && da) {
+        } else if (!xiao && da) {
             $(this).find('i:eq(1)').removeClass('color_red').end().find('i:eq(0)').addClass('color_red');
             //库存倒叙
             $('input[name=orderby]').val('total1');

@@ -455,7 +455,7 @@
                     <td  style="overflow:visible;position:relative">
                         {if empty($item['ishotel'])}
                         {ifp 'goods.edit|goods.view'}
-                        <a  class='btn btn-op btn-operation' href="{php echo webUrl('goods/edit', array('id' => $item['id'],'goodsfrom'=>$goodsfrom,'page'=>$page))}" >
+                        <a  class='btn btn-op btn-operation' href="{php echo webUrl('goods/edit', array('id' => $item['id'],'goodsfrom'=>$goodsfrom,'page'=>$_GPC['page']))}" >
                                          <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{ifp 'goods.edit'}编辑{else}查看{/if}">
                                             <i class="icow icow-bianji2"></i>
                                          </span>
@@ -463,7 +463,7 @@
                         {/if}
                         {else}
                         {ifp 'hotelreservation.goods.edit|hotelreservation.goods.view'}
-                        <a  class='btn  btn-op btn-operation' href="{php echo webUrl('hotelreservation/goods/edit', array('id' => $item['id'],'goodsfrom'=>$goodsfrom,'page'=>$page))}">
+                        <a  class='btn  btn-op btn-operation' href="{php echo webUrl('hotelreservation/goods/edit', array('id' => $item['id'],'goodsfrom'=>$goodsfrom,'page'=>$_GPC['page']))}">
                                    <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{ifp 'goods.edit'}编辑{else}查看{/if}">
                                        {ifp 'goods.edit'}
                                         <i class='icow icow-bianji2'></i>
@@ -555,7 +555,7 @@
                         {/if}
                     </div>
                     </td>
-                    <td colspan="7" style="text-align: right">
+                    <td colspan="7" style="text-align: left">
                         {$pager}
                     </td>
                 </tr>
