@@ -52,7 +52,7 @@ class SettingController extends PluginWebPage
                 show_json(0, "域名已经被绑定");
             }
             m("common")->updatePluginset(array("pc" => $data));
-            show_json(1);
+            show_json(1,array('url'=>webUrl('pc.setting')));
         }
         $data = m("common")->getPluginset("pc");
         if (0 < mb_strlen($data["domain"])) {

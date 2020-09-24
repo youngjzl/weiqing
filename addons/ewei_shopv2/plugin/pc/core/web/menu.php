@@ -46,10 +46,7 @@ class MenuController extends PluginWebPage
 		$id = $_GPC['id'];
 		$isEdit = !empty($id);
 		$map = array('top' => '顶部', 'bottom' => '底部');
-		$r = parse_url(referer());
-		$r = explode('&', $r['query']);
-		$r = explode('.', $r[count($r) - 1]);
-		$lastElement = end($r);
+		$lastElement = $_GPC['type'];
 		$desc = $map[$lastElement];
 
 		if ($isEdit) {

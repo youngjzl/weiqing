@@ -62,7 +62,7 @@ class Category_EweiShopV2Page extends WebPage
 				plog('shop.category.edit', '批量修改分类的层级及排序');
 				m('shop')->getCategory(true);
 				m('shop')->getAllCategory(true);
-				show_json(1);
+				show_json(1, array('url' => webUrl('goods/category')));
 			}
 		}
 

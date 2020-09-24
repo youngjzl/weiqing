@@ -116,6 +116,7 @@
         <div  style="width:80px;" >状态</div>
         <?php  } ?>
         <div class="flex1">属性</div>
+        <div  style="width:80px;" >供应链</div>
         <div style="width: 120px;">操作</div>
     </div>
     <form action="./index.php" method="get" class="form-horizontal form-search" role="form">
@@ -169,7 +170,7 @@
             </div>
         </div>
     </form>
-    <?php  if(count($list)>0 && cv('goods.main')) { ?>
+    <?php  if(!empty($list) && count($list)>0 && cv('goods.main')) { ?>
     <div class="row">
         <div class="col-md-12">
             <div class="page-table-header">
@@ -249,6 +250,7 @@
                     <th  style="width:80px;" >状态</th>
                     <?php  } ?>
                     <th>属性</th>
+                    <th>供应链</th>
                     <th style="width: 120px;">操作</th>
                 </tr>
 
@@ -449,10 +451,11 @@
                         <?php  } ?>
                         >不参与折扣</a>
                     </td>
+                    <td style="overflow:visible;"><span class="label label-danger">维妮</span></td>
                     <td  style="overflow:visible;position:relative">
                         <?php  if(empty($item['ishotel'])) { ?>
                         <?php if(cv('goods.edit|goods.view')) { ?>
-                        <a  class='btn btn-op btn-operation' href="<?php  echo webUrl('goods/edit', array('id' => $item['id'],'goodsfrom'=>$goodsfrom,'page'=>$page))?>" >
+                        <a  class='btn btn-op btn-operation' href="<?php  echo webUrl('goods/edit', array('id' => $item['id'],'goodsfrom'=>$goodsfrom,'page'=>$_GPC['page']))?>" >
                                          <span data-toggle="tooltip" data-placement="top" title="" data-original-title="<?php if(cv('goods.edit')) { ?>编辑<?php  } else { ?>查看<?php  } ?>">
                                             <i class="icow icow-bianji2"></i>
                                          </span>
@@ -460,7 +463,7 @@
                         <?php  } ?>
                         <?php  } else { ?>
                         <?php if(cv('hotelreservation.goods.edit|hotelreservation.goods.view')) { ?>
-                        <a  class='btn  btn-op btn-operation' href="<?php  echo webUrl('hotelreservation/goods/edit', array('id' => $item['id'],'goodsfrom'=>$goodsfrom,'page'=>$page))?>">
+                        <a  class='btn  btn-op btn-operation' href="<?php  echo webUrl('hotelreservation/goods/edit', array('id' => $item['id'],'goodsfrom'=>$goodsfrom,'page'=>$_GPC['page']))?>">
                                    <span data-toggle="tooltip" data-placement="top" title="" data-original-title="<?php if(cv('goods.edit')) { ?>编辑<?php  } else { ?>查看<?php  } ?>">
                                        <?php if(cv('goods.edit')) { ?>
                                         <i class='icow icow-bianji2'></i>
@@ -552,7 +555,7 @@
                         <?php  } ?>
                     </div>
                     </td>
-                    <td colspan="5" style="text-align: right">
+                    <td colspan="7" style="text-align: left">
                         <?php  echo $pager;?>
                     </td>
                 </tr>

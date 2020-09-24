@@ -48,7 +48,7 @@ class AdvController extends PluginWebPage
 				}
 			}
 
-			$this->updateAdvSettings(static::ADV_RECOMMEND, $cubes) ? show_json(1) : show_json(0);
+			$this->updateAdvSettings(static::ADV_RECOMMEND, $cubes) ? show_json(1,array('url'=>webUrl('pc/adv/recommend'))) : show_json(0, '操作失败');
 		}
 
 		include $this->template();
@@ -72,7 +72,7 @@ class AdvController extends PluginWebPage
 			}
 
 			$data = array('banners' => $banners, 'adv' => $adv);
-			$this->updateAdvSettings(static::ADV_BANNER, $data) ? show_json(1) : show_json(0, '操作失败');
+			$this->updateAdvSettings(static::ADV_BANNER, $data) ? show_json(1,array('url'=>webUrl('pc/adv/banner'))) : show_json(0, '操作失败');
 		}
 
 		$settings = $this->getAdvSettings(static::ADV_BANNER);

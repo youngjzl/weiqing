@@ -12,7 +12,7 @@ var myconfig = {
         'bootstrap.suggest': 'dist/bootstrap/bootstrap-suggest.min',
         'bootbox': 'dist/bootbox/bootbox.min',
         'sweet': 'dist/sweetalert/sweetalert.min',
-        'select2': 'dist/select2/select2.min',
+        // 'select2': 'dist/select2/select2.min',
         'jquery.confirm': 'dist/jquery/confirm/jquery-confirm',
         'jquery.contextMenu': 'dist/jquery/contextMenu/jquery.contextMenu',
         'switchery': 'dist/switchery/switchery',
@@ -35,7 +35,7 @@ var myconfig = {
     css: {
         'jquery.confirm': 'dist/jquery/confirm/jquery-confirm',
         'sweet': 'dist/sweetalert/sweetalert',
-        'select2': 'dist/select2/select2,dist/select2/select2-bootstrap',
+        // 'select2': 'dist/select2/select2,dist/select2/select2-bootstrap',
         'jquery.nestable': 'dist/jquery/nestable/nestable',
         'jquery.contextMenu': 'dist/jquery/contextMenu/jquery.contextMenu',
         'daterangepicker': 'dist/daterangepicker/daterangepicker',
@@ -66,6 +66,7 @@ var myrequire = function (arr, callback) {
                     }
                 }else{
                     newarr.push("css!" + myconfig.path + this + myconfig.map['css']);
+
                 }
             });
 

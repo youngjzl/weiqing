@@ -112,7 +112,7 @@
         </div>
 
 
-        <input type="hidden" name="type" {if strpos(referer(), 'pc.menu.top') !== false}value="0"{else}value="1"{/if}>
+        <input type="hidden" name="type" {if ($_GPC['type']=='top')}value="0"{else}value="1"{/if}>
 
 
         <div class="form-group"></div>

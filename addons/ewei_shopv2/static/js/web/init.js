@@ -180,9 +180,11 @@ define(['jquery', 'bootstrap'],
                 $.post(url, {data: data}, function (ret) {
                     ret = eval("(" + ret + ")");
                     if (ret.status == 1) {
-                        tip.msgbox.suc(ret.result.message || tip.lang.success, ret.result.url)
+                        // tip.msgbox.suc(ret.result.message || tip.lang.success, ret.result.url)
+                        tip.msgbox.suc(ret.result.message || tip.lang.success, window.location.reload())
                     } else {
-                        tip.msgbox.err(ret.result.message || tip.lang.error, ret.result.url), obj.removeAttr('submitting').html(html)
+                        // tip.msgbox.err(ret.result.message || tip.lang.error, ret.result.url), obj.removeAttr('submitting').html(html)
+                        tip.msgbox.err(ret.result.message || tip.lang.error, window.location.reload()), obj.removeAttr('submitting').html(html)
                     }
                 }).fail(function () {
                     obj.removeAttr('submitting').html(html), tip.msgbox.err(tip.lang.exception)

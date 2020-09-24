@@ -8,7 +8,7 @@
     <div class="page-toolbar row m-b-sm m-t-sm">
         <div class="col-sm-4">
             <span class="pull-left">
-                <a class="btn btn-primary btn-sm" href="{php echo webUrl('pc.menu.add')}"><i class="fa fa-plus"></i> 创建{if $_GET['r'] == 'pc.menu.top'}顶部{else}底部{/if}导航</a>
+                <a class="btn btn-primary btn-sm" href="{php echo webUrl('pc.menu.add',array('type'=>$_GET['r'] == 'pc.menu.top' ? 'top' : 'bottom'))}"><i class="fa fa-plus"></i> 创建{if $_GET['r'] == 'pc.menu.top'}顶部{else}底部{/if}导航</a>
             </span>
         </div>
 
@@ -94,7 +94,7 @@
 
                 </td>
                 <td style="text-align: center;">
-                    <a class="btn btn-default btn-sm" href="{php echo webUrl('pc.menu.post',array('id' => $item['id']));}" title="编辑">
+                    <a class="btn btn-default btn-sm" href="{php echo webUrl('pc.menu.post',array('id' => $item['id'],'type'=>empty($item['type'])?'top':'bottom'));}" title="编辑">
                         <i class="fa fa-edit"></i></a>
 
                     <a class="btn btn-default btn-sm" data-toggle="ajaxRemove"

@@ -144,7 +144,7 @@
         </div>
     </div>
     <?php if( ce('goods' ,$item) ) { ?>
-    <div class="form-group">
+    <div id="md_location" class="form-group">
         <label class="col-sm-2 control-label"></label>
         <div class="col-sm-9 subtitle">
             <input type="submit" value="保存商品" class="btn btn-primary"/>
@@ -788,6 +788,11 @@
             $("[for|='totalcnf3']").show();
 		}
 	}
-
 </script>
+
+<?php  if(($_GPC['ismd'])) { ?>
+<script type="text/javascript">
+    $('body,html').animate({scrollTop: $('#md_location').offset().top}, 0);
+</script>
+<?php  } ?>
 <?php (!empty($this) && $this instanceof WeModuleSite || 1) ? (include $this->template('_footer', TEMPLATE_INCLUDEPATH)) : (include template('_footer', TEMPLATE_INCLUDEPATH));?>

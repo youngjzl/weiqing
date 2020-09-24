@@ -180,7 +180,7 @@ tbody td.dropbox{
 .unchoose_scope,.choosed_scope {
     border: 1px solid #e7e7eb;
     float: left;
-    zoom:1
+    zoom:1;
     /* height: 300px; */
     width: 200px;
     overflow: visible;
@@ -223,7 +223,7 @@ tbody td.dropbox{
 .scope_list {
     height: 275px;
     overflow-y: scroll;
-    zoom:1
+    zoom:1;
     position: relative
 }
 

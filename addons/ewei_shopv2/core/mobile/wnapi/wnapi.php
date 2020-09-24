@@ -21,7 +21,7 @@ class Wnapi_EweiShopV2Page extends MobilePage
         }
     }
     //-------------------------------------------维妮供应链 begin----------------------------------------------
-    //更新维妮分类表
+    //更新维妮分类表*****
     public function main()
     {
         set_time_limit(0);
@@ -88,7 +88,7 @@ class Wnapi_EweiShopV2Page extends MobilePage
         }
     }
 
-    //更新维妮商品
+    //更新维妮商品******
     public function wn_goods_list(){
         set_time_limit(0);
         ini_set('memory_limit', '-1');    //内存无限
@@ -109,17 +109,17 @@ class Wnapi_EweiShopV2Page extends MobilePage
             $this->_insert_goods($result);
             $count=ceil($result['TotalCount']/100);
             if ($page+1>$count+1){
-                file_put_contents('sitet.txt',var_export('结束',true).PHP_EOL,FILE_APPEND);
+                file_put_contents('./wnlog/sitet.txt',var_export('结束',true).PHP_EOL,FILE_APPEND);
                 $this->wn_goods_num();//更新产品库存+商品上下架
                 exit('success');
             }
             for ($i=$page;$i<=$count;$i++){
-                file_put_contents('sitet.txt',var_export($page,true).PHP_EOL,FILE_APPEND);
+                file_put_contents('./wnlog/sitet.txt',var_export($page,true).PHP_EOL,FILE_APPEND);
                 sleep(1);
                 $this->_wn_cron_goodsList($page+1);
             }
         }else{
-            file_put_contents('sitet.txt',var_export('空了',true).PHP_EOL,FILE_APPEND);
+            file_put_contents('./wnlog/sitet.txt',var_export('空了',true).PHP_EOL,FILE_APPEND);
             exit('error');
         }
         return $result;
@@ -171,7 +171,7 @@ class Wnapi_EweiShopV2Page extends MobilePage
         }
     }
 
-    //维妮库存更新+商品上下架
+    //维妮库存更新+商品上下架*****
     public function wn_goods_num(){
         /*查询全部商品*/
         $goods = pdo_fetchall("select * from " . tablename('ewei_shop_goods_wn'));
@@ -192,6 +192,7 @@ class Wnapi_EweiShopV2Page extends MobilePage
         }
         exit();
     }
+    //获取维妮库存
     private function _goods_num($GoodsAttr){
         foreach ($GoodsAttr as $k=>$skuno){
             $id[]=$skuno['SkuNo'];
@@ -209,377 +210,63 @@ class Wnapi_EweiShopV2Page extends MobilePage
             }
         }
     }
-    //-------------------------------------------维妮供应链 end----------------------------------------------
 
-
-
-
-    //-------------------------------------------微擎  begin----------------------------------------------
-    //更新主表的分类
-    public function up_main_cat()
-    {
-        $wn_cat_list = pdo_fetchall("select * from " . tablename('ewei_shop_category_wn') . " WHERE ParentId=:parentid AND Level = :level", array(':parentid'=>0,':level' => 1));
-        if (!empty($wn_cat_list)) {
-            //leve1 一级分类
-            foreach ($wn_cat_list as $key => $cat) {
-                $leve1_id = $this->_main_insert_cat($cat['wn_id'], $cat['Name'], $cat['ParentId'], 1);
-                //拿到插入后的id
-                $res[$key]['pid'] = $leve1_id;
-
-                //leve2  二级分类
-                $cat['child'] = pdo_fetchall("select * from " . tablename('ewei_shop_category_wn') . " WHERE ParentId=:parentid AND Level = :level", array(':parentid'=>$cat['wn_id'],':level' => 2));
-                if (!empty($cat['child'])) {
-                    foreach ($cat['child'] as $key2 => $child_leve2) {
-                        //插入数据
-                        $leve2_id = $this->_main_insert_cat($child_leve2['wn_id'], $child_leve2['Name'], $res[$key]['pid'], 2);
-                        //拿到插入后的id
-                        $res[$key]['child'][$key2]['pid'] = $leve2_id;//增加一个id 分类主键
-
-                        //leve3  三级分类
-                        $child_leve2['child'] = pdo_fetchall("select * from " . tablename('ewei_shop_category_wn') . " WHERE ParentId=:parentid AND Level = :level", array(':parentid'=>$child_leve2['wn_id'],':level' => 3));
-                        if (!empty($child_leve2['child'])) {
-                            foreach ($child_leve2['child'] as $key3 => $child_leve3) {
-                                //插入数据
-                                $this->_main_insert_cat($child_leve3['wn_id'], $child_leve3['Name'], $res[$key]['child'][$key2]['pid'], 3);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    private function _main_insert_cat($cat_id, $cat_name, $cat_parentid, $level)
-    {
-        global $_W;
-        $cat_list = pdo_fetch("select * from " . tablename('ewei_shop_category') . " WHERE wn_catid = :wn_catid  AND level = :level", array(':wn_catid' => $cat_id, ':level' => $level));
-        if (!empty($cat_list)){
-            return $cat_list['id'];
-        }
-        if (!$cat_list) {
-            $data['uniacid'] = $_W['uniacid'];
-            $data['parentid'] = $cat_parentid;
-            $data['level'] = $level;
-            $data['wn_catid'] = $cat_id;
-            $data['name'] = $cat_name;
-
-            $data['isrecommand'] = 0;
-            $data['displayorder'] = 0;
-            $data['enabled'] = 1;
-            $data['thumb'] = '';
-            $data['description'] = '';
-            $data['ishome'] = 0;
-            $is_up = pdo_insert('ewei_shop_category', $data);
-            $id = pdo_insertid();
-            if ($is_up) {
-                return $id;
-            }
-        }
-        return null;
-    }
-
-    //更新商品表
-    public function up_man_goods(){
+    //实时改变商品成本价+销售价
+    public function goods_up_costprice(){
         set_time_limit(0);
         ini_set('memory_limit', '-1');    //内存无限
-//        $result=array(
-//            'act_time'=>array(//促销起止时间
-//                'start' => '1970-01-01 08:00',
-//                'end' => '1970-01-01 08:00',
-//            ),
-//            'nocommission'=>'',
-//            'saletime' => array(//限时卖时间
-//                'start' => '2020-08-24 15:58',
-//                'end' => '2020-08-31 15:58',
-//            ),
-//            'createtime' => '',//创建当前商品时间
-//            'statustime' => array(
-//                'start' => '2020-08-24 15:58',//当前时间
-//                'end' => '2020-09-24 15:58',
-//            ),
-//            'intervalfloor'=>'',
-//            'intervalnum1'=>'',
-//            'intervalprice1'=>'',
-//            'intervalnum2' => '',
-//            'intervalprice2' => '',
-//            'intervalnum3' => '',
-//            'intervalprice3' => '',
-//            'buyagain_commission'=>'',
-//            'storeids_text' => '',
-//            'diyformid' => '',
-//            'diysave' => '0',
-//            'data_type' => '0',
-//            'merchsale'=>'',
-//            'isforceverifystore_verifygoods' => '0',
-//            'verify_type1' => '0',
-//            'verifygoodsnum' => '',
-//            'verifygoodstype' => '0',
-//            'verifygoodslimittype' => '0',
-//            'verifygoodsdays' => '',
-//            'verifygoodslimitdate' => '2020-08-24 15:58:00',//当前时间
-//            'opencard' => '0',
-//            'custom_cell1_url' => '',
-//            'prerogative' => '',
-//            'card_description' => '',
-//            'card_backgroundtype' => '0',
-//            'color2' => '',
-//            'color' => 'Color010',
-//            'custom_cell1' => '0',
-//            'custom_cell1_name' => '',
-//            'custom_cell1_tips' => '',
-//            'card_logoimg' => '',
-//            'card_logolocalpath' => '',
-//            'card_backgroundimg_localpath' => '',
-//            'card_backgroundimg' => '',
-//            'card_brand_name' => '',
-//            'card_title' => '',
-//            'card_totalquantity' => '',
-//            'discounts' => array(
-//                'type' => '0',
-//                'default' => '',
-//                'default_pay' => '',
-//            ),
-//            'tab' => '#tab_option',
-//        );
-        $goods_list = pdo_fetchall("select * from " . tablename('ewei_shop_goods_wn'). " as gw left join". tablename('ewei_shop_goods')."as g on g.goodssn!=gw.goodsNo");
-        foreach ($goods_list as $list){
-            //分类
-            $Category=$this->cats($list['Category'],1);
-            $TwoCategory=$this->cats($list['TwoCategory'],2);
-            $ThreeCategory=$this->cats($list['ThreeCategory'],3);
-
-            //商品图片
-            $img_url=$this->array_images($list['displayImgUrls']);
-            $thumb=$img_url[0];
-            $thumb_url=serialize($img_url);
-
-            //规格组装
-            isset($result['goodsNo']) || $result['goodsNo'] = array();
-            $data[$list['goodsNo']][]=array(
-                'title' => $this->get_unit($list['SkuName'])['goodsname'],//商品名称
-                'timestart' => 1598255880,//限卖开始时间
-                'timeend' => 1598860680,//限卖结束时间
-                'statustimestart' => time(),//上架时间
-                'statustimeend' => 1756275682,//下架时间 2025-08-27 14:21:22
-                'pcate' => $Category,//一级分类
-                'ccate' => '',
-                'tcate' => '',
-                'pcates' => $Category,//一级分类
-                'ccates' => $TwoCategory,//二级分类
-                'tcates' => $ThreeCategory,//三级分类
-                'diymode' => 0,
-                'thumb' => $thumb,//商品图(主图)
-                'thumb_url' => $thumb_url,//缩略图地址
-                'type'=>1,//商品类型-默认实体商品
-                'status'=>$list['Status'],//上架状态 1上架 2下架
-                'isverify'=>1,//包邮设置，默认1
-                'hasoption'=>0,//是否启用商品多规格
-                'uniacid'=>2,//公众号id
-                'displayorder'=>'',//排序方式
-                'subtitle'=>'',//副标题
-                'shorttitle'=>'',//商品短标题 用于快递打印
-                'keywords'=>'',//商品关键字,能准确搜到商品
-                'thumb_first'=>0,//是否详情显示首图
-                'showsales'=>0,//是否显示销量
-                'ispresell'=>0,//是否开启商品预售设置
-                'presellover'=>0,//预售商品状态
-                'presellovertime'=>0,//商品转为正常销售时间
-                'presellprice'=>0,//预售价格0
-                'presellstart'=>'',//预售开始时间是否点击
-                'presellend'=>'',//预售结束时间是否点击
-                'preselltimestart'=>'',//预售开始时间（当前时间）
-                'preselltimeend'=>'',//预售结束时间（当前时间）
-                'presellsendtype'=>0,//是否选中发货时间
-                'presellsendstatrttime'=>'',//发货时间（当前时间）
-                'presellsendtime'=>'',//购买几天后发货
-                'labelname'=>'',//标签名称（如正品保证，七天无理由退货）
-                'isrecommand'=>'',//商品属性(如推荐，新品)
-                'ishot'=>'',//是否选中热卖
-                'isnew'=>'',//是否选中新品
-                'isdiscount'=>'',//是否选中促销
-                'isdiscount_title'=>'',//促销标题
-                'isdiscount_time_start'=>0,//act_time['start']
-                'isdiscount_time'=>0,//act_time['start']
-                'issendfree'=>$list['SaleType'],//是否包邮
-                'isnodiscount'=>'',//不参与折扣
-                'istime'=>'',//是否选中限时卖
-                'description' => substr($list['Details'],'0',400),//分享描述
-                'goodssn' => $list['goodsNo'],//编码
-                'unit' => $this->get_unit($list['Name'])['unit'],//单位, 如: 个/件/包
-                'total' => $list['Quantity'],//库存
-                'showtotal' => '',//显示库存
-                'totalcnf' => 1,//付款减库存
-                'unite_total' => 0,
-                'marketprice' => $list['SettlePrice']*0.05+$list['SettlePrice'],//现价（商品销售价）
-                'weight' => $list['Weight'],//重量（克）
-                'costprice' =>$list['SettlePrice'],//成本价
-                'productprice' => $list['RetailPrice'],//原价
-                'minprice'=>$list['SettlePrice'],
-                'maxprice'=>$list['SettlePrice'],
-                'productsn' => '',//条码
-                'credit' => '',//积分赠送
-                'maxbuy' => empty($list['LimitNum']) ? 0: $list['LimitNum'],//单次最多购买
-                'minbuy' => '',//单次最低购买
-                'usermaxbuy' => '',//用户购买过的此商品数量限制
-                'sales' => '',//已出售数
-                'share_icon' => '',//分享图标
-                'share_title' => '',//分享标题
-                'groupstype' => 0,//是否支持拼团(1支持0不)
-                'virtualsend' => 0,//自动发货
-                'virtualsendcontent' => '',//自动发货内容
-                'buyshow' => '',//商品详情是否在购买后才可见
-                'showlevels' => '',//会员等级浏览权限
-                'buylevels' => '',//会员等级购买权限
-                'showgroups' => '',//会员组浏览权限
-                'buygroups' => '',//会员组购买权限
-                'noticeopenid' => '',//商家通知
-                'noticetype' => '',//通知方式
-                'needfollow' => 0,//购买强制关注
-                'followurl' => '',//关注引导
-                'followtip' => '',//未关注提示
-                'deduct' => '',//积分最多抵扣--单位元
-                'manydeduct' => '',//允许多件累计抵扣,如果设置0，则不支持积分抵扣
-                'manydeduct2' => '',//允许多件累计抵扣,如果设置0，则支持全额抵扣，设置-1 不支持余额抵扣
-                'deduct2' => '',//
-                'virtual'=>0,//type==3?intval($_GPC['virtual']):0,
-                'ednum' => '',//如果设置0或空，则不支持满件包邮
-                'edareas' => '',//不参与单品包邮地区
-                'edareas_code' => '',//添加不参加满包邮的地区
-                'edmoney' => '',//单品满额包邮 单位元
-                'invoice' => '',//发票
-                'repair' => '',//保修
-                'seven' => '',//7天无理由退换
-                'money' => '',//余额返现
-                'province' => $list['DeliveryCity'],//商品所在地
-                'city' => '',//市
-                'quality' => '',//正品保证
-                'sharebtn' => '',//
-                'autoreceive' => '',//确认收货时间
-                'cannotrefund' => 1,//是否支持退换货
-                'refund' => 0,//退款
-                'returngoods' => 0,//退货退款
-                'exchange' => 0,//换货
-                'buyagain' => '',//重复购买折扣
-                'buyagain_islong' =>0,//购买一次后,以后都使用这个折扣 是否持续使用
-                'buyagain_condition' => 0,//重复购买使用条件,是付款后还是完成后 , 默认是付款后
-                'buyagain_sale' => 0,//重复购买时,是否与其他优惠共享!其他优惠享受后,在使用这个折扣
-                'diypage' => '',//
-                'cashier' => '',//支持收银台
-                'video' => '',//首图视频
-                'nosearch'=>0,
-                'isstatustime'=>0,
-                'verifytype'=>'',
-                'storeids'=>'',
-                'cash'=>'',
-                'isforceverifystore' => '0',
-                'diyformtype' => '0',
-                'detail_logo' => '',
-                'detail_shopname' => '',
-                'detail_totaltitle' => '',
-                'detail_btntext1' => '',
-                'detail_btnurl1' => '',
-                'detail_btntext2' => '',
-                'detail_btnurl2' => '',
-                'isendtime' => '0',
-                'usetime' => '',
-                'endtime' => time(),//当前时间
-                'cates' =>$Category.','.$TwoCategory.','.$ThreeCategory,//分类
-                'content' => $this->_goods_detail($list['detailImgUrls'],$list['Details']),//商品详情
-                'buycontent' => '',
-                'dispatchtype' => '0',
-                'dispatchid' => '0',
-                'dispatchprice' => '',
-
-                'spec'=>$list['Spec'],
-            );
+        //不更新的产品
+        $no_up_goods_id = MallSetting::findOne(['key'=>'no_up_goods_id']);
+        if (!empty($no_up_goods_id) && !empty($no_up_goods_id->value)){
+            $no_up_goods_id=explode(',',$no_up_goods_id->value);
+        }else{
+            $no_up_goods_id=[];
         }
-        foreach ($data as $k=>$itme){
-            $data_result[$itme[0]['goodssn']]=$itme[0];
-            if (count($itme) > 1) {
-                $status = array();
-                $minprice=array();
-                $maxprice=array();
-                foreach ($itme as $key => $vl) {
-                    $minprice[] = $vl['minprice'];//最小价格
-                    $maxprice[] = $vl['maxprice'];//最大价格
-                    $status[]=$vl['status'];//上下架状态
+        /*查询全部商品*/
+        $query = GoodsAttr::find();
+        $count = ceil($query->count()/2000);
+        for ($i=0;$i<$count;$i++){
+            $page=2000*$i;
+            $goodsList = $query->select('wn_SkuNo,goods_id,price,cost_price')
+                ->andWhere(['not in', 'goods_id', $no_up_goods_id])
+                ->offset($page)
+                ->limit(2000)
+                ->indexBy('wn_SkuNo')
+                ->asArray()
+                ->all();
+            $this->_goods_cost_price($goodsList);
+        }
+        exit();
+    }
+    private function _goods_cost_price($goodsList)
+    {
+//        foreach ($goodsList as $skuno) {
+//            $id[] = $skuno['wn_SkuNo'];
+//        }
+        $id[]='DAE8669';
+        /*查询全部商品*/
+        $interfacename = 'SkuSynchro';
+        $content = array(
+            'SkuReqs' => $id,
+        );
+        $contentjson = json_encode($content);
+        $result = $this->_common_api($interfacename, $contentjson);
+        if (!empty($result)) {
+            foreach ($result as $list) {
+                //销售价格按照 税率的一半+25%的利润+成本价 保留两位小数
+//                if ($list['SettlePrice'] != $goodsList[$list['SkuNo']]['cost_price']) {
+                $price = round($list['SettlePrice'] + ($list['Rate'] / 2 * $list['SettlePrice']) + ($list['SettlePrice'] * 0.25), 2);
+                \Yii::$app->db->createCommand()->update(GoodsAttr::tableName(), ['cost_price' => $list['SettlePrice'], 'price' => $price], ['wn_SkuNo' => $list['SkuNo']])->execute();
+                $goods = Goods::findOne(['wn_goods_no' => $list['SkuNo']]);
+                if ($goods) {
+                    $isup=\Yii::$app->db->createCommand()->update(Goods::tableName(), ['price' => $price], ['wn_goods_no' => $list['SkuNo']])->execute();
+                    echo '<pre>';var_dump($goods);die;
                 }
-                $data_result[$itme[0]['goodssn']] = $itme[0];
-                $data_result[$itme[0]['goodssn']]['status'] = max($status);
-                $data_result[$itme[0]['goodssn']]['minprice'] = min($minprice);
-                $data_result[$itme[0]['goodssn']]['maxprice'] = max($maxprice);
-                $data_result[$itme[0]['goodssn']]['hasoption']=1;
-            }
-            unset($data_result[$itme['goodssn']]['spec']);
-            //插入商品表 ewei_shop_goods
-            pdo_insert('ewei_shop_goods', $data_result[$itme[0]['goodssn']]);
-            $id = pdo_insertid();
-
-            if ($id && $data_result[$itme[0]['goodssn']]['hasoption']) {
-                $totalstocks=0;//总库存
-                //规格表
-                $spc = array(
-                    "uniacid" => 2,
-                    "goodsid" => $id,
-                    "displayorder" => 0,
-                    "title" => '规格',
-                );
-                pdo_insert("ewei_shop_goods_spec", $spc);
-                $spec_id = pdo_insertid();
-
-                //规格大概表
-                if ($spec_id) {
-                    foreach ($itme as $key => $vl) {
-                        $spc_item = array(
-                            "uniacid" => 2,
-                            "specid" => $spec_id,
-                            "displayorder" => $key,
-                            "title" => $vl['spec'],
-                            "show" => 1,
-                            "thumb" => '',
-                            "virtual" => 0
-                        );
-                        pdo_insert("ewei_shop_goods_spec_item", $spc_item);
-                        $itemid = pdo_insertid();
-                        //规格项详情
-                        $itemids=array();
-                        if ($itemid){
-                            $itemids[]=$itemid;
-                            $spc_item_option=array(
-                                "uniacid" => 2,
-                                "title" => $vl['spec'],
-                                "productprice" => $vl['productprice'],
-                                "costprice" => $vl['costprice'],
-                                "marketprice" => $vl['marketprice'],//销售价
-                                "presellprice" => $vl['presellprice'],
-                                "stock" => $vl['total'],
-                                "weight" => $vl['weight'],
-                                "goodssn" => $vl['goodssn'],
-                                "productsn" => $vl['productsn'],
-                                "goodsid" => $id,
-                                "specs" => $itemid,
-                                'virtual' => 0,
-                            );
-                            $totalstocks+=$spc_item_option['stock'];
-                            $spc_item_option_id=pdo_insert("ewei_shop_goods_option", $spc_item_option);
-                            $spc_item_option_ids[]=$spc_item_option_id;
-                        }
-                        //修改库存为总库存+杂七杂八的参数很恼火想死
-                        $is_discounts=array('type'=>1,'default'=>array());
-                        $commission=array('type'=>0,'default'=>array());
-                        foreach ($spc_item_option_ids as $oid){
-                            $is_discounts['default']=['option'.$oid];
-                            $commission['default']['option'.$oid]=array();
-                        }
-                        $is_discounts_json=json_encode($is_discounts);
-                        $commission_json=json_encode($commission);
-                        pdo_update('ewei_shop_goods',array('discounts'=>'{"type":"0","default":"","default_pay":""}','total'=>$totalstocks,'isdiscount_discounts'=>$is_discounts_json,'commission'=>$commission_json), array('id' => $id));
-                    }
-                    pdo_update("ewei_shop_goods_spec", array("content" => serialize($itemids)), array("id" => $spec_id));
-                }
+//                }
             }
         }
     }
-    //-------------------------------------------微擎  end----------------------------------------------
+    //-------------------------------------------维妮供应链 end----------------------------------------------
 
 
     /**
@@ -664,7 +351,7 @@ class Wnapi_EweiShopV2Page extends MobilePage
     private function _insert_file($file,$status,$id,$content){
         $status=empty($status) ? '失败' : '成功';
         $str=$id.':'.$content.$status.'--'.date('Y-m-d H:i:s',time());
-        file_put_contents($file,$str.PHP_EOL,FILE_APPEND);
+        file_put_contents("./wnlog/$file",$str.PHP_EOL,FILE_APPEND);
     }
 
     /**
