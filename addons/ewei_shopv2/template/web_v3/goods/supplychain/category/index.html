@@ -144,7 +144,7 @@
                         <label for="keywords" class="col-sm-3 control-label">关键字:</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="keywords" name="keywords" value=""
-                                   placeholder="请输入关键字">
+                                   placeholder="请输入关键字以“|”符号分隔">
                         </div>
                     </div>
                     <div class="form-group">
@@ -400,7 +400,9 @@
                         <span class="label label-{$item['supplychain_bg']}">{$item['supplychain_type']}</span>
                     </td>
                     <td style="overflow:visible;position:relative">
-                        <button type="button" class="label btn-primary" onclick="myModalShow({$item['goodsid']},{$item['id']},'{php echo $item['supplychain_type']}')">修改</button>
+                        <button type="button" id="goods_status" class="label btn-{if empty($item['goodsid'])}primary{else}success{/if}" onclick="myModalShow({$item['goodsid']},{$item['id']},'{php echo $item['supplychain_type']}')">
+                            {if empty($item['goodsid'])}修改{else}已上架{/if}
+                        </button>
                     </td>
                 </tr>
 
@@ -486,7 +488,6 @@
                     //填充
                     $('#supplychain').val(supplychain_type)
                     $('#keywords').val(goods.keywords)
-                    $('#goodsid').val(goods.id)
                     $('#supplychain_goodsid').val(supplychain_goodsid)
                     if (goods.ishot==1){$('#ishot').prop("checked", "checked")}
                     if (goods.isnew==1){$('#isnew').prop("checked", "checked")}
@@ -543,6 +544,9 @@
                 alert(ret.result.message);
                 if (ret.status){
                     $('#mainModal').modal('hide');
+                    $('#goods_status').text('已上架')
+                    $('#goods_status').removeClass("btn-primary");
+                    $('#goods_status').addClass("btn-success");
                 }
             }
         })
