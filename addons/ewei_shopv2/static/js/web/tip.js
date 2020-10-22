@@ -193,7 +193,8 @@ define(['jquery'], function ($) {
 			     options.url = options.url.replace(/&amp;/ig, "&");
                                    
                                    options.onClose = function(){
-                                       redirect( options.url );
+                                       // redirect( options.url );
+                                       window.location.reload()
                                    }
 			}
 			if (options.message && options.message.length > 17) {
@@ -209,7 +210,6 @@ define(['jquery'], function ($) {
 			notify = window.msgbox.notify(options) ,notify.show();
 		},
 		suc: function (msg, url, onClose,onClosed) {
-          
                               tip.msgbox.show({delay: 2000, type: "success", message: msg, url: url, onClose: onClose,onClosed:onClosed});
 		}
 		, err: function (msg, url, onClose,onClosed) {

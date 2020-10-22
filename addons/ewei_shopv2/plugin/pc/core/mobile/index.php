@@ -20,6 +20,7 @@ class IndexController extends PluginMobilePage
     {
         global $_W;
         global $_GPC;
+        p("pc")->checkLogin();
         $data = $this->model->getData("home");
         $data["layout"] = $this->model->getTemplateSetting();
         $info = m("common")->getSysset("shop");
@@ -41,6 +42,7 @@ class IndexController extends PluginMobilePage
     }
     public function seckill()
     {
+        p("pc")->checkLogin();
         $seckill_list = $this->model->invoke("seckill.index::get_list", false);
         $currentSecKillActivity = $seckill_list["times"][$seckill_list["timeindex"]];
     }
@@ -51,6 +53,7 @@ class IndexController extends PluginMobilePage
      */
     public function globalVariables()
     {
+        p("pc")->checkLogin();
         $r = $this->model->getTemplateGlobalVariables();
         print_r($r);
         exit;
@@ -60,6 +63,7 @@ class IndexController extends PluginMobilePage
      */
     public function getCode()
     {
+        p("pc")->checkLogin();
         global $_W;
         global $_GPC;
         $id = $_GPC["id"];

@@ -1193,7 +1193,7 @@ class TaobaoModel extends PluginModel
 		}
 		$data['thumb_url'] = serialize($mi);
 		$goods = pdo_fetch('select * from ' . tablename('ewei_shop_goods') . ' where  catch_id=:catch_id and catch_source=\'taobao\' and uniacid=:uniacid and merchid=:merchid', array(':catch_id' => $item['itemId'], ':uniacid' => $_W['uniacid'], ':merchid' => $item['merchid']));
-		if (empty($goods)) 
+		if (empty($goods))
 		{
 			pdo_insert('ewei_shop_goods', $data);
 			$goodsid = pdo_insertid();
@@ -1793,7 +1793,7 @@ class TaobaoModel extends PluginModel
 	}
 	public function get_jingdong_detail_url($itemid) 
 	{
-		$url = 'http://item.m.jd.com/ware/detail.json?wareId=' . $itemid;
+		$url = 'https://item.m.jd.com/ware/detail.json?wareId=' . $itemid;
 		$url = $this->getRealURL($url);
 		return $url;
 	}

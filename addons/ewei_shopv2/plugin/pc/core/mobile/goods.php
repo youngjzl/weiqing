@@ -4,6 +4,7 @@ class GoodsController extends PluginMobilePage
 {
     public function detail()
     {
+        p("pc")->checkLogin();
         global $_GPC;
         global $_W;
         $id = $_GPC["id"];
@@ -38,6 +39,7 @@ class GoodsController extends PluginMobilePage
         $_W["siteroot"] = $site;
         $data["goods"]["breadcrumb"] = $this->model->getBreadcrumb($id);
         $data["goods"]["footerMark"] = $this->model->getUserFooterMark($id);
+        $data['goods']['download_url']=mobileUrl('pc/goods/download',array('id'=>$id));
         if (isset($_GPC["debug"])) {
             print_r($data);
             exit;
@@ -93,6 +95,7 @@ class GoodsController extends PluginMobilePage
     {
         global $_W;
         global $_GPC;
+        p("pc")->checkLogin();
         $id = $_GPC["id"];
         $optionid = $_GPC["optionid"];
         sort($optionid);
@@ -109,6 +112,45 @@ class GoodsController extends PluginMobilePage
             return $value["id"] == $rowId;
         });
         return json_encode(current($findResult));
+    }
+
+    public function download(){
+        global $_W;
+        global $_GPC;
+        p("pc")->checkLogin();
+        $id = intval(trim($_GPC['id']));
+
+        if (empty($id)) {
+            show_json(0,'下载失败');
+        }
+
+        $goods = pdo_fetch('SELECT id,thumb_url FROM ' . tablename('ewei_shop_goods') . ' WHERE id=:id AND uniacid=:uniacid',array(':id'=>$id,':uniacid'=>$_W['uniacid']));
+        if (empty($goods)) {
+            show_json(0,'下载失败');
+        }
+        $img_url=unserialize($goods['thumb_url']);
+        $filename = $_SERVER['DOCUMENT_ROOT'] . '/app/download/'.time().'.zip';
+        $zip = new ZipArchive();
+        $zip->open($filename, ZIPARCHIVE::CREATE);
+
+        foreach ($img_url as $value) {
+            //抓取图片内容
+            $fileContent = file_get_contents($value);
+            $jpg=pathinfo($value);
+            $zip->addFromString($jpg['basename'], $fileContent);
+        }
+        $zip->close();
+        ob_end_clean();
+        header('Content-Type: application/force-download');
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename=' . time() . '.zip');
+        header('Content-Length: ' . filesize($filename));
+        error_reporting(0);
+        readfile($filename);
+        flush();
+        ob_flush();
+        @unlink($filename);
     }
 }
 

@@ -98,7 +98,7 @@ input::-ms-clear,::-ms-reveal{display:none;}
     top: 0px;
     width: 100%;
     /*min-height: 182px;*/
-    /*z-index: 999;*/
+    z-index: 20;
     height: 182px;
 }
 .nav-box {

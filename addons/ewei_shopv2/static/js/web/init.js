@@ -91,13 +91,14 @@ define(['jquery', 'bootstrap'],
             })
         }
         myrequire(['web/biz']);
-        if ($('.select2').length > 0) {
-            myrequire(['select2'], function () {
-                $('.select2').each(function () {
-                    $(this).select2({})
-                })
-            })
-        }
+        // if ($('.select2').length > 0) {
+            // myrequire(['select2'], function () {
+            //     $('.select2').each(function () {
+            //         $(this).select2({})
+            //     })
+            // })
+            $(".select2").select2({});
+        // }
         myrequire(['web/table']);
         if ($('.js-switch').length > 0) {
             myrequire(['switchery'], function () {

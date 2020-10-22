@@ -13,20 +13,22 @@ class Category_EweiShopV2Page extends WebPage
             $supplychain_goodsid=trim($_GPC['supplychain_goodsid']);
             $supplychain_type=trim($_GPC['supplychain_type']);
             switch ($supplychain_type){
-                case '维妮':
+                case 1:
                     $tablename='ewei_shop_goods_wn';
-                    $select='Status';
+                    $select='Status as status,SkuName as title,goodsNo';
                     $supplychain_type=1;
                     break;
-                case '澳安':
+                case 2:
                     $tablename='ewei_shop_goods_aoan';
-                    $select='status';
+                    $select='name as title,sn as goodsNo,goodsId,brandName as Brand';
                     $supplychain_type=2;
                     break;
             }
             //商城商品表
-            $goods = pdo_fetch("select id,pcates,ccates,tcates,title,total,marketprice,productprice,costprice,goodssn,productsn,weight,keywords,supplychain_type,isrecommand,ishot,isnew,issendfree,status from" . tablename('ewei_shop_goods') . 'where supplychain_goods_id='.$supplychain_goodsid.' and supplychain_type='.$supplychain_type);
+            $goods = pdo_fetch("select id,pcates,ccates,tcates,title,total,marketprice,productprice,costprice,goodssn,productsn,weight,keywords,supplychain_type,isrecommand,ishot,isnew,issendfree,status,is_synchronize from" . tablename('ewei_shop_goods') . 'where supplychain_goods_id='.$supplychain_goodsid.' and supplychain_type='.$supplychain_type);
             if (!empty($goods)) {
+                $goods['true_supplychain']=$goods['supplychain_type'];
+                $goods['is_synchronize']=empty($goods['is_synchronize'])?1:$goods['is_synchronize'];
                 $goods_spec = pdo_fetchall("select * from" . tablename('ewei_shop_goods_option') . ' where goodsid=' . $goods['id']);
                 $spec = array();
                 foreach ($goods_spec as $list) {
@@ -58,32 +60,55 @@ class Category_EweiShopV2Page extends WebPage
             }
 
             //供应链商品表
-            $supplychain_goods= pdo_fetch("select KeyWords as keywords,goodsNo,$select as status from" . tablename($tablename) . ' where id='.$supplychain_goodsid);
+            $supplychain_goods= pdo_fetch("select KeyWords as keywords,$select from" . tablename($tablename) . ' where id='.$supplychain_goodsid);
             if (!empty($supplychain_goods)){
-                $goods_spec=pdo_fetchall("select * from" . tablename($tablename) . ' where goodsNo=\''.$supplychain_goods['goodsNo'].'\'');
-                $spec = array();
-                foreach ($goods_spec as $list) {
-                    $spec_list['id'] = $list['id'];//规格名
-                    $spec_list['spec'] = $list['Spec'];//规格名
-                    $spec_list['stock'] = $list['Quantity'];//库存
-                    $spec_list['marketprice'] = round($list['SettlePrice'] * 0.05 + $list['SettlePrice'], 2);//现价
-                    $spec_list['productprice'] = $list['RetailPrice'];//原价
-                    $spec_list['costprice'] = $list['SettlePrice'];//成本价
-                    $spec_list['goodssn'] = $list['SkuNo'];//编码【sku】
-                    $spec_list['productsn'] = $list['BarCode'];//条码
-                    $spec_list['weight'] = $list['Weight'];//重量（克）
-                    $spec[] = $spec_list;
+                $supplychain_goods['true_supplychain']=$supplychain_type;
+                $supplychain_goods['is_synchronize']=1;
+                if ($supplychain_type===1){
+                    $goods_spec=pdo_fetchall("select * from" . tablename('ewei_shop_goods_wn') . ' where goodsNo=\''.$supplychain_goods['goodsNo'].'\'');
+                    $spec = array();
+                    foreach ($goods_spec as $list) {
+                        $spec_list['id'] = $list['id'];
+                        $spec_list['spec'] = $list['Spec'];//规格名
+                        $spec_list['stock'] = $list['Quantity'];//库存
+                        $spec_list['marketprice'] = round($list['SettlePrice'] * 0.05 + $list['SettlePrice'], 2);//现价
+                        $spec_list['productprice'] = $list['RetailPrice'];//原价
+                        $spec_list['costprice'] = $list['SettlePrice'];//成本价
+                        $spec_list['goodssn'] = $list['SkuNo'];//编码【sku】
+                        $spec_list['productsn'] = $list['BarCode'];//条码
+                        $spec_list['weight'] = $list['Weight'];//重量（克）
+                        $spec[] = $spec_list;
+                    }
+                    $supplychain_goods['keywords']=empty($supplychain_goods['keywords']) ? '':$supplychain_goods['keywords'];
+                    show_json(1,array('goods'=>$supplychain_goods,'spec'=>$spec,'cats'=>'','is_supplychain'=>1));
                 }
-                $supplychain_goods['keywords']=empty($supplychain_goods['keywords']) ? '':$supplychain_goods['keywords'];
-                show_json(1,array('goods'=>$supplychain_goods,'spec'=>$spec,'cats'=>'','is_supplychain'=>1));
+                if ($supplychain_type===2){
+                    $supplychain_goods['status']=1;
+                    $goods_spec=pdo_fetchall("select * from" . tablename('ewei_shop_goods_aoan_spec') . ' where goodsId=\''.$supplychain_goods['goodsId'].'\'');
+                    $spec = array();
+                    foreach ($goods_spec as $list) {
+                        $spec_list['id'] = $list['id'];
+                        $spec_list['spec'] = $list['productName'];//规格名
+                        $spec_list['stock'] = $list['productNum'];//库存
+                        $spec_list['marketprice'] = round($list['price'] * 0.05 + $list['price'], 2);//现价
+                        $spec_list['productprice'] = '';//原价
+                        $spec_list['costprice'] = $list['price'];//成本价
+                        $spec_list['goodssn'] = $list['goodsId'];//编码【sku】
+                        $spec_list['productsn'] = '';//条码
+                        $spec_list['weight'] = $list['weight'];//重量（克）
+                        $spec[] = $spec_list;
+                    }
+                    $supplychain_goods['keywords']=empty($supplychain_goods['keywords']) ? '':$supplychain_goods['keywords'];
+                    show_json(1,array('goods'=>$supplychain_goods,'spec'=>$spec,'cats'=>'','is_supplychain'=>1));
+                }
             }
             show_json(0,'没有数据');
         }
-        $supplychain=$_GPC['supplychain'];
+        $supplychain_name=$_GPC['$supplychain_name'];
         $pindex = max(1, intval($_GPC['page']));
         $psize = 20;
-        if ($supplychain=='all'||empty($supplychain)){
-            $sql=' SELECT * FROM((SELECT id,SkuName,displayImgUrls,Category,TwoCategory,RetailPrice,SettlePrice,Quantity,Rate,DeliveryCode,Status,ThreeCategory,Brand,1 FROM '. tablename('ewei_shop_goods_wn').') UNION ALL (SELECT id,name as SkuName,tiny as displayImgUrls,pCatName as Category,catName as TwoCategory,mktprice as RetailPrice,price as SettlePrice,enableStore as Quantity, tax as Rate,tradeTypeName as DeliveryCode,1,\'\',brandName as Brand,2 FROM '. tablename('ewei_shop_goods_aoan').')) as a WHERE a.`id`!=0';
+        if ($supplychain_name=='all'||empty($supplychain_name)){
+            $sql=' SELECT a.id FROM((SELECT id,SkuName,displayImgUrls,Category,TwoCategory,RetailPrice,SettlePrice,Quantity,Rate,DeliveryCode,Status,ThreeCategory,Brand,goodsNo,Keywords,1 FROM '. tablename('ewei_shop_goods_wn').') UNION ALL (SELECT id,name as SkuName,tiny as displayImgUrls,pCatName as Category,catName as TwoCategory,mktprice as RetailPrice,price as SettlePrice,enableStore as Quantity, tax as Rate,tradeTypeName as DeliveryCode,1,\'\',brandName as Brand,goodsId as goodsNo,Keywords,2 FROM '. tablename('ewei_shop_goods_aoan').')) as a WHERE a.`id`!=0 ' ;
             $contion = '';
             if (!empty($_GPC['select_brand'])||is_array($_GPC['select_brand'])){
                 $select_brand = $_GPC['select_brand'];
@@ -95,13 +120,14 @@ class Category_EweiShopV2Page extends WebPage
             }
             if ($_GPC['keyword']) {
                 $keyword = $_GPC['keyword'];
-                $contion .= " and (a.id Like '%$keyword%' or a.SkuName Like '%$keyword%') ";
+                $contion .= " and (a.id Like '%$keyword%' or a.SkuName Like '%$keyword%' or a.Keywords Like '%$keyword%') ";
             }
+            $contion .='group by a.goodsNo order by `1` asc';
             $total_all = pdo_fetchall($sql . $contion);
             $total = count($total_all);
             $list=array();
             if (!empty($total)) {
-                $sql=' SELECT * FROM((SELECT id,SkuName,displayImgUrls,Category,TwoCategory,RetailPrice,SettlePrice,Quantity,Rate,DeliveryCode,Status,ThreeCategory,Brand,1 FROM '. tablename('ewei_shop_goods_wn').') UNION ALL (SELECT id,name as SkuName,tiny as displayImgUrls,pCatName as Category,catName as TwoCategory,mktprice as RetailPrice,price as SettlePrice,enableStore as Quantity, tax as Rate,tradeTypeName as DeliveryCode,1,\'\',brandName as Brand,2 FROM '. tablename('ewei_shop_goods_aoan').')) as a WHERE a.`id`!=0';
+                $sql=' SELECT * FROM((SELECT id,SkuName,displayImgUrls,Category,TwoCategory,RetailPrice,SettlePrice,Quantity,Rate,DeliveryCode,Status,ThreeCategory,Brand,goodsNo,Keywords,1 FROM '. tablename('ewei_shop_goods_wn').') UNION ALL (SELECT id,name as SkuName,tiny as displayImgUrls,pCatName as Category,catName as TwoCategory,mktprice as RetailPrice,price as SettlePrice,enableStore as Quantity, tax as Rate,tradeTypeName as DeliveryCode,1,\'\',brandName as Brand,goodsId as goodsNo,Keywords,2 FROM '. tablename('ewei_shop_goods_aoan').')) as a WHERE a.`id`!=0 ';
                 if (empty($_GPC['export'])) {
                     $contion .= " limit " . ($pindex - 1) * $psize . ',' . $psize;
                 }
@@ -112,13 +138,14 @@ class Category_EweiShopV2Page extends WebPage
                     $listc['displayImgUrls'] = $displayImgUrls[0];
                     $goodsid=pdo_fetch('select id from'.tablename('ewei_shop_goods').' where supplychain_goods_id='.$listc['id'].' and supplychain_type ='.$listc[1]);
                     $listc['goodsid']=empty($goodsid)?0:$goodsid['id'];
+                    $listc['true_supplychain']=empty($listc['true_supplychain']) ? 0:$listc[1];
                     switch ($listc[1]) {
                         case 1:
-                            $listc['supplychain_type']='维妮';
+                            $listc['supplychain_type']=1;
                             $listc['supplychain_bg']='danger';
                             break;
                         case 2:
-                            $listc['supplychain_type']='澳安';
+                            $listc['supplychain_type']=2;
                             $listc['supplychain_bg']='primary';
                             break;
                     }
@@ -142,9 +169,8 @@ class Category_EweiShopV2Page extends WebPage
                 $pager = pagination2($total, $pindex, $psize);
             }
             $brand=pdo_fetchall('SELECT * FROM((SELECT id,Brand,1 FROM '. tablename('ewei_shop_goods_wn').') UNION ALL (SELECT id,brandName as Brand,2 FROM '. tablename('ewei_shop_goods_aoan').')) as a WHERE a.`id`!=0 and a.Brand!=\'\' GROUP BY a.Brand');
-
         }
-        if ($supplychain=='wn'){
+        if ($supplychain_name=='wn'){
             $sql = 'SELECT id FROM ' . tablename('ewei_shop_goods_wn') . ' where id!=0';
             $contion = '';
             if ($_GPC['select_cat']) {
@@ -162,7 +188,7 @@ class Category_EweiShopV2Page extends WebPage
             }
             if ($_GPC['keyword']) {
                 $keyword = $_GPC['keyword'];
-                $contion .= " and (SkuNo Like '%$keyword%' or SkuName Like '%$keyword%') ";
+                $contion .= " and (SkuNo Like '%$keyword%' or SkuName Like '%$keyword%' or Keywords Like '%$keyword%') ";
             }
             if ($_GPC['select_brand']){
                 $select_brand =  $_GPC['select_brand'];
@@ -172,21 +198,25 @@ class Category_EweiShopV2Page extends WebPage
                 $str = substr($str, 1);
                 $contion .= ' and (Brand in('.$str.'))';
             }
+            $contion.=' group by goodsNo ORDER BY id ASC ';
             $total_all = pdo_fetchall($sql . $contion);
             $total = count($total_all);
             $list=array();
             if (!empty($total)) {
-                $sql = "select * from " . tablename('ewei_shop_goods_wn') . ' where id!=0';
+                $sql = 'SELECT * FROM ' . tablename('ewei_shop_goods_wn') . ' where id!=0';
                 if (empty($_GPC['export'])) {
                     $contion .= " limit " . ($pindex - 1) * $psize . ',' . $psize;
                 }
-
                 $list = pdo_fetchall($sql . $contion);
                 foreach ($list as &$listc) {
+                    $goodsid=pdo_fetch('select id from'.tablename('ewei_shop_goods').' where supplychain_goods_id='.$listc['id'].' and supplychain_type =1');
+                    $listc['goodsid']=empty($goodsid)?0:$goodsid['id'];
+
                     $displayImgUrls = explode(';', $listc['displayImgUrls']);
                     $listc['displayImgUrls'] = $displayImgUrls[0];
-                    $listc['supplychain_type']='维妮';
+                    $listc['supplychain_type']=1;
                     $listc['supplychain_bg']='danger';
+                    $listc['true_supplychain']=1;
                     //发货方式1:保税区发货2:香港直邮4:海外直邮5:国内发货
                     switch ($listc['DeliveryCode']) {
                         case 1:
@@ -210,7 +240,7 @@ class Category_EweiShopV2Page extends WebPage
             $category = pdo_fetchall('select *  from ' . tablename('ewei_shop_category_wn'));
             $brand=pdo_fetchall('select Brand  from ' . tablename('ewei_shop_goods_wn').' where Brand!=\'\' GROUP BY Brand');
         }
-        if ($supplychain=='an'){
+        if ($supplychain_name=='an'){
             $sql = 'SELECT id FROM ' . tablename('ewei_shop_goods_aoan') . ' where id!=0';
             $contion = '';
             if ($_GPC['select_cat']) {
@@ -243,7 +273,7 @@ class Category_EweiShopV2Page extends WebPage
             }
             if ($_GPC['keyword']) {
                 $keyword = $_GPC['keyword'];
-                $contion .= " and (id Like '%$keyword%' or name Like '%$keyword%') ";
+                $contion .= " and (id Like '%$keyword%' or name Like '%$keyword%' or Keywords Like '%$keyword%') ";
             }
             if ($_GPC['select_brand']){
                 $select_brand =  $_GPC['select_brand'];
@@ -263,6 +293,8 @@ class Category_EweiShopV2Page extends WebPage
                 }
                 $goods = pdo_fetchall($sql . $contion);
                 foreach ($goods as &$listc){
+                    $goodsid=pdo_fetch('select id from'.tablename('ewei_shop_goods').' where supplychain_goods_id='.$listc['id'].' and supplychain_type =2');
+                    $data['goodsid']=empty($goodsid)?0:$goodsid['id'];
                     $data['id']=$listc['id'];
                     $data['SkuName']=$listc['name'];
                     $data['displayImgUrls']=$listc['tiny'];
@@ -275,8 +307,10 @@ class Category_EweiShopV2Page extends WebPage
                     $data['Rate']=$listc['tax']*0.01;
                     $data['Status']=1;
                     $data['DeliveryCode']=$listc['tradeTypeName'];
-                    $data['supplychain_type']='澳安';
+                    $data['supplychain_type']=2;
                     $data['supplychain_bg']='primary';
+                    $data['Brand']=$listc['brandName'];
+                    $data['true_supplychain']=2;
                     $list[]=$data;
                 }
                 $pager = pagination2($total, $pindex, $psize);
@@ -284,8 +318,11 @@ class Category_EweiShopV2Page extends WebPage
             $category = pdo_fetchall('select `name` as `Name`  from ' . tablename('ewei_shop_category_aoan'));
             $brand=pdo_fetchall('select brandName as Brand  from ' . tablename('ewei_shop_goods_aoan').' where brandName!=\'\' GROUP BY brandName');
         }
+        $path=EWEI_SHOPV2_CORE.'/web/goods/supplychain/supplychaintype.php';
+        $supplychainlist=include($path);
         include $this->template();
     }
+
     public function add(){
         $this->post();
     }
@@ -294,20 +331,21 @@ class Category_EweiShopV2Page extends WebPage
     }
     public function post(){
         global $_GPC;
-        $supplychain=$_GPC['supplychain'];//供应链名字
+        $supplychain=$_GPC['supplychain'];//供应链id
+        $true_supplychain=$_GPC['true_supplychain'];//用户选择的供应链
         $supplychain_goodsid=$_GPC['supplychain_goodsid'];//供应链的商品id
         $spexlist=json_decode(htmlspecialchars_decode($_GPC['spexlist']),true);//多规格数据
         $cats=$_GPC['area'];//商品分类
-        if (empty($supplychain_goodsid)||empty($supplychain)||empty($spexlist)||empty($cats)){
-            show_json(1,'数据错误，请联系管理员');
+        if (empty($supplychain_goodsid)||empty($supplychain)||empty($spexlist)||empty($cats)||empty($true_supplychain)){
+            show_json(0,'数据错误，请联系管理员');
         }
 
         switch ($supplychain){
-            case '澳安':
+            case 2:
                 $tablename='ewei_shop_goods_aoan';
                 $supplychain_type=2;
                 break;
-            case '维妮':
+            case 1:
                 $tablename='ewei_shop_goods_wn';
                 $supplychain_type=1;
                 break;
@@ -372,6 +410,8 @@ class Category_EweiShopV2Page extends WebPage
         }
         else{
             $supplychain_goods = pdo_fetch("select * from" . tablename($tablename) . ' where id=' . $supplychain_goodsid);
+            $supplychain_goods['true_supplychain']=trim($true_supplychain);
+            $supplychain_goods['is_synchronize']=trim($_GPC['is_synchronize']);
             if (!empty($supplychain_goods)) {
                 //修改供应链关键词
                 pdo_update("$tablename",array('KeyWords'=>$_GPC['keywords']),array('id'=>$supplychain_goodsid));
@@ -559,8 +599,9 @@ class Category_EweiShopV2Page extends WebPage
             'dispatchtype' => '0',
             'dispatchid' => '0',
             'dispatchprice' => '',
-            'supplychain_type'=>2,
-            'supplychain_goods_id'=>$supplychain_goods['id']
+            'supplychain_type'=>$supplychain_goods['true_supplychain'],
+            'supplychain_goods_id'=>$supplychain_goods['id'],
+            'is_synchronize'=>$supplychain_goods['is_synchronize'],
         );
         //---------准备ims_ewei_shop_goods数据 end
 
@@ -808,8 +849,9 @@ class Category_EweiShopV2Page extends WebPage
             'dispatchtype' => '0',
             'dispatchid' => '0',
             'dispatchprice' => '',
-            'supplychain_type'=>1,
-            'supplychain_goods_id'=>$supplychain_goods['id']
+            'supplychain_type'=>$supplychain_goods['true_supplychain'],
+            'supplychain_goods_id'=>$supplychain_goods['id'],
+            'is_synchronize'=>$supplychain_goods['is_synchronize'],
         );
         //---------准备ims_ewei_shop_goods数据 end
 

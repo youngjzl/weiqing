@@ -135,11 +135,22 @@
                     <div class="form-group">
                         <label for="supplychain" class="col-sm-3 control-label">供应链:</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control bg-color-default" readonly="readonly" id="supplychain" name="supplychain" value="维妮">
+                            <input type="hidden"  id="supplychain" name="supplychain" value="">
+                            <select name="true_supplychain" id="true_supplychain" class='form-control' style="width:200px;" data-placeholder="供应商列表">
+                                {loop $supplychainlist $supplychain}
+                                <option value="{$supplychain['id']}">{$supplychain['name']}</option>
+                                {/loop}
+                            </select>
                         </div>
                     </div>
                     <input type="hidden" name="supplychain_goodsid" id="supplychain_goodsid" value="">
                     <input type="hidden" name="spexlist" id="spexlist" value="">
+                    <div class="form-group">
+                        <label for="keywords" class="col-sm-3 control-label">标题:</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="title" class="form-control bg-color-default" readonly="readonly" value="{$item['title']}">
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="keywords" class="col-sm-3 control-label">关键字:</label>
                         <div class="col-sm-9">
@@ -183,6 +194,13 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-3 control-label">是否后期同步价格:</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline"><input type="radio" name="is_synchronize" value="2"/> 否</label>
+                            <label class="radio-inline"><input type="radio" name="is_synchronize" value="1"/> 是</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-3 control-label">规格:</label>
                         <div class="col-sm-9">
                             <div id="options" style="padding:0;">
@@ -218,24 +236,6 @@
                             </div>
                         </div>
                     </div>
-<!--                    <div class="form-group">-->
-<!--                        <label for="nummaxbuy" class="col-sm-3 control-label">单次最多购买:</label>-->
-<!--                        <div class="col-sm-9">-->
-<!--                            <input type="text" class="form-control" id="nummaxbuy" name="nummaxbuy" value="1">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="numminbuy" class="col-sm-3 control-label">单次最低购买:</label>-->
-<!--                        <div class="col-sm-9">-->
-<!--                            <input type="text" class="form-control" id="numminbuy" name="numminbuy" value="1">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="maxbuy" class="col-sm-3 control-label">最多购买:</label>-->
-<!--                        <div class="col-sm-9">-->
-<!--                            <input type="text" class="form-control" id="maxbuy" name="maxbuy" value="1">-->
-<!--                        </div>-->
-<!--                    </div>-->
                 </form>
             </div>
             <div class="modal-footer">
@@ -255,7 +255,7 @@
         <input type="hidden" name="m" value="ewei_shopv2"/>
         <input type="hidden" name="do" value="web"/>
         <input type="hidden" name="r" value="goods.supplychain.category"/>
-        <input type="hidden" name="supplychain" value="{$supplychain}"/>
+        <input type="hidden" name="supplychain_name" value="{$supplychain_name}"/>
         <div class="page-toolbar">
             <div class="input-group col-sm-10 pull-left">
                 <span class="input-group-select">
@@ -362,8 +362,12 @@
                 <tbody>
                 {loop $list $item}
                 <tr>
-                    <td style='text-align:center;'>{if
-                        $_GPC['supplychain']=='wn'}{$item['SkuNo']}{else}{$item['id']}{/if}
+                    <td style='text-align:center;'>
+                        {if $_GPC['supplychain']=='wn'}
+                            {$item['SkuNo']}
+                        {else}
+                            {$item['id']}
+                        {/if}
                     </td>
                     <td title="此图片没有可能是供应链已经把此商品删除">
                         <img src="{$item['displayImgUrls']}"
@@ -397,10 +401,10 @@
                         {$item['DeliveryCode']}
                     </td>
                     <td>
-                        <span class="label label-{$item['supplychain_bg']}">{$item['supplychain_type']}</span>
+                        <span class="label label-{$item['supplychain_bg']}">{php echo $supplychainlist[array_search($item['supplychain_type'],array_column($supplychainlist,'id'))]['name']}</span>
                     </td>
                     <td style="overflow:visible;position:relative">
-                        <button type="button" id="goods_status" class="label btn-{if empty($item['goodsid'])}primary{else}success{/if}" onclick="myModalShow({$item['goodsid']},{$item['id']},'{php echo $item['supplychain_type']}')">
+                        <button type="button" id="goods_status" class="label btn-{if empty($item['goodsid'])}primary{else}success{/if}" onclick="myModalShow({$item['goodsid']},{$item['id']},'{php echo $item['supplychain_type']}','{php echo $item['true_supplychain']}')">
                             {if empty($item['goodsid'])}修改{else}已上架{/if}
                         </button>
                     </td>
@@ -423,7 +427,7 @@
     {/if}
 </div>
 <script>
-    //分类加载
+    //加载分类
     $.ajax({
         url: "{php echo webUrl('goods/supplychain/category/ajaxcategory');}",
         dataType: 'json',
@@ -472,12 +476,12 @@
         });
     }
     //模态框+数据
-    function myModalShow(goodsid,supplychain_goodsid,supplychain_type){
+    function myModalShow(goodsid,supplychain_goodsid,supplychain_type,true_supplychain){
         $.ajax({
             url: "{php echo webUrl('goods/supplychain/category');}",
             dataType: 'json',
             data: {
-                goodsid: goodsid,supplychain_type:supplychain_type,supplychain_goodsid:supplychain_goodsid
+                goodsid: goodsid,supplychain_type:supplychain_type,supplychain_goodsid:supplychain_goodsid,true_supplychain:true_supplychain
             },
             success: function (ret) {
                 if (ret.status){
@@ -486,15 +490,20 @@
                     $('#modal_data')[0].reset();
                     $('#spec').html('');
                     //填充
-                    $('#supplychain').val(supplychain_type)
                     $('#keywords').val(goods.keywords)
                     $('#supplychain_goodsid').val(supplychain_goodsid)
                     if (goods.ishot==1){$('#ishot').prop("checked", "checked")}
                     if (goods.isnew==1){$('#isnew').prop("checked", "checked")}
                     if (goods.isrecommand==1){$('#isrecommand').prop("checked", "checked")}
                     if (goods.issendfree==1){$('#issendfree').prop("checked", "checked")}
+                    $('#title').val(goods.title)
+                    //供应链
+                    $('#supplychain').val(supplychain_type)
+                    $('#true_supplychain').val(supplychain_type)
                     //商品状态
                     $(":radio[name='virtualsend'][value='" + goods.status + "']").prop("checked", "checked");
+                    //是否后期更新价格
+                    $(":radio[name='is_synchronize'][value='" + goods.is_synchronize + "']").prop("checked", "checked");
                     //商品分类
                     $("#cats").val(goods.pcates);
                     change($("#cats"),goods.ccates,goods.tcates);

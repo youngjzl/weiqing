@@ -10,6 +10,8 @@ if(!empty($id)){
 }
 $item = pdo_fetch("SELECT * FROM " . tablename('ewei_shop_goods') . " WHERE id = :id and uniacid = :uniacid", array(':id' => $id,':uniacid'=>$_W['uniacid']));
 
+$path=EWEI_SHOPV2_CORE.'/web/goods/supplychain/supplychaintype.php';
+$supplychaintype=include($path);
 $item['isdiscount_time'] = date('Y-m-d H:i',$item['isdiscount_time']);
 $item['isdiscount_time_start'] = date('Y-m-d H:i',$item['isdiscount_time_start']);
 
@@ -232,7 +234,8 @@ if ($_W['ispost']) {
         'buyagain_sale' => intval($_GPC['buyagain_sale']),
         'diypage' => intval($_GPC['diypage']),
         'cashier' => intval($_GPC['cashier']),
-        'video' => trim($_GPC['video'])
+        'video' => trim($_GPC['video']),
+        'supplychain_type'=>trim($_GPC['supplychaintype'])
     );
 
 

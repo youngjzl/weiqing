@@ -30,12 +30,44 @@
                     <div class="fui-cell-label">主营项目</div>
                     <div class="fui-cell-info"><input type="text" class="fui-input" id="salecate" placeholder="例如鞋帽, 化妆品等" value="{$reg['salecate']}"/></div>
                 </div>
-                <div class="fui-cell ">
-                    <div class="fui-cell-label">简单介绍</div>
-                    <div class="fui-cell-info"><textarea id="desc" placeholder="简单介绍下商户">{$reg['desc']}</textarea></div>
+            </div>
+            <div class="fui-cell-group">
+                <div class="fui-cell must " name="shop_type">
+                    <div class="fui-cell-label">店铺类型</div>
+                    <div class="fui-cell-info" >
+                        <select name='s_shop_type' num='0' class='form-control select' id="s_shop_type" onchange="change(this)"></select>
+                    </div>
                 </div>
             </div>
-
+            <div class="fui-cell-group" name="fans" style="display: none">
+                <div class="fui-cell must ">
+                    <div class="fui-cell-label">粉丝数量</div>
+                    <div class="fui-cell-info"><input type="text" class="fui-input" id="fans" placeholder="粉丝数量" value="{$reg['fans']}"/></div>
+                </div>
+            </div>
+            <div class="fui-cell-group">
+                <div class="fui-cell must ">
+                    <div class="fui-cell-label">店铺地址</div>
+                    <div class="fui-cell-info"><input type="text" class="fui-input" id="merchaddress" placeholder="店铺地址" value="{$reg['merchaddress']}"/></div>
+                </div>
+            </div>
+            <div class="fui-cell-group">
+                <div class="fui-cell must">
+                    <div class="fui-cell-label">商家资质</div>
+                    <div class='fui-cell-info'>
+                        <ul class="fui-images fui-images-sm"></ul>
+                        <div class="fui-uploader fui-uploader-sm" data-max="5" data-count="0">
+                            <input type="file" name="imgFile{$g['id']}" id="imgFile{$g['id']}" multiple="" accept="image/*">
+                        </div>
+                        <div class="" data-max="5" data-count="0">
+                            <img src="../addons/ewei_shopv2/plugin/merch/template/mobile/default/static/images/1.png" class="smallimg" alt="">
+                            <span>
+                                <img src="/static3.0/img/example.png" alt="">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="fui-cell-group">
                 <div class="fui-cell must ">
                     <div class="fui-cell-label">联系人</div>
@@ -59,6 +91,7 @@
                 </div>
                 <div class="fui-cell-tip">用于登录多商户后台,请认真填写</div>
             </div>
+
 
             {if $template_flag}
                 {template 'diyform/formfields'}
@@ -101,6 +134,54 @@
         require(['../addons/ewei_shopv2/plugin/merch/static/js/register.js'], function (modal) {
             modal.init({php echo json_encode($apply_set)});
         })
+    </script>
+    <script language="javascript">
+        //店铺类型
+        $.ajax({
+            url: "{php echo mobileUrl('merch/register/ajaxmerch_type');}",
+            dataType: 'json',
+            data: {id:'0'},
+            success: function (data) {
+                var option="<option value=''>请选择</option>";
+                var list=data.result.data;
+                for(var key in list){
+                    option+="<option value='"+list[key].id+"'>"+list[key].name+"</option>";
+                }
+                $('#s_shop_type').html(option);
+            }
+        })
+        function change(event){
+            $('.select').each(function(i){
+                //清除重选后的 老节点
+                if($(this).attr('num')>$(event).attr('num')){
+                    $(this).parent().remove();
+                }
+                if ($(this).find("option:selected").val()==16){
+                    $('div[name=fans]').css('display','block');
+                }else {
+                    $('div[name=fans]').css('display','none');
+                }
+            })
+            var sel=$('.select').index($(event))+1;
+            var id=$(event).val();
+            $.ajax({
+                type: "get",
+                dataType:"json",
+                url: "{php echo mobileUrl('merch/register/ajaxmerch_type');}",
+                data: {id:id},
+                sync: false,//设置为同步
+                success: function(data){
+                    var list=data.result.data;
+                    if(data.status===1 && data.result.data.length>0){
+                        var option="<option value=''>请选择</option>";
+                        for(var key in list){
+                            option+="<option value='"+list[key].id+"'>"+list[key].name+"</option>";
+                        }
+                        $('<div class="fui-cell-info"><select name="s_shop_type[]" num="'+sel+'" class="form-control select" onchange="change(this)">'+option+'</select></div>').appendTo($('div[name=shop_type]'));
+                    }
+                }
+            });
+        }
     </script>
 </div>
 {template '_footer'}

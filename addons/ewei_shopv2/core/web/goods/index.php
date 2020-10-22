@@ -7,21 +7,22 @@ if (!defined('IN_IA')) {
 class Index_EweiShopV2Page extends WebPage {
 
     function main($goodsfrom='sale') {
-
         global $_W, $_GPC;
 
-        if(empty($_W['shopversion'])){
-            $goodsfrom = strtolower(trim($_GPC['goodsfrom']));
-            if(empty($goodsfrom)){
-                header('location: ' . webUrl('goods', array('goodsfrom'=>'sale','page'=>$_GPC['page'])));
-            }
-        }else{
-            $goodsfrom = strtolower(trim($_GPC['goodsfrom']));
-            if(!empty($_GPC['goodsfrom'])){
-                header('location: ' . webUrl('goods/'.$goodsfrom, array('page'=>$_GPC['page'])));
+
+        if (!empty($_GPC['goodsfrom'])) {
+            if (empty($_W['shopversion'])) {
+                $goodsfrom = strtolower(trim($_GPC['goodsfrom']));
+                if (empty($goodsfrom)) {
+                    header('location: ' . webUrl('goods', array('goodsfrom' => 'sale', 'page' => $_GPC['page'])));
+                }
+            } else {
+                $goodsfrom = strtolower(trim($_GPC['goodsfrom']));
+                if (!empty($_GPC['goodsfrom'])) {
+                    header('location: ' . webUrl('goods/' . $goodsfrom, array('page' => $_GPC['page'])));
+                }
             }
         }
-
 
         $merch_plugin = p('merch');
         $merch_data = m('common')->getPluginset('merch');
@@ -123,12 +124,14 @@ class Index_EweiShopV2Page extends WebPage {
         $total = count($total_all);
         unset($total_all);
         if (!empty($total)) {
-            $sql = 'SELECT g.id,g.merchid,g.cates,g.status,g.displayorder,g.thumb,g.title,g.marketprice,g.total,g.salesreal,g.isnew,g.ishot,g.isdiscount,g.isrecommand,g.issendfree,g.istime,g.isnodiscount,g.checked FROM ' . tablename('ewei_shop_goods') . 'g ' . $merchSql . $sqlcondition . $condition . $groupcondition . ' ORDER BY'.$orderby.' g.`status` DESC, g.`displayorder` DESC,
+            $sql = 'SELECT g.id,g.supplychain_type,g.merchid,g.cates,g.status,g.displayorder,g.thumb,g.title,g.marketprice,g.total,g.salesreal,g.isnew,g.ishot,g.isdiscount,g.isrecommand,g.issendfree,g.istime,g.isnodiscount,g.checked FROM ' . tablename('ewei_shop_goods') . 'g ' . $merchSql . $sqlcondition . $condition . $groupcondition . ' ORDER BY'.$orderby.' g.`status` DESC, g.`displayorder` DESC,
                 g.`id` DESC ';
             if (empty($_GPC['export'])) {
                 $sql.=" limit " . ($pindex - 1) * $psize . ',' . $psize;
             }
             $list = pdo_fetchall($sql, $params);
+            $path=EWEI_SHOPV2_CORE.'/web/goods/supplychain/supplychaintype.php';
+            $supplychaintype=include($path);
             foreach($list as $key => &$value){
                 $value['allcates'] = explode(",",$value['cates']);
                 $value['allcates']=array_unique($value['allcates']);
@@ -136,6 +139,10 @@ class Index_EweiShopV2Page extends WebPage {
                 $value['qrcode'] = m('qrcode')->createQrcode($url);
                 $sale_cpcount=pdo_fetch("SELECT sum(og.total)  as sale_count   FROM ims_ewei_shop_order_goods  og LEFT JOIN ims_ewei_shop_order o on og.orderid=o.id  WHERE og.goodsid=:gsid and o.`status`>=:status and o.refundstate = 0 and og.uniacid=:uniacid",array(':gsid'=>$value['id'],':status'=>1,':uniacid'=>$_W['uniacid']));
                 $value['sale_cpcount']=!empty($sale_cpcount['sale_count']) ? $sale_cpcount['sale_count'] : 0;
+                $supplychain_type_key=array_search($value['supplychain_type'],array_column($supplychaintype, 'id'));
+                $value['supplychain_type']=empty($supplychain_type_key)?'无':$supplychaintype[$supplychain_type_key]['name'];
+                $value['supplychain_bg']=empty($supplychain_type_key)?'default':$supplychaintype[$supplychain_type_key]['supplychain_bg'];
+                $value['supplychain_bg']=empty($supplychain_type_key)?'default':$supplychaintype[$supplychain_type_key]['supplychain_bg'];
             }
             if ($_GPC['export'] == 1) {
                 foreach ($list as $k => $v) {

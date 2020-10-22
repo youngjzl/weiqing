@@ -1065,7 +1065,7 @@ class Goods_EweiShopV2Model {
         if(empty($member['groupid'])){
             $member['groupid']=0;
         }
-        if(empty($showgroupsArr) && count($showgroupsArr)==0){
+        if(empty($showgroupsArr)){
             $showgroupsArr = array();
         }
         if(strpos($member['groupid'],',') !== false || strpos($showgroups,',') !== false){
