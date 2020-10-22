@@ -336,11 +336,13 @@ class Member_EweiShopV2Model {
 
 
 	public function checkMember() {
+
 		global $_W, $_GPC;
 
 		$member = array();
 		$shopset = m('common')->getSysset(array('shop','wap'));
 		$openid = $_W['openid'];
+
         if($_W['routes']=='order.pay_alipay' || $_W['routes']=='creditshop.log.dispatch_complete' || $_W['routes']=='threen.register.threen_complete' || $_W['routes']=='creditshop.detail.creditshop_complete' || $_W['routes']=='order.pay_alipay.recharge_complete' || $_W['routes']=='order.pay_alipay.complete' || $_W['routes']=='newmr.alipay' || $_W['routes']=='newmr.callback.gprs' || $_W['routes']=='newmr.callback.bill' || $_W['routes']=='account.sns' || $_W['plugin']=='mmanage' || $_W['routes']=='live.send.credit' || $_W['routes']=='live.send.coupon' || $_W['routes']=='index.share_url'){
             return;
         }
@@ -391,6 +393,7 @@ class Member_EweiShopV2Model {
 			$mc['resideprovince'] = $userinfo['province'];
 			$mc['residecity'] = $userinfo['city'];
 		}
+
 		if (empty($member) && !empty($openid)) {
 			$member = array(
 				'uniacid' => $_W['uniacid'],

@@ -39,7 +39,8 @@ class Index_EweiShopV2Page extends WebPage
 		$ordercol = 6;
 		if (cv('goods') && cv('order')) {
 			$ordercol = 6;
-		} else {
+		}
+		else {
 			if (cv('goods') && !cv('order')) {
 				$ordercol = 12;
 			}

@@ -4,7 +4,6 @@ class GoodsController extends PluginMobilePage
 {
     public function detail()
     {
-        p("pc")->checkLogin();
         global $_GPC;
         global $_W;
         $id = $_GPC["id"];
@@ -95,7 +94,6 @@ class GoodsController extends PluginMobilePage
     {
         global $_W;
         global $_GPC;
-        p("pc")->checkLogin();
         $id = $_GPC["id"];
         $optionid = $_GPC["optionid"];
         sort($optionid);
@@ -117,7 +115,6 @@ class GoodsController extends PluginMobilePage
     public function download(){
         global $_W;
         global $_GPC;
-        p("pc")->checkLogin();
         $id = intval(trim($_GPC['id']));
 
         if (empty($id)) {

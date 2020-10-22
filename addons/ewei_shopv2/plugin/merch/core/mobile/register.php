@@ -142,12 +142,5 @@ class Register_EweiShopV2Page extends PluginMobileLoginPage
 		include $this->template('_message');
 		exit();
 	}
-    //店铺类型
-    public function ajaxmerch_type(){
-        global $_GPC;
-        $id=$_GPC['id'];
-        $merch_type=pdo_fetchall("select * from" . tablename('ewei_shop_merch_type').' where parentid='.$id);
-        show_json(1, array('data'=>$merch_type));
-    }
 }
 ?>

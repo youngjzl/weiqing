@@ -1,1 +1,1 @@
-{"ip":null,"code":null,"domain":"http:\/\/www.weiqin.com\/"}
+{"ip":"120.26.99.91","code":"010XRRRG87RUDBM1WLUFIYXU7GZT09MCDU3","domain":"http:\/\/www.weiqin.com\/"}

@@ -135,12 +135,12 @@ class Index_EweiShopV2Page extends WebPage {
             . " where a.uniacid=:uniacid and a.status=:status", array(':uniacid' => $_W['uniacid'], ':status' => 2));
 
         show_json(1,array(
-            'goods_totals' => empty($goods_totals) ? 0 : $goods_totals,
-            'finance_total' => empty($finance_total) ? 0 : $finance_total,
-            'commission_agent_total' => empty($commission_agent_total) ? 0 : $commission_agent_total,
-            'commission_agent_status0_total' => empty($commission_agent_status0_total) ? 0 : $commission_agent_status0_total,
-            'commission_apply_status1_total' => empty($commission_apply_status1_total) ? 0 : $commission_apply_status1_total,
-            'commission_apply_status2_total' => empty($commission_apply_status2_total) ? 0 : $commission_apply_status2_total
+            'goods_totals' => $goods_totals,
+            'finance_total' => $finance_total,
+            'commission_agent_total' => $commission_agent_total,
+            'commission_agent_status0_total' => $commission_agent_status0_total,
+            'commission_apply_status1_total' => $commission_apply_status1_total,
+            'commission_apply_status2_total' => $commission_apply_status2_total
         ));
     }
 

@@ -41,6 +41,9 @@
             </div>
 
         </div>
+        <script>
+            $("#cates").select2({});
+        </script>
         <div class="form-group">
             <label class="col-lg control-label"> </label>
             <div class="col-sm-9">
@@ -99,7 +102,7 @@
             if (len >= total) {
                 $("#btn_submit").val("立即获取").addClass("btn-primary").removeAttr("disabled");
                 if (confirm('商品已经获取成功, 是否跳转到商品管理?')) {
-                    location.href = "{php echo webUrl('goods' ,array('goodsfrom'=>'stock'))}";
+                    location.href = "{php echo webUrl('goods' ,array('goodsfrom'=>stock))}";
                 }
                 else {
                     location.reload();

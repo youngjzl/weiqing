@@ -251,7 +251,6 @@
                     {/if}
                     <th>属性</th>
                     <th>供应链</th>
-                    <th>是否同步</th>
                     <th style="width: 120px;">操作</th>
                 </tr>
 
@@ -453,7 +452,6 @@
                         >不参与折扣</a>
                     </td>
                     <td style="overflow:visible;"><span class="label label-{$item['supplychain_bg']}">{$item['supplychain_type']}</span></td>
-                    <td><input type="button" synchronize="{$item['is_synchronize']}" name="is_synchronize" class="label label-label-primary">否</input></td>
                     <td  style="overflow:visible;position:relative">
                         {if empty($item['ishotel'])}
                         {ifp 'goods.edit|goods.view'}
@@ -597,18 +595,7 @@
     $('.modal-footer .btn.btn-default').click(function () {
         $('#batchcates').hide();
     })
-    $('button[name=is_synchronize]').click(function (){
-        $.post(biz.url('goods/ajax_batchcates'),{'goodsids':goodsids,'cates': cates,'iscover':iscover}, function (ret) {
-            if (ret.status == 1) {
-                $('#batchcates').hide();
-                tip.msgbox.suc('修改成功');
-                window.location.reload();
-                return
-            } else {
-                tip.msgbox.err('修改失败');
-            }
-        }, 'json');
-    })
+
 
     //确认
     $('.modal-footer .btn.btn-primary').click(function () {

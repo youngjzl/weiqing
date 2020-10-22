@@ -451,7 +451,7 @@
                         <?php  } ?>
                         >不参与折扣</a>
                     </td>
-                    <td style="overflow:visible;"><span class="label label-danger">维妮</span></td>
+                    <td style="overflow:visible;"><span class="label label-<?php  echo $item['supplychain_bg'];?>"><?php  echo $item['supplychain_type'];?></span></td>
                     <td  style="overflow:visible;position:relative">
                         <?php  if(empty($item['ishotel'])) { ?>
                         <?php if(cv('goods.edit|goods.view')) { ?>

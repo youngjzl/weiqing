@@ -4,6 +4,18 @@
     </div>
     <div class="region-goods-right col-sm-10">
         <div class="form-group">
+            <label class="col-sm-2 control-label">供应商</label>
+            <div class="col-sm-9 col-xs-12">
+               <span class="input-group-select">
+                    <select name="supplychaintype" class='form-control select2' style="width:200px;" data-placeholder="供应商列表">
+                        <?php  if(is_array($supplychaintype)) { foreach($supplychaintype as $supplychain) { ?>
+                        <option value="<?php  echo $supplychain['id'];?>" <?php  if($supplychain['id']==$item['supplychain_type']) { ?>selected<?php  } ?>><?php  echo $supplychain['name'];?></option>
+                        <?php  } } ?>
+                    </select>
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-2 control-label">排序</label>
             <div class="col-sm-9 col-xs-12">
                 <?php if( ce('goods' ,$item) ) { ?>
@@ -270,7 +282,7 @@
         <label class="col-sm-2 control-label">商品分类</label>
         <div class="col-sm-8 col-xs-12">
             <?php if( ce('goods' ,$item) ) { ?>
-            <select id="cates"  name='cates[]' class="form-control select2" style='width:605px;' multiple='' >
+            <select id="cates"  name='cates[]' class="form-control select2" style='width:605px;' multiple='multiple' >
                 <?php  if(is_array($category)) { foreach($category as $c) { ?>
                 <option value="<?php  echo $c['id'];?>" <?php  if(is_array($cates) &&  in_array($c['id'],$cates)) { ?>selected<?php  } ?> ><?php  echo $c['name'];?></option>
                 <?php  } } ?>
@@ -285,7 +297,9 @@
             <?php  } ?>
         </div>
     </div>
-
+<!--    <script>-->
+<!--        $("#cates").select2({});-->
+<!--    </script>-->
 
     <div class="form-group">
         <label class="col-sm-2 control-label">商品属性</label>

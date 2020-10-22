@@ -163,6 +163,7 @@ class Plugin_EweiShopV2Model {
 	}
 
 	public function loadModel($pluginname = '') {
+
 		static $_model;
 		if (!$_model) {
 			$modelfile = IA_ROOT . '/addons/ewei_shopv2/plugin/' . $pluginname . "/core/model.php";
@@ -174,6 +175,7 @@ class Plugin_EweiShopV2Model {
 				$_model = new $classname($pluginname);
 			}
 		}
+
 		return $_model;
 	}
 

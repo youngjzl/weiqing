@@ -21,7 +21,7 @@ class Wnapi_EweiShopV2Page extends MobilePage
         }
     }
     //-------------------------------------------维妮供应链 begin----------------------------------------------
-    //更新维妮分类表*****
+    //更新维妮分类表
     public function main()
     {
         set_time_limit(0);
@@ -88,7 +88,7 @@ class Wnapi_EweiShopV2Page extends MobilePage
         }
     }
 
-    //更新维妮商品******
+    //更新维妮商品
     public function wn_goods_list(){
         set_time_limit(0);
         ini_set('memory_limit', '-1');    //内存无限
@@ -171,7 +171,7 @@ class Wnapi_EweiShopV2Page extends MobilePage
         }
     }
 
-    //维妮库存更新+商品上下架*****
+    //维妮库存更新+商品上下架
     public function wn_goods_num(){
         /*查询全部商品*/
         $goods = pdo_fetchall("select * from " . tablename('ewei_shop_goods_wn'));
@@ -192,7 +192,6 @@ class Wnapi_EweiShopV2Page extends MobilePage
         }
         exit();
     }
-    //获取维妮库存
     private function _goods_num($GoodsAttr){
         foreach ($GoodsAttr as $k=>$skuno){
             $id[]=$skuno['SkuNo'];
@@ -207,62 +206,6 @@ class Wnapi_EweiShopV2Page extends MobilePage
             foreach ($result as $list){
                 $is_up=pdo_update('ewei_shop_goods_wn', array('Quantity'=>$list['Quantity']),array('SkuNo'=>$list['SkuNo']));
                 $this->_insert_file('Api.goodsnum.txt',$is_up,$list['SkuNo'],'修改库存');
-            }
-        }
-    }
-
-    //实时改变商品成本价+销售价
-    public function goods_up_costprice(){
-        set_time_limit(0);
-        ini_set('memory_limit', '-1');    //内存无限
-        //不更新的产品
-        $no_up_goods_id = MallSetting::findOne(['key'=>'no_up_goods_id']);
-        if (!empty($no_up_goods_id) && !empty($no_up_goods_id->value)){
-            $no_up_goods_id=explode(',',$no_up_goods_id->value);
-        }else{
-            $no_up_goods_id=[];
-        }
-        /*查询全部商品*/
-        $query = GoodsAttr::find();
-        $count = ceil($query->count()/2000);
-        for ($i=0;$i<$count;$i++){
-            $page=2000*$i;
-            $goodsList = $query->select('wn_SkuNo,goods_id,price,cost_price')
-                ->andWhere(['not in', 'goods_id', $no_up_goods_id])
-                ->offset($page)
-                ->limit(2000)
-                ->indexBy('wn_SkuNo')
-                ->asArray()
-                ->all();
-            $this->_goods_cost_price($goodsList);
-        }
-        exit();
-    }
-    private function _goods_cost_price($goodsList)
-    {
-//        foreach ($goodsList as $skuno) {
-//            $id[] = $skuno['wn_SkuNo'];
-//        }
-        $id[]='DAE8669';
-        /*查询全部商品*/
-        $interfacename = 'SkuSynchro';
-        $content = array(
-            'SkuReqs' => $id,
-        );
-        $contentjson = json_encode($content);
-        $result = $this->_common_api($interfacename, $contentjson);
-        if (!empty($result)) {
-            foreach ($result as $list) {
-                //销售价格按照 税率的一半+25%的利润+成本价 保留两位小数
-//                if ($list['SettlePrice'] != $goodsList[$list['SkuNo']]['cost_price']) {
-                $price = round($list['SettlePrice'] + ($list['Rate'] / 2 * $list['SettlePrice']) + ($list['SettlePrice'] * 0.25), 2);
-                \Yii::$app->db->createCommand()->update(GoodsAttr::tableName(), ['cost_price' => $list['SettlePrice'], 'price' => $price], ['wn_SkuNo' => $list['SkuNo']])->execute();
-                $goods = Goods::findOne(['wn_goods_no' => $list['SkuNo']]);
-                if ($goods) {
-                    $isup=\Yii::$app->db->createCommand()->update(Goods::tableName(), ['price' => $price], ['wn_goods_no' => $list['SkuNo']])->execute();
-                    echo '<pre>';var_dump($goods);die;
-                }
-//                }
             }
         }
     }
