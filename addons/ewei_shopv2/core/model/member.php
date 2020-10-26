@@ -419,8 +419,8 @@ class Member_EweiShopV2Model {
 			$member['id'] = pdo_insertid();
 		} else {
 			if ($member['isblack'] == 1) {
-		
-				show_message("暂时无法访问，请稍后再试!");
+//				show_message("暂时无法访问，请稍后再试!");
+                header("location:" . mobileUrl("account/register"));
 			}
 			$upgrade = array('uid'=>$uid);
 			if (isset($mc['nickname']) && $member['nickname_wechat'] != $mc['nickname']) {

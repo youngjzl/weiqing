@@ -87,9 +87,20 @@ class Index_EweiShopV2Page extends MobilePage
 			$mobile = trim($_GPC['mobile']);
 			$verifycode = trim($_GPC['verifycode']);
 			$pwd = trim($_GPC['pwd']);
+			$email = trim($_GPC["email"]);
+			$wechatname = trim($_GPC["wechatname"]);
+			$province = trim($_GPC["province"]);
+			$city = trim($_GPC["city"]);
+			$area = trim($_GPC["area"]);
+			$shopname = trim($_GPC["shopname"]);
+			$parent = trim($_GPC["parent"]);
+			$sub = trim($_GPC["sub"]);
+			$child = trim($_GPC["child"]);
+			$fans = trim($_GPC["fans"]);
+			$address = trim($_GPC["address"]);
 
 			if (empty($mobile)) {
-				show_json(0, '请输入正确的手机号');
+				show_json(0, '请输入正确的手机号123');
 			}
 
 			if (empty($verifycode)) {
@@ -98,6 +109,63 @@ class Index_EweiShopV2Page extends MobilePage
 
 			if (empty($pwd)) {
 				show_json(0, '请输入密码');
+			}
+			if (empty($email)) {
+				show_json(0, "请输入邮箱");
+			}
+			if (empty($wechatname)) {
+				show_json(0, "请输入微信名");
+			}
+			if (empty($province)) {
+				show_json(0, "请选择省份");
+			}
+			if (empty($city)) {
+				show_json(0, "请选择市/区");
+			}
+			if (empty($area)) {
+				show_json(0, "请选择区");
+			}
+			if (empty($shopname)) {
+				show_json(0, "请选择店铺名字");
+			}
+			if (empty($parent)) {
+				show_json(0, "请选择店铺类型");
+			}
+			if (empty($sub)) {
+				show_json(0, "请选择店铺类型");
+			}
+			if (empty($child)) {
+				show_json(0, "请选择店铺类型");
+			}
+			if ($parent == 2 && $sub == 6) {
+				if (empty($fans)) {
+					show_json(0, "请输入粉丝数量");
+				}
+			}
+			if (empty($address) && $parent == 1 && $sub != 1) {
+				show_json(0, "请输入店铺地址");
+			}
+
+			$path  = IA_ROOT."/addons/ewei_shopv2/static/images/qualification/";
+			if(!is_dir($path)){
+				load()->func('file');
+				mkdirs($path,'0777');
+			}
+			$filename = $_FILES['file']['name'];
+			$tmpname = $_FILES['file']['tmp_name'];
+			if(empty($tmpname)){
+				show_json(0, "请上传商家资质");
+			}
+			$ext =  strtolower( pathinfo($filename, PATHINFO_EXTENSION) );
+			if($ext!='jpg' && $ext!='image/jpeg' && $ext!='png'){
+				show_json(0, "请上传 jpg 或 jpeg  png 格式的图片文件!");
+			}
+
+			$file = time().$_W['uniacid'].".".$ext;
+			$uploadfile = $path.$file;
+			$result  = move_uploaded_file($tmpname,$uploadfile);
+			if(!$result){
+				show_json(0,'上传图片文件失败, 请重新上传!');
 			}
 
 			$key = '__ewei_shopv2_member_verifycodesession_' . $_W['uniacid'] . '_' . $mobile;
@@ -126,7 +194,27 @@ class Index_EweiShopV2Page extends MobilePage
 					$nickname = substr($mobile, 0, 3) . 'xxxx' . substr($mobile, 7, 4);
 				}
 
-				$data = array('uniacid' => $_W['uniacid'], 'mobile' => $mobile, 'nickname' => $nickname, 'openid' => $openid, 'pwd' => md5($pwd . $salt), 'salt' => $salt, 'createtime' => time(), 'mobileverify' => 1, 'comefrom' => 'mobile');
+				$data = array(
+					'uniacid' => $_W['uniacid'],
+					'mobile' => $mobile,
+					'nickname' => $nickname,
+					'openid' => $openid,
+					'pwd' => md5($pwd . $salt),
+					'salt' => $salt,
+					'createtime' => time(),
+					'mobileverify' => 1,
+					'comefrom' => 'mobile',
+					"email"=>$email,
+					"weixin"=>$wechatname,
+					"province"=>$province,
+					"city"=>$city,
+					"area"=>$area,
+					"shopname"=>$shopname,
+					"shoptype"=>$parent.','.$sub.','.$child,
+					"fans"=>$fans,
+					"shop_qualification"=>$uploadfile,
+					"shop_address"=>$address,
+				);
 			}
 			else {
 				if (empty($member)) {

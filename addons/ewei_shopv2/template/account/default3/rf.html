@@ -4,6 +4,88 @@
     .header {background-image: url("{php echo empty($set['wap']['bg'])?'../addons/ewei_shopv2/template/account/default3/bg.jpg':tomedia($set['wap']['bg'])}"); background-repeat: n}
     .btn {background: {if !empty($set['wap']['color'])}{$set['wap']['color']}{else}#43afcf{/if};}
     .text a {color: {if !empty($set['wap']['color'])}{$set['wap']['color']}{else}#43afcf{/if};}
+    /* 新增代码start */
+    .inp-title {
+        padding: 0 0 0 4px;
+        font-size: 0.7rem;
+        text-align: left;
+        color: #000000;
+    }
+    select.inp-select {
+        flex: 1;
+        background: none;
+        border: none;
+        outline: none;
+        height: 34px;
+        text-align: left;
+    }
+    select.inp-select:nth-child(2) {
+        margin: 0 30px;
+    }
+    .multi-item em {
+        position: absolute;
+        top: 0;
+        right: -23px;
+    }
+    .multi-item {
+        max-height: 100px;
+        max-width: 100px;
+        position: relative;
+        float: left;
+        margin: 10px 30px 0 10px;
+    }
+    .img-thumbnail {
+        display: inline-block;
+        width: 108px;
+        height: 108px;
+        line-height: 1.42857143;
+        background-color: #fff;
+        border-radius: 4px;
+        -webkit-transition: all .2s ease-in-out;
+        -o-transition: all .2s ease-in-out;
+        transition: all .2s ease-in-out;
+    }
+    .close {
+        float: right;
+        font-size: 21px;
+        font-weight: 700;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        filter: alpha(opacity=20);
+        opacity: .2;
+    }
+    .txt {
+        width: 108px;
+        height: 108px;
+        background: rgba(0,0,0,0.6);
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        top: 0;
+        color: #fff;
+    }
+    .txt>i{
+        position:absolute;
+        top: 50%;
+        left: 50%;
+        margin: -5px 0 0 -5px;
+    }
+    .uploadfile{
+        height:108px;
+        overflow: hidden;
+        position:absolute;
+        right:0;
+        top:0;
+        opacity: 0;
+        filter:alpha(opacity=0);
+        cursor:pointer;
+    }
+    div>input:before {
+        content: '* ';
+        color: red;
+    }
+    /* 新增代码end */
 </style>
 <div class="fui-page">
     {if is_h5app()}
@@ -68,6 +150,89 @@
                         <input type="password" placeholder="请重复输入密码" class="fui-input" name="pwd1" id="pwd1">
                     </div>
                 </div>
+                <!--邮箱-->
+                <div class="fui-cell">
+                    <div class="fui-cell-icon">
+                        <i class="icon icon-lock"></i>
+                    </div>
+                    <div class="fui-cell-info">
+                        <input name="email" class="fui-input" type="text" placeholder="邮箱(必填)" value="">
+                    </div>
+                </div>
+                <!--微信-->
+                <div class="fui-cell">
+                    <div class="fui-cell-icon">
+                        <i class="icon icon-lock"></i>
+                    </div>
+                    <div class="fui-cell-info">
+                        <input name="wechatname" class="fui-input" type="text" placeholder="微信号(必填)" value="">
+                    </div>
+                </div><br/>
+                <!--所在城市-->
+                <p class="inp-title">请选择所在城市(必选)</p>
+                <div class="fui-cell">
+                    <select id="sel-provance" name='province' class="inp-select"></select>
+                    <select id="sel-city" name='city' class="inp-select">
+                        <option value="">请选择城市</option>
+                    </select>
+                    <select id="sel-area" name='area'  class="inp-select">
+                        <option value="">请选择区/县</option>
+                    </select>
+                </div>
+                <!--店铺名称-->
+                <div class="fui-cell">
+                    <div class="fui-cell-icon">
+                        <i class="icon icon-lock"></i>
+                    </div>
+                    <div class="fui-cell-info">
+                        <input name="shopname" class="fui-input" type="text" placeholder="店铺名字(必填)" value="">
+                    </div>
+                </div><br/>
+                <!--选择店铺类型-->
+                <p class="inp-title">请选择店铺类型(必选)</p>
+                <div class="fui-cell">
+                    <select class="inp-select inp-select-parent" name="inp-select-parent"></select>
+                    <select class="inp-select inp-select-sub" name="inp-select-sub">
+                        <option value="">请选择</option>
+                    </select>
+                    <select class="inp-select inp-select-child" name="inp-select-child">
+                        <option value="">请选择</option>
+                    </select>
+                </div><br>
+                <!--粉丝量-->
+                <div style="display: none" class="fui-cell">
+                    <div class="fui-cell-icon">
+                        <i class="icon icon-lock"></i>
+                    </div>
+                    <div class="fui-cell-info">
+                        <input type="text" class="fui-input" name="fans" placeholder="请输入粉丝量(必填)">
+                    </div>
+                </div>
+                <!--商家资质证书-->
+                <p class="inp-title">请上传资质(必填)</p>
+                <div class="fui-cell">
+                    <div class="multi-item">
+                        <img src="" onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'; this.title='图片未找到.'"
+                             class="img-show img-responsive img-thumbnail">
+                        <input type="file" class="uploadfile" name="file" id="upload"  accept="image/jpg,image/jpeg,image/png">
+                        <em class="close" title="删除这张图片" onclick="deleteMultiImage(this)">×</em>
+                    </div>
+                    <div style="display: none" class="multi-item">
+                        <img src="" onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'; this.title='图片未找到.'" class="img-prompt img-responsive img-thumbnail">
+                        <input type="hidden" name="thumbs" value="">
+                        <div class="txt">
+                            <i class="iconfont">&#58888;</i>
+                        </div>
+                    </div>
+                </div><br/>
+                <div class="fui-cell inp-address">
+                    <div class="fui-cell-icon">
+                        <i class="icon icon-lock"></i>
+                    </div>
+                    <div class="fui-cell-info">
+                        <input type="text" class="fui-input" name="address" placeholder="请输入店铺/企业地址(必填)">
+                    </div>
+                </div>
             </div>
 
         <div class="btn" id="btnSubmit">{if empty($type)}立即注册{else}立即找回{/if}</div>
@@ -79,6 +244,241 @@
             require(['biz/member/account'], function (modal) {
                 modal.initRf({backurl:'{$backurl}', type: {php echo intval($type)}, endtime: {php echo intval($endtime)}, imgcode: {php echo intval($set['wap']['smsimgcode'])}});
             });
+        </script>
+        <script src="../addons/fm_photosvote/static/mobile/public/mui/js/city.data-3.js"></script>
+        <script language='javascript'>
+            // 商家资质选择
+            var listArr = [
+                {
+                    id: 1,
+                    name: '个人型',
+                    subArr: [{
+                        id: 1,
+                        name: "微商",
+                        needAddress: false,
+                        bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_02.jpg',
+                        childArr: [{
+                            id: 1,
+                            name: "微商",
+                        }]
+                    },{
+                        id: 2,
+                        name: "平台商铺",
+                        needAddress: true,
+                        bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_03.png',
+                        childArr: [{
+                            id: 1,
+                            name: "淘宝"
+                        }, {
+                            id: 2,
+                            name: "拼多多"
+                        }, {
+                            id: 3,
+                            name: "有赞"
+                        }, {
+                            id: 4,
+                            name: "微店"
+                        }, {
+                            id: 5,
+                            name: "其他"
+                        }]
+                    },{
+                        id: 3,
+                        name: "实体店",
+                        needAddress: true,
+                        bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+                        childArr: [{
+                            id: 1,
+                            name: "实体店"
+                        }]
+                    },]
+                }, {
+                    id: 2,
+                    name: '企业型',
+                    subArr: [{
+                        id: 1,
+                        name: "平台商铺",
+                        needAddress: true,
+                        bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+                        childArr: [{
+                            id: 1,
+                            name: "淘宝"
+                        }, {
+                            id: 2,
+                            name: "拼多多"
+                        }, {
+                            id: 3,
+                            name: "有赞"
+                        }, {
+                            id: 4,
+                            name: "微店"
+                        }, {
+                            id: 5,
+                            name: "其他"
+                        }]
+                    }, {
+                        id: 2,
+                        name: "实体店",
+                        needAddress: true,
+                        bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+                        childArr: [{
+                            id: 1,
+                            name: "实体店"
+                        }]
+                    }, {
+                        id: 3,
+                        name: "新零售平台",
+                        needAddress: true,
+                        bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+                        childArr: [{
+                            id: 1,
+                            name: "新零售平台"
+                        }]
+                    }, {
+                        id: 4,
+                        name: "供应链平台",
+                        needAddress: true,
+                        bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+                        childArr: [{
+                            id: 1,
+                            name: "供应链平台"
+                        }]
+                    }, {
+                        id: 5,
+                        name: "电商平台",
+                        needAddress: true,
+                        bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+                        childArr: [{
+                            id: 1,
+                            name: "电商平台"
+                        }]
+                    }, {
+                        id: 6,
+                        name: "自媒体",
+                        needAddress: true,
+                        bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+                        childArr: [{
+                            id: 1,
+                            name: "自媒体"
+                        }]
+                    }]
+                }
+            ]
+            var initHtmls = '<option value="">请选择</option>';
+            listArr.map(function(item){
+                initHtmls += '<option value="'+ item.id +'">'+ item.name +'</option>';
+            })
+            $(".inp-select-parent").append(initHtmls);
+
+            var pIndex = "";
+            var subIndex = "";
+            var childIndex = "";
+            $(".inp-select-parent").on("change", function(){
+                var pVal = $(this).val();
+                listArr.map(function(item, index) {
+                    if (item.id == pVal) {
+                        pIndex = index;
+                        var subHtmls = '<option value="">请选择</option>';
+                        item.subArr.map(function(subItem){
+                            subHtmls += '<option value="'+ subItem.id +'">'+ subItem.name +'</option>';
+                        })
+                        $(".inp-select-sub").empty().append(subHtmls);
+                    }
+                })
+                $(".inp-select-child").empty().append('<option value="">请选择</option>');
+            })
+
+            $(".inp-select-sub").on("change", function(){
+                var subVal = $(this).val();
+                listArr[pIndex].subArr.map(function(item, index) {
+                    if (item.id == subVal) {
+                        if (item.needAddress) {
+                            $(".inp-address").show();
+                        } else {
+                            $(".inp-address").hide();
+                        }
+                        $('.img-prompt').parent().css('display','block');
+                        $('.img-prompt').attr('src',item.bg);
+                        if(pIndex+1==2 && item.id==6){
+                            $('input[name=fans]').parent().css('display','block');
+                        }else{
+                            $('input[name=fans]').parent().css('display','none');
+                        }
+
+                        var childHtmls = '<option value="">请选择</option>';
+                        item.childArr.map(function(childItem){
+                            childHtmls += '<option value="'+ childItem.id +'">'+ childItem.name +'</option>';
+                        })
+                        $(".inp-select-child").empty().append(childHtmls);
+                    }
+                })
+            })
+            // end
+
+            //上传图片
+            $("#upload").on("change",function(){
+                var objUrl = getObjectURL(this.files[0]) ; //获取图片的路径，该路径不是图片在本地的路径
+                if (objUrl) {
+                    $(".img-show").attr("src", objUrl) ; //将图片路径存入src中，显示出图片
+                }
+            });
+            function getObjectURL(file) {
+                var url = null ;
+                if (window.createObjectURL!=undefined) { // basic
+                    url = window.createObjectURL(file) ;
+                } else if (window.URL!=undefined) { // mozilla(firefox)
+                    url = window.URL.createObjectURL(file) ;
+                } else if (window.webkitURL!=undefined) { // webkit or chrome
+                    url = window.webkitURL.createObjectURL(file) ;
+                }
+                return url ;
+            }
+            function deleteMultiImage(elm){
+                $(elm).prevAll('.img-show').attr('src','');
+            }
+            //end
+
+            //城市选择
+            var addressArr=cityData3;
+            var  provance= '<option value="">请选择省/直辖市</option>';
+            addressArr.map(function(item){
+                provance += '<option value="'+ item.value +'">'+ item.text +'</option>';
+            })
+            $("#sel-provance").append(provance);
+
+            var apIndex = "";
+            $("#sel-provance").on("change", function(){
+                $("#sel-city").empty().append('<option value="">请选择城市</option>');
+                $("#sel-area").empty().append('<option value="">请选择区/县</option>');
+                var pVal = $(this).val();
+                addressArr.map(function(item, index) {
+                    if (item.value == pVal) {
+                        apIndex = index;
+                        var subHtmls = '<option value="">请选择城市</option>';
+                        item.children.map(function(subItem){
+                            subHtmls += '<option value="'+ subItem.value +'">'+ subItem.text +'</option>';
+                        })
+                        $("#sel-city").empty().append(subHtmls);
+                    }
+                })
+            })
+
+            $("#sel-city").on("change", function(){
+                var subVal = $(this).val();
+                addressArr[apIndex].children.map(function(item, index) {
+                    if (subVal.length==0){
+                        $("#sel-area").empty().append('<option value="">请选择区/县</option>');
+                    }
+                    if (item.value == subVal) {
+                        var childHtmls = '<option value="">请选择区/县</option>';
+                        item.children.map(function(childItem){
+                            childHtmls += '<option value="'+ childItem.value +'">'+ childItem.text +'</option>';
+                        })
+                        $("#sel-area").empty().append(childHtmls);
+                    }
+                })
+            })
+            //end
         </script>
     </div>
 </div>

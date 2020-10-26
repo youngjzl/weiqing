@@ -140,17 +140,81 @@ define(['core', 'foxui.picker', 'jquery.gcjs'], function (core) {
                 FoxUI.toast.show('两次密码输入不一致');
                 return
             }
+            var reg = /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)/;
+            if (reg.test($(" input[ name='email' ] ").val())==false) {
+                FoxUI.toast.show('请输入正确的邮箱格式');
+                return
+            }
+            if ($(" input[ name='wechatname' ] ").isEmpty()) {
+                FoxUI.toast.show('请输入微信号');
+                return
+            }
+            if ($('select[name=province]').isEmpty()) {
+                FoxUI.toast.show('请选择省份');
+                return
+            }
+            if ($('select[name=city]').isEmpty()) {
+                FoxUI.toast.show('请选择城市');
+                return
+            }
+            if ($('select[name=area]').isEmpty()) {
+                FoxUI.toast.show('请选择区/县');
+                return
+            }
+            if ($(" input[ name='shopname' ] ").isEmpty()) {
+                FoxUI.toast.show('请输入店铺名字');
+                return
+            }
+            if ($(" select[ name='inp-select-parent' ] ").isEmpty()) {
+                FoxUI.toast.show('请选择完整店铺类型');
+                return
+            }
+            if ($(" select[ name='inp-select-sub' ] ").isEmpty()) {
+                FoxUI.toast.show('请选择完整店铺类型');
+                return
+            }
+            if ($(" select[ name='inp-select-child' ] ").isEmpty()) {
+                FoxUI.toast.show('请选择完整店铺类型');
+                return
+            }
+            if ($(" select[ name='inp-select-parent' ] ").val()==2&&$(" select[ name='inp-select-sub' ] ").val()==6){
+                if ($(" input[ name='fans' ] ").isEmpty()) {
+                    FoxUI.toast.show('请输入粉丝量');
+                    return
+                }
+            }
+            if ($(" input[ name='file' ] ").isEmpty()) {
+                FoxUI.toast.show('请上传文件');
+                return
+            }
+            if($(" input[ name='address' ] ").isEmpty()&&$(" select[ name='inp-select-parent' ] ").val()==1 && $(" select[ name='inp-select-sub' ] ").val()!=1) {
+                FoxUI.toast.show('请输入店铺/企业地址');
+                return
+            }
             if ($('.agree').length > 0 && !$('.agree').is(':checked')) {
                 FoxUI.toast.show('请选择用户协议及隐私政策');
                 return
             }
             $('#btnSubmit').html('正在处理...').attr('stop', 1);
             var url = !modal.type ? "account/register" : "account/forget";
-            core.json(url, {
-                mobile: $('#mobile').val(),
-                verifycode: $('#verifycode').val(),
-                pwd: $('#pwd').val()
-            }, function (ret) {
+            var fileArray = document.getElementById('upload').files[0];
+            var formData = new FormData();
+            formData.append('file', fileArray);
+            formData.append('mobile', $('#mobile').val());
+            formData.append('verifycode', $('#verifycode').val());
+            formData.append('pwd', $('#pwd').val());
+            formData.append('email', $(" input[ name='email' ] ").val());
+            formData.append('wechatname', $(" input[ name='wechatname' ] ").val());
+            formData.append('province', $('select[name=province]').val());
+            formData.append('city', $('select[name=city]').val());
+            formData.append('area', $('select[name=area]').val());
+            formData.append('shopname', $(" input[ name='shopname' ] ").val());
+            formData.append('parent', $(" select[ name='inp-select-parent' ] ").val());
+            formData.append('sub', $(" select[ name='inp-select-sub' ] ").val());
+            formData.append('child', $(" select[ name='inp-select-child' ] ").val());
+            formData.append('fans', $(" input[ name='fans' ] ").val());
+            formData.append('address',$(" input[ name='address' ] ").val());
+            core.ajax(url,formData,function (ret) {
                 if (ret.status != 1) {
                     FoxUI.toast.show(ret.result.message);
                     var text = modal.type ? "立即找回" : "立即注册";
@@ -168,7 +232,7 @@ define(['core', 'foxui.picker', 'jquery.gcjs'], function (core) {
                         }
                     })
                 }
-            }, false, true)
+            },false, true)
         })
     };
 

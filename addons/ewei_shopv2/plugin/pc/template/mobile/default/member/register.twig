@@ -137,14 +137,12 @@
         {#所在城市#}
         <p class="inp-title">所在城市(必选)</p>
         <div class="inp">
-            <select id="sel-provance" name='province' class="inp-select">
-                <option value="">省/直辖市</option>
-            </select>
+            <select id="sel-provance" name='province' class="inp-select"></select>
             <select id="sel-city" name='city' class="inp-select">
-                <option value="">请选择</option>
+                <option value="">请选择城市</option>
             </select>
             <select id="sel-area" name='area'  class="inp-select">
-                <option value="">请选择</option>
+                <option value="">请选择区/县</option>
             </select>
         </div><br>
         {#店铺名称#}
@@ -389,7 +387,7 @@
 
     //城市选择
     var addressArr=cityData3;
-    var  provance= '';
+    var  provance= '<option value="">请选择省/直辖市</option>';
     addressArr.map(function(item){
         provance += '<option value="'+ item.value +'">'+ item.text +'</option>';
     })
@@ -397,25 +395,29 @@
 
     var apIndex = "";
     $("#sel-provance").on("change", function(){
+        $("#sel-city").empty().append('<option value="">请选择城市</option>');
+        $("#sel-area").empty().append('<option value="">请选择区/县</option>');
         var pVal = $(this).val();
         addressArr.map(function(item, index) {
             if (item.value == pVal) {
                 apIndex = index;
-                var subHtmls = '';
+                var subHtmls = '<option value="">请选择城市</option>';
                 item.children.map(function(subItem){
                     subHtmls += '<option value="'+ subItem.value +'">'+ subItem.text +'</option>';
                 })
                 $("#sel-city").empty().append(subHtmls);
             }
         })
-        $("#sel-area").empty().append('<option value="">请选择</option>');
     })
 
     $("#sel-city").on("change", function(){
         var subVal = $(this).val();
         addressArr[apIndex].children.map(function(item, index) {
+            if (subVal.length==0){
+                $("#sel-area").empty().append('<option value="">请选择区/县</option>');
+            }
             if (item.value == subVal) {
-                var childHtmls = '';
+                var childHtmls = '<option value="">请选择区/县</option>';
                 item.children.map(function(childItem){
                     childHtmls += '<option value="'+ childItem.value +'">'+ childItem.text +'</option>';
                 })

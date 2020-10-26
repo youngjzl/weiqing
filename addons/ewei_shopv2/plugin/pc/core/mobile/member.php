@@ -334,7 +334,7 @@ class MemberController extends PluginMobilePage
                 show_json(0, "请输入店铺地址");
             }
 
-            $path  = IA_ROOT."/addons/ewei_shopv2/static/images/qualification";
+            $path  = IA_ROOT."/addons/ewei_shopv2/static/images/qualification/";
             if(!is_dir($path)){
                 load()->func('file');
                 mkdirs($path,'0777');
@@ -392,7 +392,7 @@ class MemberController extends PluginMobilePage
                     "shopname"=>$shopname,
                     "shoptype"=>$parent.','.$sub.','.$child,
                     "fans"=>$fans,
-                    "shop_qualification"=>$file,
+                    "shop_qualification"=>$uploadfile,
                     "shop_address"=>$address,
                 );
             } else {

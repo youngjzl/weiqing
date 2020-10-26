@@ -87,6 +87,39 @@ define(['jquery', 'foxui', 'tpl'], function ($, FoxUI, tpl) {
         }
         $.ajax(op)
     };
+    core.ajax=function(routes, args, callback, hasloading, ispost){
+        var url = ispost ? this.getUrl(routes) : this.getUrl(routes, args);
+        var op = {
+            url: url,
+            type: ispost ? 'post' : 'get',
+            dataType: 'json',
+            processData : false, // 使数据不做处理
+            contentType : false, // 不要设置Content-Type请求头
+            beforeSend: function () {
+                if (hasloading) {
+                    FoxUI.loader.show('mini')
+                }
+            },
+            error: function (a) {
+                /*alert(JSON.stringify(a));*/
+                if (hasloading) {
+                    FoxUI.loader.hide()
+                }
+            }
+        };
+        if (args && ispost) {
+            op.data = args
+        }
+        if (callback) {
+            op.success = function (data) {
+                if (hasloading) {
+                    FoxUI.loader.hide()
+                }
+                callback(data)
+            }
+        }
+        $.ajax(op);
+    }
     core.post = function (routes, args, callback, hasloading) {
         this.json(routes, args, callback, hasloading, true)
     };
