@@ -106,10 +106,13 @@
                     <div class="btn-group">
                         {ifp 'member.list.edit'}
                         <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('member/list/setblack',array('isblack'=>1))}">
-                            <i class="icow icow-heimingdan2"></i>设置黑名单
+                            <i class="icow icow-heimingdan2"></i>取消入住
+                        </button>
+                        <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('member/list/setblack',array('isblack'=>2))}">
+                            <i class="icow icow-heimingdan2"></i>驳回
                         </button>
                         <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('member/list/setblack',array('isblack'=>0))}">
-                            <i class="icow icow-yongxinyonghu"></i> 取消黑名单
+                            <i class="icow icow-yongxinyonghu"></i>入住
                         </button>
                         {/if}
                         {ifp 'member.list.delete'}
@@ -182,7 +185,11 @@
                                            {if empty($row['nickname'])}未更新{else}{$row['nickname']}{/if}
                                        </span>
                                        {if $row['isblack']==1}
-                                            <span class="text-danger">黑名单<i class="icow icow-heimingdan1"style="color: #db2228;margin-left: 2px;font-size: 13px;"></i></span>
+                                            <span class="text-yellow">待审核<i class="icow icow-shangjia2"style="color: #db2228;margin-left: 2px;font-size: 13px;"></i></span>
+                                       {else if $row['isblack']==2}
+                                            <span class="text-danger">已驳回<i class="icow icow-heimingdan1"style="color: #db2228;margin-left: 2px;font-size: 13px;"></i></span>
+                                       {else}
+                                            <span class="text-success">已入驻<i class="icow icow-heimingdan1"style="color: #db2228;margin-left: 2px;font-size: 13px;"></i></span>
                                        {/if}
                                    </span>
 
@@ -265,10 +272,13 @@
                             <div class="btn-group">
                                 {ifp 'member.list.edit'}
                                 <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('member/list/setblack',array('isblack'=>1))}">
-                                    <i class="icow icow-heimingdan2"></i>设置黑名单
+                                    <i class="icow icow-heimingdan2"></i>取消入驻
+                                </button>
+                                <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('member/list/setblack',array('isblack'=>2))}">
+                                    <i class="icow icow-heimingdan2"></i>驳回
                                 </button>
                                 <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('member/list/setblack',array('isblack'=>0))}">
-                                    <i class="icow icow-yongxinyonghu"></i> 取消黑名单
+                                    <i class="icow icow-yongxinyonghu"></i>入住
                                 </button>
                                 {/if}
                                 {ifp 'member.list.delete'}
