@@ -620,14 +620,15 @@ if (!function_exists('is_weixin')) {
         if (EWEI_SHOPV2_DEBUG) {
             return true;
         }
-        /*
-        if($_W['shopset']['wap']['inwap']){
-           return false;
-        }*/
-        if (empty($_SERVER['HTTP_USER_AGENT']) || strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') === false && strpos($_SERVER['HTTP_USER_AGENT'], 'Windows Phone') === false) {
-            return false;
-        }
-        return true;
+        return  false;
+//        /*
+//        if($_W['shopset']['wap']['inwap']){
+//           return false;
+//        }*/
+//        if (empty($_SERVER['HTTP_USER_AGENT']) || strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') === false && strpos($_SERVER['HTTP_USER_AGENT'], 'Windows Phone') === false) {
+//            return false;
+//        }
+//        return true;
     }
 }
 

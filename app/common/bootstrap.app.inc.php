@@ -198,3 +198,4 @@ if ($_W['platform'] == 'account' && $_W['account']->supportJssdk && $controller 
 }
 
 $_W['attachurl'] = attachment_set_attach_url();
+$_W['openid']='';//新增  放弃微信自动登录

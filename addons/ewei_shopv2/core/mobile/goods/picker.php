@@ -5,7 +5,7 @@ if (!defined('IN_IA')) {
     exit('Access Denied');
 }
 
-class Picker_EweiShopV2Page extends MobilePage {
+class Picker_EweiShopV2Page extends MobileLoginPage {
 
     function main()
     {

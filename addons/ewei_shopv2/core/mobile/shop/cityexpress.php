@@ -4,7 +4,7 @@ if (!defined('IN_IA')) {
 	exit('Access Denied');
 }
 
-class Cityexpress_EweiShopV2Page extends MobilePage
+class Cityexpress_EweiShopV2Page extends MobileLoginPage
 {
 	public function map()
 	{

@@ -3,7 +3,7 @@ if (!defined('IN_IA')) {
 	exit('Access Denied');
 }
 
-class Package_EweiShopV2Page extends MobilePage
+class Package_EweiShopV2Page extends MobileLoginPage
 {
 	public function main()
 	{

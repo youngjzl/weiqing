@@ -17,7 +17,9 @@
 
     {% endblock %}
     <style>
-        /* 新增代码start */
+        .inp {
+            overflow: hidden;
+        }
         .inp-title {
             padding: 0 0 0 4px;
             font-size: 14px;
@@ -34,24 +36,34 @@
             text-align: left;
         }
         select.inp-select:nth-child(2) {
-            margin: 0 30px;
+            margin: 0 20px;
         }
         .multi-item em {
             position: absolute;
             top: 0;
-            right: -23px;
+            right: 0;
+            cursor: hand;
+            cursor: pointer;
+            font-style: normal;
+            font-weight: normal;
+            height: 24px;
+            width: 24px;
+            color: #FFF;
+            opacity: 1;
+            background: rgba(0, 0, 0, 0.64);
         }
         .multi-item {
-            max-height: 100px;
-            max-width: 100px;
+            position: relative;
+            height: 100px;
+            width: 100px;
             position: relative;
             float: left;
             margin: 10px 30px 0 10px;
         }
         .img-thumbnail {
-            display: inline-block;
-            width: 108px;
-            height: 108px;
+            display: block;
+            width: 100px;
+            height: 100px;
             line-height: 1.42857143;
             background-color: #fff;
             border-radius: 4px;
@@ -92,6 +104,8 @@
             right:0;
             top:0;
             opacity: 0;
+            width: 100%;
+            height: 100%;
             filter:alpha(opacity=0);
             cursor:pointer;
         }
@@ -99,7 +113,16 @@
             content: '* ';
             color: red;
         }
-        /* 新增代码end */
+        .flex {
+            display: -webkit-flex;
+            display: flex;
+        }
+        .inp-select {
+            padding: 0 4px;
+        }
+        .submit>button, .code>button {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body class="red">
@@ -139,17 +162,17 @@
         <div class="inp">
             <select id="sel-provance" name='province' class="inp-select"></select>
             <select id="sel-city" name='city' class="inp-select">
-                <option value="">请选择城市</option>
+                <option value="">城市</option>
             </select>
             <select id="sel-area" name='area'  class="inp-select">
-                <option value="">请选择区/县</option>
+                <option value="">区/县</option>
             </select>
         </div><br>
         {#店铺名称#}
         <div class="inp"><input name="shopname" class="lynn-input-email" type="text" placeholder="店铺名字(必填)" value=""></div>
         {#选择店铺类型#}
         <p class="inp-title">选择店铺类型(必选)</p>
-        <div class="inp">
+        <div class="inp inp-select flex">
             <select class="inp-select inp-select-parent" name="inp-select-parent"></select>
             <select class="inp-select inp-select-sub" name="inp-select-sub">
                 <option value="">请选择</option>
@@ -161,8 +184,8 @@
         {# 粉丝量 #}
         <div style="display: none" class="inp"><input type="text" name="fans" placeholder="请输入粉丝量(必填)"></div>
         {#商家资质证书#}
-        <p class="inp-title">上传资质(必填)</p>
-        <div class="inp">
+        <p class="inp-title inp-upload-item">上传资质(必填)</p>
+        <div class="inp  inp-upload-item">
             <div class="multi-item">
                 <img src="" onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'; this.title='图片未找到.'"
                      class="img-show img-responsive img-thumbnail">
@@ -177,7 +200,7 @@
                 </div>
             </div>
         </div><br/>
-        <div class="inp inp-address" style="margin-top: 14px;"><input type="text" name="address" placeholder="请输入店铺地址(必填)"></div>
+        <div class="inp inp-address"><input type="text" name="address" placeholder="请输入店铺地址(必填)"></div>
         <div class="inp"><input type="hidden"  name="sendurl" value="{{ pcUrl('member/verifycode') }}"></div>
         <div class="inp"><input type="hidden"  name="registerurl" value="{{ pcUrl('member/regiinfo') }}"></div>
         <div class="inp"><input type="hidden"  name="loginurl" value="{{ pcUrl('member/login') }}"></div>
@@ -387,7 +410,7 @@
 
     //城市选择
     var addressArr=cityData3;
-    var  provance= '<option value="">请选择省/直辖市</option>';
+    var  provance= '<option value="">省/直辖市</option>';
     addressArr.map(function(item){
         provance += '<option value="'+ item.value +'">'+ item.text +'</option>';
     })
@@ -395,13 +418,13 @@
 
     var apIndex = "";
     $("#sel-provance").on("change", function(){
-        $("#sel-city").empty().append('<option value="">请选择城市</option>');
-        $("#sel-area").empty().append('<option value="">请选择区/县</option>');
+        $("#sel-city").empty().append('<option value="">城市</option>');
+        $("#sel-area").empty().append('<option value="">区/县</option>');
         var pVal = $(this).val();
         addressArr.map(function(item, index) {
             if (item.value == pVal) {
                 apIndex = index;
-                var subHtmls = '<option value="">请选择城市</option>';
+                var subHtmls = '<option value="">城市</option>';
                 item.children.map(function(subItem){
                     subHtmls += '<option value="'+ subItem.value +'">'+ subItem.text +'</option>';
                 })
@@ -414,10 +437,10 @@
         var subVal = $(this).val();
         addressArr[apIndex].children.map(function(item, index) {
             if (subVal.length==0){
-                $("#sel-area").empty().append('<option value="">请选择区/县</option>');
+                $("#sel-area").empty().append('<option value="">区/县</option>');
             }
             if (item.value == subVal) {
-                var childHtmls = '<option value="">请选择区/县</option>';
+                var childHtmls = '<option value="">区/县</option>';
                 item.children.map(function(childItem){
                     childHtmls += '<option value="'+ childItem.value +'">'+ childItem.text +'</option>';
                 })

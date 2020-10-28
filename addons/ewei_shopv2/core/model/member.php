@@ -366,6 +366,7 @@ class Member_EweiShopV2Model {
                     </body>
                 </html>");
 		}
+		return null;//微信端不注册用户信息
         $member = $this->getMember($openid);
 		$followed = m('user')->followed($openid);
 		$uid = 0;
@@ -419,8 +420,7 @@ class Member_EweiShopV2Model {
 			$member['id'] = pdo_insertid();
 		} else {
 			if ($member['isblack'] == 1) {
-//				show_message("暂时无法访问，请稍后再试!");
-                header("location:" . mobileUrl("account/register"));
+				show_message("暂时无法访问，请稍后再试!");
 			}
 			$upgrade = array('uid'=>$uid);
 			if (isset($mc['nickname']) && $member['nickname_wechat'] != $mc['nickname']) {

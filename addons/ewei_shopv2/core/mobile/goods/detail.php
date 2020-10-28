@@ -5,7 +5,7 @@ if (!defined('IN_IA')) {
     exit('Access Denied');
 }
 
-class Detail_EweiShopV2Page extends MobilePage {
+class Detail_EweiShopV2Page extends MobileLoginPage {
 
     function main() {
         global $_W, $_GPC;

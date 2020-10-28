@@ -2,7 +2,7 @@
 {
 	exit( "Access Denied" );
 }
-class Index_EweiShopV2Page extends MobilePage 
+class Index_EweiShopV2Page extends MobileLoginPage
 {
 	public function main() 
 	{

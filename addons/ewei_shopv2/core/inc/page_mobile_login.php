@@ -10,6 +10,10 @@ class MobileLoginPage extends MobilePage
 		global $_W;
 		global $_GPC;
 		parent::__construct();
+		$m = m("member")->getMember($_W["openid"], true);
+		if ($m['isblack']==1||empty($m)){
+			show_message('请您重新登录！');
+		}
 	}
 }
 

@@ -32,17 +32,21 @@ class Index_EweiShopV2Page extends MobilePage
 	{
 		global $_W;
 		global $_GPC;
-		if (is_weixin() || !empty($_GPC['__ewei_shopv2_member_session_' . $_W['uniacid']])) {
-			header('location: ' . mobileUrl());
-		}
+//		if (is_weixin() || !empty($_GPC['__ewei_shopv2_member_session_' . $_W['uniacid']])) {
+//			header('location: ' . mobileUrl());
+//		}
 
 		if ($_W['ispost']) {
 			$mobile = trim($_GPC['mobile']);
 			$pwd = trim($_GPC['pwd']);
-			$member = pdo_fetch('select id,openid,mobile,pwd,salt from ' . tablename('ewei_shop_member') . ' where mobile=:mobile and mobileverify=1 and uniacid=:uniacid limit 1', array(':mobile' => $mobile, ':uniacid' => $_W['uniacid']));
+			$member = pdo_fetch('select id,openid,mobile,pwd,salt,isblack from ' . tablename('ewei_shop_member') . ' where mobile=:mobile and mobileverify=1 and uniacid=:uniacid limit 1', array(':mobile' => $mobile, ':uniacid' => $_W['uniacid']));
 
 			if (empty($member)) {
 				show_json(0, '用户不存在');
+			}
+
+			if ($member['isblack']==1) {
+				show_json(0, '用户正在审核中');
 			}
 
 			if (md5($pwd . $member['salt']) !== $member['pwd']) {
@@ -79,9 +83,9 @@ class Index_EweiShopV2Page extends MobilePage
 	{
 		global $_W;
 		global $_GPC;
-		if (is_weixin() || !empty($_GPC['__ewei_shopv2_member_session_' . $_W['uniacid']])) {
-			header('location: ' . mobileUrl());
-		}
+//		if (is_weixin() || !empty($_GPC['__ewei_shopv2_member_session_' . $_W['uniacid']])) {
+//			header('location: ' . mobileUrl());
+//		}
 
 		if ($_W['ispost']) {
 			$mobile = trim($_GPC['mobile']);
@@ -241,7 +245,7 @@ class Index_EweiShopV2Page extends MobilePage
 			}
 
 			unset($_SESSION[$key]);
-			show_json(1, empty($type) ? '注册成功' : '密码重置成功');
+			show_json(1, empty($type) ? '注册成功，请等待审核员审核！' : '密码重置成功');
 		}
 
 		$sendtime = $_SESSION['verifycodesendtime'];
@@ -270,9 +274,9 @@ class Index_EweiShopV2Page extends MobilePage
 	{
 		global $_W;
 		global $_GPC;
-		if (is_weixin() || !empty($_GPC['__ewei_shopv2_member_session_' . $_W['uniacid']])) {
-			header('location: ' . mobileUrl());
-		}
+//		if (is_weixin() || !empty($_GPC['__ewei_shopv2_member_session_' . $_W['uniacid']])) {
+//			header('location: ' . mobileUrl());
+//		}
 
 		$sns = trim($_GPC['sns']);
 		if ($_W['ispost'] && !empty($sns) && !empty($_GPC['openid'])) {
