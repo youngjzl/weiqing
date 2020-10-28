@@ -9,6 +9,7 @@ class ListController extends PluginMobilePage
     {
         global $_GPC;
         global $_W;
+        p("pc")->checkLogin();
         $pindex = max(1, intval($_GPC["page"]));
         $psize = 20;
         $serch = array();
@@ -96,6 +97,7 @@ class ListController extends PluginMobilePage
     public function getallcate($info, $shoplevel)
     {
         global $_W;
+        p("pc")->checkLogin();
         $cate = array();
         if ($shoplevel == 1) {
             $cate["upcate"][] = $info;
@@ -147,6 +149,7 @@ class ListController extends PluginMobilePage
     {
         global $_W;
         global $_GPC;
+        p("pc")->checkLogin();
         $data["title"] = "拼团商品";
         $info = $this->model->invoke("groups.list::main");
         if ($info["error"] == 0) {
@@ -177,6 +180,7 @@ class ListController extends PluginMobilePage
     {
         global $_W;
         global $_GPC;
+        p("pc")->checkLogin();
         $data["title"] = "秒杀列表";
         $info = $this->model->invoke("seckill.index::get_list");
         $data["info"] = $info;
@@ -208,6 +212,7 @@ class ListController extends PluginMobilePage
     {
         global $_W;
         global $_GPC;
+        p("pc")->checkLogin();
         $data["title"] = "砍价列表";
         $info = $this->model->invoke("bargain.index::get_list");
         if ($info["error"] == 0) {

@@ -20,6 +20,7 @@ class IndexController extends PluginMobilePage
     {
         global $_W;
         global $_GPC;
+        p("pc")->checkLogin();
         $data = $this->model->getData("home");
         $data["layout"] = $this->model->getTemplateSetting();
         $info = m("common")->getSysset("shop");
@@ -32,7 +33,7 @@ class IndexController extends PluginMobilePage
         try {
             return $this->view("index", $data);
         } catch (Throwable $exception) {
-            dd($exception);
+//            dd($exception);
         }
     }
     public function debug()
@@ -52,7 +53,7 @@ class IndexController extends PluginMobilePage
     public function globalVariables()
     {
         $r = $this->model->getTemplateGlobalVariables();
-        print_r($r);
+//        print_r($r);
         exit;
     }
     /**

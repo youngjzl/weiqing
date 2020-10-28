@@ -17,10 +17,6 @@ class PluginMobilePage extends MobilePage
     {
         global $_W;
         parent::__construct();
-        $m = m("member")->getMember($_W["openid"], true);
-        if ($m['isblack']==1||empty($m)){
-            show_message('请您重新登录！');
-        }
         $this->model = m('plugin')->loadModel($GLOBALS["_W"]['plugin']);
         $this->set = $this->model->getSet();
     }

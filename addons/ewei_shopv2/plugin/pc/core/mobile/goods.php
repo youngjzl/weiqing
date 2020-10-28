@@ -6,6 +6,7 @@ class GoodsController extends PluginMobilePage
     {
         global $_GPC;
         global $_W;
+        p("pc")->checkLogin();
         $id = $_GPC["id"];
         if (!$this->model->checkGoodsExists($id)) {
             exit("浏览商品不存在");
@@ -115,6 +116,7 @@ class GoodsController extends PluginMobilePage
     public function download(){
         global $_W;
         global $_GPC;
+        p("pc")->checkLogin();
         $id = intval(trim($_GPC['id']));
 
         if (empty($id)) {

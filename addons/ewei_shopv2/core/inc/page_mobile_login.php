@@ -12,7 +12,7 @@ class MobileLoginPage extends MobilePage
 		parent::__construct();
 		$m = m("member")->getMember($_W["openid"], true);
 		if ($m['isblack']==1||empty($m)){
-			show_message('请您重新登录！');
+			show_message('请您重新登录！',mobileUrl('account/login'));
 		}
 	}
 }
