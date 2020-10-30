@@ -45,10 +45,32 @@
                                 <div class="grade"><i class="iconfont">&#xe643;</i>{{ userinfo.levelname }}</div>
                             </div>
                         </div>
+                        <style>
+                            .btn {
+                                width: 3.6rem;
+                                height: 1.5rem;
+                                color: #ff3153;
+                                line-height: 1.5rem;
+                                margin-left: -1rem;
+                                text-align: center;
+                                border-radius: 1rem;
+                                border: 1px solid #000;
+                            }
+                            .asset>div span {
+                                color: #666;
+                                font-size: 14px;
+                            }
+                            .balance{
+                                margin-top: 1.5rem;
+                            }
+                        </style>
                         <div class="asset flex">
                             <div class="balance">
                                 <span>{{ userinfo.credit2 ? userinfo.credit2 : '0'}}</span>
                                 <span>{{ userinfo.moneytext ? userinfo.moneytext : '余额'}}</span>
+                                {% if userinfo.closerecharge==0 %}
+                                <span><a href="{php echo mobileUrl('member/recharge')}"><div class="btn">充值</div></a></span>
+                                {% endif %}
                             </div>
                             <div class="integral">
                                 <span>{{ userinfo.credit1 ? userinfo.credit1 : '0'}}</span>

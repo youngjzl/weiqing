@@ -216,7 +216,7 @@ class Index_EweiShopV2Page extends MobilePage
 					"shopname"=>$shopname,
 					"shoptype"=>$parent.','.$sub.','.$child,
 					"fans"=>$fans,
-					"shop_qualification"=>$uploadfile,
+					"shop_qualification"=>$file,
 					"shop_address"=>$address,
 				);
 			}

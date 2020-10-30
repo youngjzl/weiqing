@@ -1,0 +1,116 @@
+var listArr = [
+    {
+        id: 1,
+        name: '个人型',
+        subArr: [{
+            id: 1,
+            name: "微商",
+            needAddress: false,
+            bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_02.jpg',
+            childArr: [{
+                id: 1,
+                name: "微商",
+            }]
+        },{
+            id: 2,
+            name: "平台商铺",
+            needAddress: true,
+            bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_03.png',
+            childArr: [{
+                id: 1,
+                name: "淘宝"
+            }, {
+                id: 2,
+                name: "拼多多"
+            }, {
+                id: 3,
+                name: "有赞"
+            }, {
+                id: 4,
+                name: "微店"
+            }, {
+                id: 5,
+                name: "其他"
+            }]
+        },{
+            id: 3,
+            name: "实体店",
+            needAddress: true,
+            bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+            childArr: [{
+                id: 1,
+                name: "实体店"
+            }]
+        },]
+    }, {
+        id: 2,
+        name: '企业型',
+        subArr: [{
+            id: 1,
+            name: "平台商铺",
+            needAddress: true,
+            bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+            childArr: [{
+                id: 1,
+                name: "淘宝"
+            }, {
+                id: 2,
+                name: "拼多多"
+            }, {
+                id: 3,
+                name: "有赞"
+            }, {
+                id: 4,
+                name: "微店"
+            }, {
+                id: 5,
+                name: "其他"
+            }]
+        }, {
+            id: 2,
+            name: "实体店",
+            needAddress: true,
+            bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+            childArr: [{
+                id: 1,
+                name: "实体店"
+            }]
+        }, {
+            id: 3,
+            name: "新零售平台",
+            needAddress: true,
+            bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+            childArr: [{
+                id: 1,
+                name: "新零售平台"
+            }]
+        }, {
+            id: 4,
+            name: "供应链平台",
+            needAddress: true,
+            bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+            childArr: [{
+                id: 1,
+                name: "供应链平台"
+            }]
+        }, {
+            id: 5,
+            name: "电商平台",
+            needAddress: true,
+            bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+            childArr: [{
+                id: 1,
+                name: "电商平台"
+            }]
+        }, {
+            id: 6,
+            name: "自媒体",
+            needAddress: true,
+            bg:'http://seller.weinib2b.com/static3.0/img/registerImg/register_01.jpg',
+            childArr: [{
+                id: 1,
+                name: "自媒体"
+            }]
+        }]
+    }
+]

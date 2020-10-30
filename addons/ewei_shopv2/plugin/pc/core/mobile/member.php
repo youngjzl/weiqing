@@ -39,6 +39,7 @@ class MemberController extends PluginMobilePage
             }
             $userinfo["levelname"] = $shop["levelname"];
         }
+        $userinfo["closerecharge"]=$_W['shopset']['trade']['closerecharge'];
         $data = array("userinfo" => $userinfo, "neworderlist" => $this->getOrderList(), "ordercount" => p("pc")->getOrderCount());
         if (p("membercard")) {
             $data["membercard"] = $this->getMemberCard();

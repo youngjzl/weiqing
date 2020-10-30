@@ -724,7 +724,46 @@ class List_EweiShopV2Page extends WebPage {
                 $aafields = iunserializer($member['diyaagentfields']);
             }
         }
+        if (!empty($member)){
+            //城市
+            $citydata=file_get_contents('../addons/ewei_shopv2/static/js/dist/city.data.json');
+            $citydata=json_decode($citydata,true);
 
+            $citys=array();
+            $province=array_search($member['province'], array_column($citydata, 'value'));
+            if ($province!==false){
+                $citys[]=$citydata[$province]['text'];
+                $city=array_search($member['city'],array_column($citydata[$province]['children'], 'value'));
+                if ($city!==false){
+                    $citys[]=$citydata[$province]['children'][$city]['text'];
+                    $area=array_search($member['area'],array_column($citydata[$province]['children'][$city]['children'], 'value'));
+                    if ($area!==false){
+                        $citys[]=$citydata[$province]['children'][$city]['children'][$area]['text'];
+                    }
+                }
+            }
+            $member['citys']=implode(',',$citys);
+
+            //店铺类型
+            $shop_type_data=file_get_contents('../addons/ewei_shopv2/static/js/dist/shop-type.json');
+            $shop_type_data=json_decode($shop_type_data,true);
+
+            $shop_type_data_sql=explode(',',$member['shoptype']);
+            $shop_typeleve1=array_search($shop_type_data_sql[0], array_column($shop_type_data, 'id'));
+            $shop_type=array();
+            if ($shop_typeleve1!==false){
+                $shop_type[]=$shop_type_data[$shop_typeleve1]['name'];
+                $shop_typeleve2=array_search($shop_type_data_sql[1],array_column($shop_type_data[$shop_typeleve1]['subArr'], 'id'));
+                if ($shop_typeleve2!==false){
+                    $shop_type[]=$shop_type_data[$shop_typeleve1]['subArr'][$shop_typeleve2]['name'];
+                    $shop_typeleve3=array_search($shop_type_data_sql[2],array_column($shop_type_data[$shop_typeleve1]['subArr'][$shop_typeleve2]['childArr'], 'id'));
+                    if ($shop_typeleve3!==false){
+                        $shop_type[]=$shop_type_data[$shop_typeleve1]['subArr'][$shop_typeleve2]['childArr'][$shop_typeleve3]['name'];
+                    }
+                }
+            }
+            $member['shoptype']=implode(',',$shop_type);
+        }
         include $this->template();
     }
 
