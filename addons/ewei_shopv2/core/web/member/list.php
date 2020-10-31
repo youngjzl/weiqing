@@ -939,7 +939,7 @@ class List_EweiShopV2Page extends WebPage {
             if (!empty($black)) {
                 if ($black==2){
                     pdo_update('ewei_shop_member', array('isblack' => 2), array('id' => $member['id']));
-                    plog('member.list.edit', "设置黑名单 <br/>用户信息:  ID: {$member['id']} /  {$member['openid']}/{$member['nickname']}/{$member['realname']}/{$member['mobile']}");
+                    plog('member.list.edit', "驳回申请 <br/>用户信息:  ID: {$member['id']} /  {$member['openid']}/{$member['nickname']}/{$member['realname']}/{$member['mobile']}");
                 }else{
                     pdo_update('ewei_shop_member', array('isblack' => 1), array('id' => $member['id']));
                     plog('member.list.edit', "设置黑名单 <br/>用户信息:  ID: {$member['id']} /  {$member['openid']}/{$member['nickname']}/{$member['realname']}/{$member['mobile']}");
