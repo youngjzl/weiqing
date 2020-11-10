@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
     <script> document.documentElement.style.fontSize =document.documentElement.clientWidth/750*40 +"px";</script>
     <meta name="format-detection" content="telephone=no" />
-    <meta name="referrer" content="no-referrer" />
+    <meta name="referrer" content="never" />
     <title>{if empty($this->merch_user)}{$_W['shopset']['shop']['name']}{else}{php echo $this->merch_user['merchname']}{/if}</title>
 
     <link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/static/js/dist/foxui/css/foxui.min.css?v=0.2">
@@ -81,7 +81,24 @@
     </style>
     {/if}
 
-    <style>.danmu {display: none;opacity: 0;}</style>
+    <style>
+        .danmu {display: none;opacity: 0;}
+        .fui-menu-group {
+            background: none !important;
+        }
+        .fui-menu-group .fui-menu-item {
+            margin: 0 auto !important;
+            width: 62% !important;
+        }
+        .fui-picture img {
+            object-fit: cover !important;
+            height: 200px !important;
+        }
+        .fui-swipe-wrapper .fui-swipe-item img {
+            height: 240px !important;
+            object-fit: cover !important;
+        }
+    </style>
 </head>
 
 <body ontouchstart>
