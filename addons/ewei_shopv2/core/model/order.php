@@ -1228,7 +1228,7 @@ class Order_EweiShopV2Model
                             $price2 = round($dd / 10 * $gprice, 2);
                         }
                     } else {
-                        $dd = floatval($discounts[$key . '_pay'] * $total); //设置的会员折扣
+                        $dd = floatval(floatval($discounts[$key . '_pay']) * $total); //设置的会员折扣
                         $md = floatval($level['discount']); //会员等级折扣
                         if (!empty($dd)) {
                             $price2 = round($dd, 2);

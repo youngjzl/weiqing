@@ -15,10 +15,87 @@
         <script src="{{ basePath }}/js/common.js"></script>
         <script src="{{ basePath }}/js/jquery.js"></script>
     {% endblock %}
+    <style>
+        html {
+
+        }
+        body, .loginBox {
+            height: 100%;
+        }
+        .logo {
+            min-width: 1180px;
+            height: 76px;
+            background: #FFF;
+            line-height: 76px;
+        }
+        .logo .left, .logo .right {
+            height: 76px;
+        }
+        .logo .left>span {
+            font-size: 18px;
+        }
+        .logo .inner {
+            background: #FFF;
+        }
+        .loginBox {
+            position: relative;
+            min-width: 1180px;
+            height: 592px;
+            background: url(http://seller.weinib2b.com/static3.0/img/bg-login_n.jpg) center no-repeat;
+            background-size: cover;
+        }
+        .login-wrap {
+            position: absolute;
+            top: 126px;
+            left: 50%;
+            margin: 0 0 0 -600px;
+            width: 1180px;
+        }
+        .login {
+            position: absolute;
+            right: 0;
+            padding: 48px 44px 41px;
+            margin: 0;
+            width: 400px;
+        }
+        .login .inp>input, .code>input,
+        .submit>button, .code>button {
+            height: 48px;
+            line-height: 48px;
+        }
+        .submit>button, .code>button {
+            margin: 18px 0 20px;
+        }
+        .about {
+            padding: 90px 0;
+            min-width: 1200px;
+        }
+        .about h2 {
+            margin: 0 0 36px;
+            text-align: center;
+            font-size: 22px;
+            color: #333;
+            font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,"PingFang SC","Noto Sans",Roboto,"Microsoft Yahei",sans-serif,Apple Color Emoji,Segoe UI Emoji;
+        }
+        .about p {
+            text-align: center;
+            line-height: 1.6;
+            font-size: 14px;
+            font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,"PingFang SC","Noto Sans",Roboto,"Microsoft Yahei",sans-serif,Apple Color Emoji,Segoe UI Emoji;
+        }
+        .footer {
+            padding: 34px 0;
+            min-width: 1200px;
+        }
+        .footer p {
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body class="red">
     <div class="loginBox">
-
         <div class="logo">
             <div class="inner">
                 <div class="left fl flex">
@@ -37,22 +114,31 @@
                 </div>
             </div>
         </div>
-        <div style="position: relative;">
-        <div class="login">
-            <h3>账号登录</h3>
-            <div class="inp"><input type="tel" placeholder="手机号码" name="mobile" value="{{ mobile }}" maxlength="11"></div>
-            <div class="inp"><input type="password" name="pwd" placeholder="密码"></div>
-            <div class="inp"><input name="loginurl" type="hidden" value="{{ pcUrl('member/loginin') }}"></div>
-            <div class="inp"><input name="index" type="hidden" value="{{ pcUrl('') }}"></div>
-            <div class="forgot-pas"><a href="{{ pcUrl('member/forget') }}"><span>忘记密码</span></a></div>
-            <div class="submit"><button>登录</button></div>
-            <div class="go-regist">
-                <span>没有账号？</span>
-                <a href="{{ pcUrl('member/register') }}" class="goRegist"><span>立即注册</span></a>
+        <div class="login-wrap">
+            <div class="login">
+                <h3>账号登录</h3>
+                <div class="inp"><input type="tel" placeholder="手机号码" name="mobile" value="{{ mobile }}" maxlength="11"></div>
+                <div class="inp"><input type="password" name="pwd" placeholder="密码"></div>
+                <div class="inp"><input name="loginurl" type="hidden" value="{{ pcUrl('member/loginin') }}"></div>
+                <div class="inp"><input name="index" type="hidden" value="{{ pcUrl('') }}"></div>
+                <div class="forgot-pas"><a href="{{ pcUrl('member/forget') }}"><span>忘记密码</span></a></div>
+                <div class="submit"><button>登录</button></div>
+                <div class="go-regist">
+                    <span>没有账号？</span>
+                    <a href="{{ pcUrl('member/register') }}" class="goRegist"><span>立即注册</span></a>
+                </div>
             </div>
         </div>
-            <div class="copyright">{{ global.setting.copyright ?:'无'}}</div>
+{#            <div class="copyright">{{ global.setting.copyright ?:'无'}}</div>#}
     </div>
+
+    <div class="about">
+        <h2>关于海桃供应链</h2>
+        <p>妮素旗下S2B2C全球商品采销供应链平台，集国际商品采购、保税区 <br>及海外仓储、高效订单管理、便捷报关清关和极速物流配送为一体的全方位分销体系， <br>为国内各大商家提供跨境商品代发服务</p>
+    </div>
+
+    <div class="footer">
+        <p>Copyright 2015-2023 wenib2b.com，All Rights Reserved 浙ICP备16004799号-3</p>
     </div>
 </body>
 </html>

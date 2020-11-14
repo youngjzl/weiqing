@@ -20,7 +20,7 @@ class Aoanapi_EweiShopV2Page extends MobilePage
         set_time_limit(0);
         ini_set('memory_limit', '-1');    //内存无限
         $this->_cron_category(0);
-//        $this->_cron_goodsList(1);
+        $this->_cron_goodsList(1);
     }
     /*获取更新分类信息*/
     private function _cron_category($catId = 0){
@@ -96,7 +96,7 @@ class Aoanapi_EweiShopV2Page extends MobilePage
             if($result['success'] == true && $result['data']['totalCount'] > 0){
                 foreach ($result['data']['result'] as $val) {
                     $goods = pdo_fetch("select * from " . tablename('ewei_shop_goods_aoan') . " WHERE goodsId = :goodsId", array(':goodsId' => $val['goodsId']));
-                    if (!$goods) {
+                    if ($goods) {
                         //商品数据
                         $goods_data = array(
                             'activeEnableStore' => $val['activeEnableStore'],
@@ -249,13 +249,13 @@ class Aoanapi_EweiShopV2Page extends MobilePage
         return $result;
     }
 
-    //更新单个商品信息
+    //更新商品信息
     public function up_goodsinfo(){
         $goods = pdo_fetchall("select goodsId from " . tablename('ewei_shop_goods_aoan'));
         $data=array();
         foreach ($goods as $goodsid){
             $goodsinfo=$this->goodsInfo($goodsid['goodsId']);
-            if (!empty($goodsinfo)&&empty($goodsinfo['success']==true)){
+            if (!empty($goodsinfo)&&$goodsinfo['success']==true){
                 if (!empty($goodsinfo['data']['specs'])){
                     foreach ($goodsinfo['data']['specs'] as $list){
                         $goods_speclist=pdo_fetch("select * from " . tablename('ewei_shop_goods_aoan_spec')." where goodsId=:goodsId and productName=:productName",array(':goodsId'=>$goodsid['goodsId'],':productName'=>$list['specValue']));
@@ -274,10 +274,12 @@ class Aoanapi_EweiShopV2Page extends MobilePage
                         }else{
                             $is_up = pdo_update('ewei_shop_goods_aoan_spec', array(
                                 'isFreePost'=>$list['isFreePost'],
-                                'intro'=>$list['intro'],
+                                'weight' =>$list['weight'],
+                                'productName' =>$list['specValue'],
+                                'productNum' =>$list['num'],
+                                'unit' =>$list['unit'],
                                 'tax'=>$list['tax'],
                                 'price'=>$list['price'],
-                                'mktprice'=>$list['mktprice'],
                             ),array('goodsId'=>$goodsid['goodsId'],'productName'=>$list['specValue']));
                             $text='修改规格';
                         }
@@ -285,7 +287,7 @@ class Aoanapi_EweiShopV2Page extends MobilePage
                     }
                 }
                 $data['isFreePost'] = $goodsinfo['data']['isFreePost'];
-                $data['intro'] = $goodsinfo['data']['intro'];
+                $data['Details'] = $goodsinfo['data']['intro'];
                 $data['tax'] = $goodsinfo['data']['tax'];
                 $data['price'] = $goodsinfo['data']['price'];
                 $data['mktprice'] = $goodsinfo['data']['mktprice'];

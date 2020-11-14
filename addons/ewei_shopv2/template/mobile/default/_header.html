@@ -86,17 +86,24 @@
         .fui-menu-group {
             background: none !important;
         }
-        .fui-menu-group .fui-menu-item {
-            margin: 0 auto !important;
-            width: 62% !important;
-        }
         .fui-picture img {
             object-fit: cover !important;
             height: 200px !important;
         }
+        .fui-menu-group .fui-menu-item {
+            margin: 0 auto !important;
+            width: 62% !important;
+            display: block !important;
+        }
         .fui-swipe-wrapper .fui-swipe-item img {
-            height: 240px !important;
+            height: 300px !important;
             object-fit: cover !important;
+        }
+        .fui-header ~ .fui-content {
+            top:0;
+        }
+        .fui-header{
+            display: none;
         }
     </style>
 </head>

@@ -577,7 +577,7 @@ class List_EweiShopV2Page extends WebPage {
                 }
                 
                 //订单商品
-                $order_goods = pdo_fetchall('select op.id as option_id,og.fullbackid,op.fullbackprice,g.isfullback,g.id,g.title,og.title as gtitle,g.thumb,g.invoice,g.goodssn,og.goodssn as option_goodssn, g.productsn,og.productsn as option_productsn, og.total,
+                $order_goods = pdo_fetchall('select g.supplychain_type,op.id as option_id,og.fullbackid,op.fullbackprice,g.isfullback,g.id,g.title,og.title as gtitle,g.thumb,g.invoice,g.goodssn,og.goodssn as option_goodssn, g.productsn,og.productsn as option_productsn, og.total,
                     og.price,og.optionname as optiontitle, og.realprice,og.changeprice,og.oldprice,og.commission1,og.commission2,og.commission3,og.commissions,og.diyformdata,
                     og.diyformfields,op.specs,g.merchid,og.seckill,og.seckill_taskid,og.seckill_roomid,g.ispresell,g.costprice,op.costprice as option_costprice,og.expresssn,og.expresscom,og.express,og.sendtype,g.status as giftstatus,og.single_refundid,og.single_refundstate,og.id as ogid,og.nocommission from ' . tablename('ewei_shop_order_goods') . ' og '
                     . ' left join ' . tablename('ewei_shop_goods') . ' g on g.id=og.goodsid '
@@ -696,6 +696,10 @@ class List_EweiShopV2Page extends WebPage {
                     if($og['giftstatus'] ==2){
                         $value['giftSign'] = true;
                     }
+                    //区分供应链
+                    $supplychain_namelist = array('维妮' => 1, '澳安' => 2);
+                    $supplychain_key=array_search($og['supplychain_type'],$supplychain_namelist);
+                    $og['supplychain_type']=!empty($supplychain_key)?$supplychain_key:'无';
                 }
                 unset($og);
                 if (!empty($level) && empty($agentid)) {
