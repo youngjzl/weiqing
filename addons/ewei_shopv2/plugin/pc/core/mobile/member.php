@@ -11,6 +11,7 @@ class MemberController extends PluginMobilePage
         p("pc")->checkLogin();
         $data = $this->memberData("member");
         $data["title"] = "会员中心";
+        $data['rechargeurl']=mobileurl('member/recharge');
         return $this->view("member", $data);
     }
     /**
@@ -84,6 +85,7 @@ class MemberController extends PluginMobilePage
         unset($value);
         return $orders;
     }
+
     /**
      * 获取会员卡信息
      * @return array

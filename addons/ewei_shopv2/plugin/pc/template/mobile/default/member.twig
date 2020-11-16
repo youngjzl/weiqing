@@ -69,7 +69,7 @@
                                 <span>{{ userinfo.credit2 ? userinfo.credit2 : '0'}}</span>
                                 <span>{{ userinfo.moneytext ? userinfo.moneytext : '余额'}}</span>
                                 {% if userinfo.closerecharge==0 %}
-                                <span><a href="{php echo mobileUrl('member/recharge')}"><div class="btn">充值</div></a></span>
+                                <span><a href="{{ rechargeurl }}"><div class="btn">充值</div></a></span>
                                 {% endif %}
                             </div>
                             <div class="integral">
