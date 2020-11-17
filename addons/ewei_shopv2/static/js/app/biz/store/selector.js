@@ -1,4 +1,4 @@
-define(['core', 'tpl', 'https://api.map.baidu.com/getscript?v=2.0&ak=ZQiFErjQB7inrGpx27M1GR5w3TxZ64k7&services=&t=20170324173232'], function (core, tpl) {
+define(['core', 'tpl', 'https://api.map.baidu.com/getscript?v=2.0&ak=MztZFiFUu1BZCG1FGX04y33oTbsyNiUa&services=&t=20170324173232'], function (core, tpl) {
     var modal = {page: 1, loaded: false};
     modal.init = function (type, ids, merchid) {
 
