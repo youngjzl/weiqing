@@ -41,20 +41,46 @@ class Index_EweiShopV2Page extends MerchWebPage
             }
         }
 
-        if (!empty($_GPC['keyword'])) {
+        if (!empty($_GPC['keyword'])&&!empty($_GPC['k_type'])) {
             $_GPC['keyword'] = trim($_GPC['keyword']);
+            $_GPC['k_type']=trim($_GPC['k_type']);
 
-            $sqlcondition = ' left join ' . tablename('ewei_shop_goods_option') . ' op on g.id = op.goodsid';
-            $groupcondition = ' group by g.`id`';
+            switch ($_GPC['k_type']){
+                case '1':
+                    $sqlcondition = ' left join ' . tablename('ewei_shop_goods_option') . ' op on g.id = op.goodsid';
+                    $groupcondition = ' group by g.`id`';
 
-            $condition .= ' AND (g.`id` = :id or g.`title` LIKE :keyword or g.`goodssn` LIKE :keyword or g.`productsn` LIKE :keyword or op.`title` LIKE :keyword or op.`goodssn` LIKE :keyword or op.`productsn` LIKE :keyword)';
+                    $condition .= ' AND (g.`title` LIKE :keyword or g.`productsn` LIKE :keyword or op.`title` LIKE :keyword or op.`goodssn` LIKE :keyword or op.`productsn` LIKE :keyword)';
+                    break;
+                case '2':
+                    $condition .=' AND (g.`id`=:id LIKE :keyword or g.`goodssn` LIKE :keyword or g.`goodssn` LIKE :keyword)';
+                    break;
+                case '3':
+                    $condition .='AND  productsn=:productsn';
+                    $params[':productsn'] = '%' . $_GPC['keyword'] . '%';
+                    break;
+            }
             $params[':keyword'] = '%' . $_GPC['keyword'] . '%';
             $params[':id'] = $_GPC['keyword'];
         }
-
-        if (!empty($_GPC['cate'])) {
-            $_GPC['cate'] = intval($_GPC['cate']);
-            $condition .= " AND FIND_IN_SET({$_GPC['cate']},cates)<>0 ";
+        if (!empty($_GPC['cats'])){
+            $_GPC['cats'] = trim($_GPC['cats']);
+            $cats=explode(',',$_GPC['cats']);
+            if (is_array($cats)){
+                foreach ($cats as $list){
+                    $condition .= " AND FIND_IN_SET({$list},cates)<>0 ";
+                }
+            }
+        }
+        if (!empty($_GPC['goodsbusinesstype'])){
+            $goodsbusinesstype=trim($_GPC['goodsbusinesstype']);
+            $condition .= " AND goodsbusinesstype=:goodsbusinesstype ";
+            $params[':goodsbusinesstype'] = $goodsbusinesstype;
+        }
+        if (!empty($_GPC['brand'])) {
+            $brand = $_GPC['brand'];
+            $condition .= " AND brand LIKE :brand ";
+            $params[':brand'] = '%' .$brand.'%';
         }
 
         if (empty($goodsfrom)) {
@@ -555,5 +581,37 @@ class Index_EweiShopV2Page extends MerchWebPage
         }
         include $this->template();
 
+    }
+
+    public function goods_cat(){
+        $leve1=pdo_fetchall('select * from'.tablename('ewei_shop_category').'where parentid=0 and level=1');
+        $data=array();
+        foreach ($leve1 as $l1){
+            $leve_list=array(
+                'id'=>$l1['id'],
+                'name'=> $l1['name'],
+                'pid'=> -1,
+                'cities'=>array()
+            );
+            $leve2=pdo_fetchall('select * from'.tablename('ewei_shop_category').'where level=2 and parentid='.$l1['id']);
+            foreach ($leve2 as $k=>$l2){
+                $leve_list['cities'][]=array(
+                    'id'=> $l2['id'],
+                    'name'=> $l2['name'],
+                    'pid'=> $l1['id'],
+                    'district'=>array(),
+                );
+                $leve3=pdo_fetchall('select * from'.tablename('ewei_shop_category').'where level=3 and  parentid='.$l2['id']);
+                foreach ($leve3 as $l3){
+                    $leve_list['cities'][$k]['district'][]=array(
+                        'id'=> $l3['id'],
+                        'name'=> $l3['name'],
+                        'pid'=> $l2['id'],
+                    );
+                }
+            }
+            $data['data'][]=$leve_list;
+        }
+        show_json(1, array('data' => $data));
     }
 }

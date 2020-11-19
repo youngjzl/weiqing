@@ -136,7 +136,9 @@ if ($_W['ispost']) {
     , 'quality' => intval($_GPC['quality'])
     , 'cashier' => intval($_GPC['cashier'])
     , 'video' => trim($_GPC['video'])
-    , 'buyshow' => intval($_GPC['buyshow'])
+    , 'buyshow' => intval($_GPC['buyshow']),
+        'brand'=>$_GPC['brand'],
+        'goodsbusinesstype'=>trim(intval($_GPC['goodsbusinesstype'])),
     );
 
     if (intval($_GPC['isverify']) == 2 || $goodstype == 2 || $goodstype == 3) {

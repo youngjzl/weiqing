@@ -88,7 +88,7 @@
             <div class="input-group col-sm-6" style="margin-top: 6px">
                 <span class="input-group-select" style="width: 1%;">
                     <span style="font-size: 12px">商品搜索：</span>
-                    <select name="cate" class='form-control select2' style="width:200px;" data-placeholder="商品名称">
+                    <select name="k_type" class='form-control select2' style="width:200px;" data-placeholder="商品名称">
                         <option value="1">商品名称</option>
                         <option value="2">SKU货号/id</option>
                         <option value="3">条形码</option>
@@ -100,31 +100,33 @@
                 <span class="input-group-select">
                     <span style="font-size: 12px">商品分类：</span>
                     <div class="pick-area pick-area1" name=""></div>
+                    <input type="hidden" name="cats">
                 </span>
                 <span class="input-group-select" style="margin-left: 10px">
                     <span style="font-size: 12px">贸易类型：</span>
-                    <select name="cate" class='form-control select2' style="width:200px;" data-placeholder="贸易类型">
+                    <select name="goodsbusinesstype" class='form-control select2' style="width:200px;" data-placeholder="贸易类型">
                         <option value="0">全部</option>
-                        <option value="1">海外直邮</option>
+                        <option value="1">保税区发货</option>
                         <option value="2">香港直邮</option>
-                        <option value="3">国内贸易</option>
-                        <option value="4">保税直供</option>
+                        <option value="4">海外直邮</option>
+                        <option value="5">国内发货</option>
                     </select>
                 </span>
                 <span class="input-group-select" style="font-size: 12px">品牌：</span>
-                <input type="text" class="input-sm form-control" name='keyword' value="{$_GPC['keyword']}" placeholder="商品品牌">
+                <input type="text" class="input-sm form-control" name='brand' value="{$_GPC['brand']}" placeholder="商品品牌">
             </div>
             <div style="margin-top: 6px;margin-left: 135px;">
                 <span class="input-group-btn">
                     <button class="btn btn-primary" type="submit"> 搜索</button>
                 </span>
                 <span class="input-group-btn">
-                    <button class="btn btn-primary" type="submit"> 重置</button>
+                    <a href="{php echo merchUrl('goods')}" class="btn btn-primary"> 重置/刷新</a>
                 </span>
             </div>
 
         </div>
     </form>
+    <input type="hidden" name="goodscatsurl" value="{php echo merchUrl('goods/goods_cat')}">
 </div>
 {if count($list)>0}
 <div style="margin-top: 10px" class="page-table-header">
@@ -520,7 +522,10 @@
 <script type="text/javascript">
     require(['{php echo EWEI_SHOPV2_LOCAL}/plugin/merch/static/js/manage/pick-pcc.js'],function(){
         $(".pick-area1").pickArea({
-            "format":"province/city/county", //格式
+            "format":"province/city/county",
+            "getVal":function(){
+                $('input[name=cats]').val($(".pick-area-hidden").val());
+            }
         });
     })
 </script>
