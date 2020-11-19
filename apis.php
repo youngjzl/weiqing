@@ -16,7 +16,7 @@ if(!empty($api_user)&&empty($item)){
 	$code = "10002";
 	$reason = "请输入查询范围";
 }
-//商品列表
+//商品列表ceshi
 if($item=="goodslist"){
 
 	$keyword  = $_POST['keyword'];
