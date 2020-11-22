@@ -44,16 +44,15 @@ class Index_EweiShopV2Page extends MerchWebPage
         if (!empty($_GPC['keyword'])&&!empty($_GPC['k_type'])) {
             $_GPC['keyword'] = trim($_GPC['keyword']);
             $_GPC['k_type']=trim($_GPC['k_type']);
-
+            $sqlcondition = ' left join ' . tablename('ewei_shop_goods_option') . ' op on g.id = op.goodsid';
+            $groupcondition = ' group by g.`id`';
             switch ($_GPC['k_type']){
                 case '1':
-                    $sqlcondition = ' left join ' . tablename('ewei_shop_goods_option') . ' op on g.id = op.goodsid';
-                    $groupcondition = ' group by g.`id`';
-
                     $condition .= ' AND (g.`title` LIKE :keyword or g.`productsn` LIKE :keyword or op.`title` LIKE :keyword or op.`goodssn` LIKE :keyword or op.`productsn` LIKE :keyword)';
                     break;
                 case '2':
                     $condition .=' AND (g.`id`=:id LIKE :keyword or g.`goodssn` LIKE :keyword or g.`goodssn` LIKE :keyword)';
+                    $params[':id'] = $_GPC['keyword'];
                     break;
                 case '3':
                     $condition .='AND  productsn=:productsn';
@@ -61,14 +60,31 @@ class Index_EweiShopV2Page extends MerchWebPage
                     break;
             }
             $params[':keyword'] = '%' . $_GPC['keyword'] . '%';
-            $params[':id'] = $_GPC['keyword'];
+
         }
         if (!empty($_GPC['cats'])){
             $_GPC['cats'] = trim($_GPC['cats']);
             $cats=explode(',',$_GPC['cats']);
             if (is_array($cats)){
+                $catsname=array();
                 foreach ($cats as $list){
                     $condition .= " AND FIND_IN_SET({$list},cates)<>0 ";
+                    $catsname[]=pdo_fetch('select name from '.tablename('ewei_shop_category').' where id=:id ',array(':id'=>$list));
+                }
+                $num=count($catsname);
+                switch ($num){
+                    case 1:
+                        $catsname=$this->strc($catsname[0]['name']).'/二级/三级';
+                        break;
+                    case 2:
+                        $catsname=$this->strc($catsname[0]['name']).'/'.$this->strc($catsname[1]['name']).'/三级';
+                        break;
+                    case 3:
+                        $catsname=$this->strc($catsname[0]['name']).'/'.$this->strc($catsname[1]['name']).'/'.$this->strc($catsname[2]['name']);
+                        break;
+                    default:
+                        $catsname='province/city/county';
+                        break;
                 }
             }
         }
@@ -165,6 +181,11 @@ class Index_EweiShopV2Page extends MerchWebPage
     {
 
         require dirname(__FILE__) . "/post.php";
+    }
+
+    function strc($name){
+        $str= str_replace('/','\\',$name);
+        return $str;
     }
 
     function delete()

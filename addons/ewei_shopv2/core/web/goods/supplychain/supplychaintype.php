@@ -1,0 +1,29 @@
+<?php
+return
+    [
+        [
+            'id'=>'0',
+            'name'=>'请选择',
+            'supplychain_bg'=>'',
+        ],
+        [
+            'id'=>1,
+            'name'=>'维妮',
+            'supplychain_bg'=>'danger',
+        ],
+        [
+            'id'=>2,
+            'name'=>'澳安',
+            'supplychain_bg'=>'primary',
+        ],
+        [
+            'id'=>'10001',
+            'name'=>'云尚潮',
+            'supplychain_bg'=>'success',
+        ],
+        [
+            'id'=>'10002',
+            'name'=>'候鸟供应链',
+            'supplychain_bg'=>'primary',
+        ]
+    ];

@@ -6,38 +6,27 @@
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
       </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
     </expand>
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06ce1170-9c08-49b8-a07a-83c5c9354632" name="Default Changelist" comment="上下架到商城  按钮显示问题--已修复">
+    <list default="true" id="06ce1170-9c08-49b8-a07a-83c5c9354632" name="Default Changelist" comment="测试">
+      <change afterPath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/goods/supplychain/supplychaintype.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/core/mobile/account/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/core/mobile/account/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/core/model/member.php" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/core/model/member.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/pc/core/mobile/member.php" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/pc/core/mobile/member.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/pc/template/mobile/default/member/register.twig" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/pc/template/mobile/default/member/register.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/static/js/app/biz/member/account.js" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/static/js/app/biz/member/account.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/static/js/app/core.js" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/static/js/app/core.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/template/account/default3/rf.html" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/template/account/default3/rf.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/member/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/member/list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/sitet.txt" beforeDir="false" afterPath="$PROJECT_DIR$/app/sitet.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/attachment/images/global/wechat.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/attachment/images/global/wechat.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/goods/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/goods/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/core/web/manage/goods/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/core/web/manage/goods/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/static/js/manage/pick-pcc.js" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/static/js/manage/pick-pcc.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/template/web_v3/manage/goods/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/template/web_v3/manage/goods/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/goods/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/goods/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apis.php" beforeDir="false" afterPath="$PROJECT_DIR$/apis.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tpl/web_v3/default/ewei_shopv2/web/goods.tpl.php" beforeDir="false" afterPath="$PROJECT_DIR$/data/tpl/web_v3/default/ewei_shopv2/web/goods.tpl.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ChangesViewManager" show_ignored="true" />
   <component name="ComposerSettings">
     <execution />
   </component>
@@ -62,13 +51,14 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../BaiduNetdiskDownload/人人商城3.22（带装修小程序）+小程序对接视频教程/ewei_shopv2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/addons/ewei_shopv2/core/web/util" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -76,19 +66,20 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="Ignore Files Support" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Php\phpstudy_pro\WWW\www.weiqin.com\addons\ewei_shopv2\core\web\util" />
+      <recent name="D:\Php\phpstudy_pro\WWW\www.weiqin.com\addons\ewei_shopv2\static\js\dist" />
+      <recent name="D:\Php\phpstudy_pro\WWW\www.weiqin.com\addons\ewei_shopv2\plugin\pc\static\layui\lay\modules" />
+      <recent name="D:\Php\phpstudy_pro\WWW\www.weiqin.com\web" />
+      <recent name="D:\jzl\phpstudy_pro\WWW\www.weiqin.com\addons\ewei_shopv2\static\images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Php\phpstudy_pro\WWW\www.weiqin.com\addons\ewei_shopv2\plugin\pc\static\layui" />
       <recent name="D:\jzl\phpstudy_pro\WWW\www.weiqin.com\addons\ewei_shopv2\static\js\dist\select2" />
       <recent name="D:\jzl\phpstudy_pro\WWW\www.weiqin.com\addons\ewei_shopv2\template\web_v3\goods\supplychain\category" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\jzl\phpstudy_pro\WWW\www.weiqin.com\addons\ewei_shopv2\static\images" />
-      <recent name="D:\jzl\phpstudy_pro\WWW\www.weiqin.com\addons\ewei_shopv2\static\js\dist\select2" />
-      <recent name="D:\jzl\phpstudy_pro\WWW\www.weiqin.com\attachment\images\global" />
-      <recent name="D:\jzl\phpstudy_pro\WWW\www.weiqin.com\addons\ewei_shopv2\plugin\merch\template\mobile\default\static\images" />
-      <recent name="D:\jzl\phpstudy_pro\WWW\www.weiqin.com\addons\ewei_shopv2\plugin\merch\template\mobile\default\static\js" />
     </key>
   </component>
   <component name="RunManager">
@@ -101,7 +92,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
   <component name="SvnConfiguration">
     <configuration>C:\Users\Adminstory\AppData\Roaming\Subversion</configuration>
   </component>
@@ -137,10 +128,12 @@
       <workItem from="1602487909277" duration="10000" />
       <workItem from="1602496022282" duration="44146000" />
       <workItem from="1603081362697" duration="44682000" />
-      <workItem from="1603335520872" duration="34608000" />
-      <workItem from="1603680339016" duration="809000" />
-      <workItem from="1603681219314" duration="1361000" />
-      <workItem from="1603683320907" duration="346000" />
+      <workItem from="1603335520872" duration="10716000" />
+      <workItem from="1605763532520" duration="2789000" />
+      <workItem from="1605766587825" duration="13409000" />
+      <workItem from="1605786229463" duration="478000" />
+      <workItem from="1605841305609" duration="21698000" />
+      <workItem from="1606030914375" duration="55000" />
     </task>
     <task id="LOCAL-00001" summary="biquge小说网下载小说">
       <created>1598253023800</created>
@@ -184,18 +177,18 @@
       <option name="project" value="LOCAL" />
       <updated>1603337170732</updated>
     </task>
-    <task id="LOCAL-00007" summary="微擎版本和线上同步">
-      <created>1603354231936</created>
+    <task id="LOCAL-00007" summary="测试">
+      <created>1605767058636</created>
       <option name="number" value="00007" />
       <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
-      <updated>1603354231936</updated>
+      <updated>1605767058636</updated>
     </task>
     <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
+    <option name="version" value="2" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -210,6 +203,9 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
     <MESSAGE value="第一次git微擎（供应链项目）" />
     <MESSAGE value="biquge小说网下载小说" />
     <MESSAGE value="第一小阶段性结束" />
@@ -218,21 +214,22 @@
     <MESSAGE value="上下架到商城  按钮显示问题--已修复" />
     <MESSAGE value="修改供应链前期的一些bug以及完善pc端的功能和修复pc的bug" />
     <MESSAGE value="微擎版本和线上同步" />
-    <option name="LAST_COMMIT_MESSAGE" value="微擎版本和线上同步" />
+    <MESSAGE value="测试" />
+    <option name="LAST_COMMIT_MESSAGE" value="测试" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="452" y="94" key="#Deployment" timestamp="1596773328727">
+    <state x="747" y="386" key="#Chrome_Settings" timestamp="1605860331845">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="452" y="94" key="#Deployment/0.0.1920.1040@0.0.1920.1040" timestamp="1596773328727" />
-    <state x="846" y="124" key="#SSH_Configurations" timestamp="1596770861092">
+    <state x="747" y="386" key="#Chrome_Settings/0.0.1920.1040@0.0.1920.1040" timestamp="1605860331845" />
+    <state x="817" y="353" key="#Notifications" timestamp="1605765496589">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="846" y="124" key="#SSH_Configurations/0.0.1920.1040@0.0.1920.1040" timestamp="1596770861092" />
-    <state x="706" y="260" key="#TODO" timestamp="1603681047631">
+    <state x="817" y="353" key="#Notifications/0.0.1920.1040@0.0.1920.1040" timestamp="1605765496589" />
+    <state x="723" y="257" key="#Web_Browsers" timestamp="1605860334311">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="706" y="260" key="#TODO/0.0.1920.1040@0.0.1920.1040" timestamp="1603681047631" />
+    <state x="723" y="257" key="#Web_Browsers/0.0.1920.1040@0.0.1920.1040" timestamp="1605860334311" />
     <state x="655" y="302" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1603100482732">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -241,14 +238,14 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="624" y="215" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1600757771402" />
-    <state x="263" y="85" width="1536" height="861" key="DiffContextDialog" timestamp="1603435063971">
+    <state x="263" y="85" key="DiffContextDialog" timestamp="1598417973395">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="263" y="85" width="1536" height="861" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1603435063971" />
-    <state x="687" y="214" key="FileChooserDialogImpl" timestamp="1603341562780">
+    <state x="263" y="85" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1598417973395" />
+    <state x="687" y="214" key="FileChooserDialogImpl" timestamp="1605860320224">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="687" y="214" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1603341562780" />
+    <state x="687" y="214" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1605860320224" />
     <state x="549" y="0" key="FileDocumentManager.FileCacheConflict" timestamp="1598342180067">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -309,66 +306,50 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="748" y="426" key="NewPhpFileDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1602315335542" />
-    <state x="677" y="151" key="RollbackChangesDialog" timestamp="1603683658646">
+    <state x="677" y="151" key="RollbackChangesDialog" timestamp="1605842943509">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="677" y="151" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1603683658646" />
-    <state x="359" y="77" key="SettingsEditor" timestamp="1603681601511">
+    <state x="677" y="151" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605842943509" />
+    <state x="359" y="77" key="SettingsEditor" timestamp="1605766942914">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="359" y="77" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1603681601511" />
-    <state x="753" y="414" key="VCS.ChangelistChooser" timestamp="1603681014349">
+    <state x="359" y="77" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1605766942914" />
+    <state x="452" y="187" key="Vcs.Push.Dialog.v2" timestamp="1605768262251">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="753" y="414" key="VCS.ChangelistChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1603681014349" />
-    <state x="452" y="187" key="Vcs.Push.Dialog.v2" timestamp="1603354272736">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="452" y="187" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603354272736" />
-    <state x="779" y="394" key="WebDeployment.AddServerDialog.v.1" timestamp="1596770782250">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="779" y="394" key="WebDeployment.AddServerDialog.v.1/0.0.1920.1040@0.0.1920.1040" timestamp="1596770782250" />
+    <state x="452" y="187" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605768262251" />
     <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1599814326234">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1599814326234" />
-    <state x="165" y="119" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1603259261770">
+    <state x="165" y="119" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1605867270108">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="165" y="119" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1603259261770" />
-    <state x="727" y="414" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1597632545863">
+    <state x="165" y="119" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605867270108" />
+    <state x="727" y="414" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605767599685">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="727" y="414" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1597632545863" />
+    <state x="727" y="414" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605767599685" />
     <state x="134" y="0" width="1471" height="1018" maximized="true" key="dock-window-1" timestamp="1600231017469">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="134" y="0" width="1471" height="1018" maximized="true" key="dock-window-1/0.0.1920.1040@0.0.1920.1040" timestamp="1600231017469" />
-    <state x="309" y="157" width="765" height="736" key="find.popup" timestamp="1603443857977">
+    <state x="69" y="173" width="765" height="736" key="find.popup" timestamp="1605864328120">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="309" y="157" width="765" height="736" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603443857977" />
-    <state x="772" y="185" key="ftp.server.browser" timestamp="1596770898837">
+    <state x="69" y="173" width="765" height="736" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1605864328120" />
+    <state x="721" y="352" key="git4idea.rebase.GitRebaseDialog" timestamp="1605767131510">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="772" y="185" key="ftp.server.browser/0.0.1920.1040@0.0.1920.1040" timestamp="1596770898837" />
-    <state x="709" y="276" key="git4idea.history.wholeTree.VcsStructureChooser" timestamp="1603680826034">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="709" y="276" key="git4idea.history.wholeTree.VcsStructureChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1603680826034" />
-    <state x="687" y="391" key="git4idea.ui.GitResetDialog" timestamp="1603683539169">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="687" y="391" key="git4idea.ui.GitResetDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1603683539169" />
+    <state x="721" y="352" key="git4idea.rebase.GitRebaseDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605767131510" />
     <state x="532" y="237" key="run.anything.popup" timestamp="1600401319703">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="532" y="237" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1600401319703" />
-    <state x="532" y="-5" width="840" height="1032" key="search.everywhere.popup" timestamp="1603438404279">
+    <state x="544" y="424" width="840" height="1032" key="search.everywhere.popup" timestamp="1605859035923">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="532" y="-5" width="840" height="1032" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603438404279" />
+    <state x="544" y="424" width="840" height="1032" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1605859035923" />
     <state x="726" y="358" key="webDeployment.PermissionsDialog" timestamp="1598859753478">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -386,10 +367,10 @@
           <line>932</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/goods/index.html</url>
-          <line>596</line>
-          <option name="timeStamp" value="15" />
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/apis.php</url>
+          <line>5</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
