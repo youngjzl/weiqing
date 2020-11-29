@@ -37,9 +37,8 @@ class Index_EweiShopV2Page extends WebPage {
         $sqlcondition = $groupcondition = '';
         $condition = ' WHERE g.`uniacid` = :uniacid and g.type<>9';
         $params = array(':uniacid' => $_W['uniacid']);
-        if (!empty($_GPC['keyword']) &&!empty($_GPC['k_type'])) {
+        if (!empty($_GPC['keyword'])) {
             $_GPC['keyword'] = trim($_GPC['keyword']);
-            $_GPC['k_type']=trim($_GPC['k_type']);
 
             $sqlcondition = ' left join ' . tablename('ewei_shop_goods_option') . ' op on g.id = op.goodsid';
             if ($merch_plugin) {
@@ -48,63 +47,19 @@ class Index_EweiShopV2Page extends WebPage {
 
             $groupcondition = ' group by g.`id`';
 
-            switch ($_GPC['k_type']){
-                case '1':
-                    $condition .= ' AND (g.`title` LIKE :keyword or g.`productsn` LIKE :keyword or op.`title` LIKE :keyword or op.`goodssn` LIKE :keyword or op.`productsn` LIKE :keyword ';
-                    if ($merch_plugin) {
-                        $condition .= ' or merch.`merchname` LIKE :keyword';
-                    }
-                    $condition .= ' )';
-                    break;
-                case '2':
-                    $condition .=' AND (g.`id`=:id LIKE :keyword or g.`goodssn` LIKE :keyword or g.`goodssn` LIKE :keyword)';
-                    $params[':id'] = $_GPC['keyword'];
-                    break;
-                case '3':
-                    $condition .='AND  productsn=:productsn';
-                    $params[':productsn'] = '%' . $_GPC['keyword'] . '%';
-                    break;
+            $condition .= ' AND (g.`id` = :id or g.`title` LIKE :keyword or g.`keywords` LIKE :keyword or g.`goodssn` LIKE :keyword or g.`productsn` LIKE :keyword or op.`title` LIKE :keyword or op.`goodssn` LIKE :keyword or op.`productsn` LIKE :keyword';
+            if ($merch_plugin) {
+                $condition .= ' or merch.`merchname` LIKE :keyword';
             }
+            $condition .= ' )';
+
             $params[':keyword'] = '%' . $_GPC['keyword'] . '%';
+            $params[':id'] = $_GPC['keyword'];
         }
 
-        if (!empty($_GPC['cats'])){
-            $_GPC['cats'] = trim($_GPC['cats']);
-            $cats=explode(',',$_GPC['cats']);
-            if (is_array($cats)){
-                $catsname=array();
-                foreach ($cats as $list){
-                    $condition .= " AND FIND_IN_SET({$list},cates)<>0 ";
-                    $catsname[]=pdo_fetch('select name from '.tablename('ewei_shop_category').' where id=:id ',array(':id'=>$list));
-                }
-                $num=count($catsname);
-                switch ($num){
-                    case 1:
-                        $catsname=$this->strc($catsname[0]['name']).'/二级/三级';
-                        break;
-                    case 2:
-                        $catsname=$this->strc($catsname[0]['name']).'/'.$this->strc($catsname[1]['name']).'/三级';
-                        break;
-                    case 3:
-                        $catsname=$this->strc($catsname[0]['name']).'/'.$this->strc($catsname[1]['name']).'/'.$this->strc($catsname[2]['name']);
-                        break;
-                    default:
-                        $catsname='province/city/county';
-                        break;
-                }
-            }
-        }
-
-        if (!empty($_GPC['goodsbusinesstype'])){
-            $goodsbusinesstype=trim($_GPC['goodsbusinesstype']);
-            $condition .= " AND goodsbusinesstype=:goodsbusinesstype ";
-            $params[':goodsbusinesstype'] = $goodsbusinesstype;
-        }
-
-        if (!empty($_GPC['brand'])) {
-            $brand = $_GPC['brand'];
-            $condition .= " AND brand LIKE :brand ";
-            $params[':brand'] = '%' .$brand.'%';
+        if (!empty($_GPC['cate'])) {
+            $_GPC['cate'] = intval($_GPC['cate']);
+            $condition .= " AND ( FIND_IN_SET({$_GPC['cate']},cates)<>0 OR pcate={$_GPC['cate']} OR ccate={$_GPC['cate']} )";
         }
 
         if(!empty($_GPC['attribute'])){
@@ -1026,35 +981,5 @@ update ".tablename('ewei_shop_goods')." set minprice = marketprice,maxprice = ma
         $data['tcates'] = $tcates;
         return $data;
     }
-    public function goods_cat(){
-        $leve1=pdo_fetchall('select * from'.tablename('ewei_shop_category').'where parentid=0 and level=1');
-        $data=array();
-        foreach ($leve1 as $l1){
-            $leve_list=array(
-                'id'=>$l1['id'],
-                'name'=> $l1['name'],
-                'pid'=> -1,
-                'cities'=>array()
-            );
-            $leve2=pdo_fetchall('select * from'.tablename('ewei_shop_category').'where level=2 and parentid='.$l1['id']);
-            foreach ($leve2 as $k=>$l2){
-                $leve_list['cities'][]=array(
-                    'id'=> $l2['id'],
-                    'name'=> $l2['name'],
-                    'pid'=> $l1['id'],
-                    'district'=>array(),
-                );
-                $leve3=pdo_fetchall('select * from'.tablename('ewei_shop_category').'where level=3 and  parentid='.$l2['id']);
-                foreach ($leve3 as $l3){
-                    $leve_list['cities'][$k]['district'][]=array(
-                        'id'=> $l3['id'],
-                        'name'=> $l3['name'],
-                        'pid'=> $l2['id'],
-                    );
-                }
-            }
-            $data['data'][]=$leve_list;
-        }
-        show_json(1, array('data' => $data));
-    }
+
 }

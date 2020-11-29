@@ -98,24 +98,6 @@
     .sorting .color_red {
         color: #f55;
     }
-    .page-toolbar {
-        height: 135px;
-    }
-    .input-group-btn button{
-        margin-right: 20px;
-    }
-    .pick-area{display:inline-block;position:relative;background:#fff;text-decoration: none;cursor:default;}
-
-    .pick-show{position:relative;padding:0 8px;height:28px;line-height:24px;border:1px solid #dedede;border-radius: 3px;;}
-    .pick-show span{float:left;display:inline-block;max-width:100px;height:14px;line-height:12px;padding: 0 3px;margin-top:6px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;color:#333;cursor:pointer;}
-    .pick-show span:hover{color:#fff!important;border-radius:3px;height: 14px;}
-    .pick-show span.pressActive{background:#7894D4;color:#fff!important;border-radius:3px}
-    .pick-show em.pick-arrow{position:absolute;top:11px;right:5px;display: block;border:6px solid #999;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:4px solid transparent;}
-    .pick-show i{float:left;display:inline-block;padding:0 3px;color:#333;font-style:normal;}
-
-    .pick-list{display:none;position:absolute;line-height:36px;margin:0;padding:0;background:#fff;z-index:999999999;overflow-y:auto;overflow-x:hidden;border:1px solid #dedede;border-top:none;}
-    .pick-list li{margin:0;padding-left:8px;list-style: none;color:#888;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
-    .pick-list li:hover{color:#fff;font-weight:bold;}
 </style>
 <div class="page-header">
     当前位置：<span class="text-primary">商品管理</span>
@@ -143,11 +125,9 @@
         <input type="hidden" name="m" value="ewei_shopv2" />
         <input type="hidden" name="do" value="web" />
         <input type="hidden" name="r"  value="goods.{$goodsfrom}" />
-        <input type="hidden" name="goodscatsurl" value="{php echo webUrl('goods/goods_cat')}">
         <div class="page-toolbar">
-            <span style="margin-right:30px;">
+            <span class="pull-left" style="margin-right:30px;">
                 {ifp 'goods.add'}
-                <button class="btn btn-sm btn-primary" data-toggle="ajaxModal" href="{php echo webUrl('util/cats_selector')}">按照商品分类管理</button>
                 <a class='btn btn-sm btn-primary' href="{php echo webUrl('goods/add')}"><i class='fa fa-plus'></i> 添加商品</a>
                 {/if}
                 {ifp 'goods.add'}
@@ -161,26 +141,9 @@
                 {/if}
 
             </span>
-            <div class="input-group col-sm-6" style="margin-top: 6px">
-                <span class="input-group-select" style="width: 1%;">
-                    <span style="font-size: 12px">商品搜索：</span>
-                    <select name="k_type" class='form-control select2' style="width:200px;" data-placeholder="商品名称">
-                        <option value="1">商品名称</option>
-                        <option value="2">SKU货号/id</option>
-                        <option value="3">条形码</option>
-                    </select>
-                </span>
-                <input type="text" class="input-sm form-control" name='keyword' value="{$_GPC['keyword']}" placeholder="请输入">
-            </div>
-            <div class="input-group col-sm-9" style="margin-top: 6px">
+            <div class="input-group col-sm-6 pull-right">
                 <span class="input-group-select">
-                    <span style="font-size: 12px">商品分类：</span>
-                    <div class="pick-area pick-area1" name=""></div>
-                    <input type="hidden" name="cats">
-                </span>
-                <span class="input-group-select">
-                    <span style="font-size: 12px">商品属性：</span>
-                    <select name="attribute" class='form-control select2' style="width:200px;">
+                    <select name="attribute" class='form-control select2' style="width:200px;" data-placeholder="商品属性">
                         <option value="" {if empty($_GPC['attribute'])}selected{/if}>商品属性</option>
                         <option value="new" {if $_GPC['attribute']=='new'}selected{/if}>新品</option>
                         <option value="hot" {if $_GPC['attribute']=='hot'}selected{/if} >热卖</option>
@@ -191,23 +154,17 @@
                         <option value="nodiscount" {if $_GPC['attribute'] == 'nodiscount'}selected{/if} >不参与折扣</option>
                     </select>
                 </span>
-                <span class="input-group-select" style="margin-left: 10px">
-                    <span style="font-size: 12px">贸易类型：</span>
-                    <select name="goodsbusinesstype" class='form-control select2' style="width:200px;" data-placeholder="贸易类型">
-                        <option value="0">全部</option>
-                        <option value="1">保税区发货</option>
-                        <option value="2">香港直邮</option>
-                        <option value="4">海外直邮</option>
-                        <option value="5">国内发货</option>
+                <span class="input-group-select">
+                    <select name="cate" class='form-control select2' style="width:200px;" data-placeholder="商品分类">
+                        <option value="" {if empty($_GPC['cate'])}selected{/if} >商品分类</option>
+                        {loop $category $c}
+                        <option value="{$c['id']}" {if $_GPC['cate']==$c['id']}selected{/if} >{$c['name']}</option>
+                        {/loop}
                     </select>
                 </span>
-                <span class="input-group-select" style="font-size: 12px">品牌：</span>
-                <input type="text" class="input-sm form-control" name='brand' value="{$_GPC['brand']}" placeholder="商品品牌">
-            </div>
-            <div class="col-sm-6" style="margin-top: 6px;margin-left: 135px;">
+                <input type="text" class="input-sm form-control" name='keyword' value="{$_GPC['keyword']}" placeholder="ID/名称/编号/条码{if $merch_plugin}/商户名称{/if}">
                 <span class="input-group-btn">
-                    <button class="btn btn-sm btn-primary" type="submit"> 搜索</button>&nbsp;
-                    <a href="{php echo webUrl('goods')}" class="btn btn-sm btn-primary"> 重置/刷新</a>
+                    <button class="btn btn-primary" type="submit"> 搜索</button>&nbsp;
                     <button type="submit" value="1" name="export" class="btn btn-sm btn-success">导出商品</button>
                 </span>
             </div>
@@ -784,15 +741,5 @@
             //库存倒叙
             $('input[name=orderby]').val('total1');
         }
-    })
-</script>
-<script type="text/javascript">
-    require(['{php echo EWEI_SHOPV2_LOCAL}/plugin/merch/static/js/manage/pick-pcc.js'],function(){
-        $(".pick-area1").pickArea({
-            "format":"{php echo empty($catsname)?'province/city/county':$catsname; }",
-            "getVal":function(){
-                $('input[name=cats]').val($(".pick-area-hidden").val());
-            }
-        });
     })
 </script>

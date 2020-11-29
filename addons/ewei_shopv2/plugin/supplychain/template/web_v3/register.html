@@ -1,0 +1,309 @@
+{template 'supplychain/_header_base'}
+<link rel="stylesheet" href="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/bootstrap/css/bootstrapValidator.min.css">
+<link rel="stylesheet" href="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/bootstrap/css/bootstrap-fileinput.css">
+<style type="text/css">
+    h1{text-align:center;}
+    body{font-size: 13px}
+</style>
+<body>
+<div class="container">
+    <div class="row">
+        <section>
+            <div class="col-lg-8 col-lg-offset-2">
+                <h1 class="">供应商注册</h1>
+                <form id="defaultForm" method="post" class="form-horizontal bv-form" action="target.php" novalidate="novalidate">
+                    <div class="page-header">
+                        <h2>供应商信息</h2>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">供应商名称</label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="supplyName" placeholder="名称不超过30个字符" data-bv-field="supplyName">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label">供应商描述</label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" name="supplyDesc" placeholder="供应商描述在100字符以内" data-bv-field="supplyDesc">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">真实姓名</label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" name="realname" placeholder="姓名不超过10个字符" data-bv-field="realname">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">联系手机</label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" name="mobile" placeholder="请填写阿拉伯数字" data-bv-field="mobile">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label">客服QQ</label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" name="qq" data-bv-field="qq">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">联系邮箱</label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" name="email" data-bv-field="email">
+                        </div>
+                    </div>
+                    <div class="page-header">
+                        <h2>实名信息</h2>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">身份证号</label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="cardNum" placeholder="身份证号码" data-bv-field="cardNum">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">申请人身份证正面</label>
+<!--                        <div class="col-lg-5">-->
+<!--                            <input type="file" class="form-control" name="cardImage1" data-bv-field="cardImage1">-->
+<!--                        </div>-->
+                        <div class="fileinput fileinput-new" data-provides="fileinput"  id="exampleInputUpload">
+                            <div class="fileinput-new thumbnail" style="width: 200px;height: auto;max-height:150px;">
+                                <img id='picImg' style="width: 100%;height: auto;max-height: 140px;" src="images/noimage.png" alt="" />
+                            </div>
+                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                            <div>
+                        <span class="btn btn-primary btn-file">
+                            <span class="fileinput-new">选择文件</span>
+                            <span class="fileinput-exists">换一张</span>
+                            <input type="file" name="pic1" id="picID" accept="image/gif,image/jpeg,image/x-png"/>
+                        </span>
+                                <a href="javascript:;" class="btn btn-warning fileinput-exists" data-dismiss="fileinput">移除</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">申请人身份证反面</label>
+                        <div class="col-lg-5">
+                            <input type="file" class="form-control" name="cardImage2" data-bv-field="cardImage2">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">供应商LOGO</label>
+                        <div class="col-lg-5">
+                            <input type="file" class="form-control" name="supplyLogo" data-bv-field="supplyLogo">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">公司名称</label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" name="companyName" data-bv-field="companyName">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">选择区域</label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" name="selectAddress" data-bv-field="selectAddress">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">公司地址</label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" name="companyAddress" data-bv-field="companyAddress">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-9 col-lg-offset-3">
+                            <button type="submit" class="btn btn-primary" name="signup2" value="确定">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+<script type="text/javascript" src="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/bootstrap/js/bootstrapValidator.min.js"></script>
+<script type="text/javascript" src="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/bootstrap/js/bootstrap-fileinput.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#defaultForm').bootstrapValidator({
+//        live: 'disabled',
+            message: '请填写正确的值',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                //名称
+                supplyName:{
+                    validators: {
+                        notEmpty: {
+                            message: '必填项'
+                        },
+                        stringLength: {
+                            min: 2,
+                            max: 20,
+                            message: '字符长度请设置在2-20个字符以内'
+                        },
+                    }
+                },
+                //描述
+                supplyDesc:{
+                    validators: {
+                        stringLength: {
+                            max: 100,
+                            message: '字符长度请设置在100个字符以内'
+                        },
+                    }
+                },
+                //真实姓名
+                realname:{
+                    validators: {
+                        notEmpty: {
+                            message: '必填项'
+                        },
+                        stringLength: {
+                            max: 20,
+                            message: '字符长度请设置在20个字符以内'
+                        },
+                    }
+                },
+                //手机号码
+                mobile:{
+                    validators: {
+                        notEmpty: {
+                            message: '必填项'
+                        },
+                        stringLength: {
+                            min:11,
+                            max:11,
+                            message: '字符长度请设置在11个字符以内'
+                        },
+                        regexp: {
+                            regexp: /^[0-9_\.]+$/,
+                            message: '只能填写阿拉伯数字喔'
+                        },
+                    }
+                },
+                qq:{
+                    validators: {
+                        regexp: {
+                            regexp: /^[0-9_\.]+$/,
+                            message: '只能填写阿拉伯数字'
+                        },
+                    }
+                },
+                email: {
+                    validators: {
+                        notEmpty: {
+                            message: '必填项'
+                        },
+                        regexp: {
+                            regexp: /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/,
+                            message: '请填写正确的邮箱格式'
+                        },
+                    }
+                },
+                //身份证号
+                cardNum: {
+                    validators: {
+                        notEmpty: {
+                            message: '必填项'
+                        },
+                        regexp: {
+                            regexp: /^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/,
+                            message: '请填写正确的身份证号格式'
+                        },
+                    }
+                },
+                //身份证图片正面
+                cardImage1: {
+                    validators: {
+                        notEmpty: {
+                            message: '上传图片不能为空'
+                        },
+                        file: {
+                            extension: 'png,jpg,jpeg',
+                            type: 'image/png,image/jpg,image/jpeg',
+                            message: '请重新选择图片'
+                        }
+                    }
+                },
+                //身份证图片反
+                cardImage2: {
+                    validators: {
+                        notEmpty: {
+                            message: '上传图片不能为空'
+                        },
+                        file: {
+                            extension: 'png,jpg,jpeg',
+                            type: 'image/png,image/jpg,image/jpeg',
+                            message: '请重新选择图片'
+                        }
+                    }
+                },
+                //logo
+                supplyLogo: {
+                    validators: {
+                        notEmpty: {
+                            message: '上传图片不能为空'
+                        },
+                        file: {
+                            extension: 'png,jpg,jpeg',
+                            type: 'image/png,image/jpg,image/jpeg',
+                            message: '请重新选择图片'
+                        }
+                    }
+                },
+                //公司名字
+                companyName: {
+                    validators: {
+                        notEmpty: {
+                            message: '必填项'
+                        },
+                        stringLength: {
+                            max:50,
+                            message: '公司名字不能超过50个字符'
+                        },
+                    }
+                },
+                //区域选择
+                selectAddress: {
+                    validators: {
+                        emailAddress: {
+                            message: 'The input is not a valid email address'
+                        }
+                    }
+                },
+                //公司地址
+                companyAddress: {
+                    validators: {
+                        notEmpty: {
+                            message: '必填项'
+                        },
+                        stringLength: {
+                            max:100,
+                            message: '公司地址不能超过100个字符'
+                        },
+                    }
+                },
+            }
+        });
+
+        // Validate the form manually
+        $('#validateBtn').click(function() {
+            $('#defaultForm').bootstrapValidator('validate');
+        });
+
+        $('#resetBtn').click(function() {
+            $('#defaultForm').data('bootstrapValidator').resetForm(true);
+        });
+    });
+</script>
+{if !empty($_W['setting']['copyright']['statcode'])}{$_W['setting']['copyright']['statcode']}{/if}
+{if !empty($copyright) && !empty($copyright['copyright'])}
+<div class="signup-footer" style='width:750px;margin:auto;margin-top:10px;'>
+    <div>{$copyright['copyright']}</div>
+</div>
+{/if}
+</body>
+</html>
