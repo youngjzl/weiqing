@@ -6,22 +6,27 @@
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
       </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
     </expand>
-    <select />
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/master" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="06ce1170-9c08-49b8-a07a-83c5c9354632" name="Default Changelist" comment="测试">
-      <change afterPath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/goods/supplychain/supplychaintype.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/goods/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/goods/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/core/web/manage/goods/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/core/web/manage/goods/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/static/js/manage/pick-pcc.js" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/static/js/manage/pick-pcc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/template/web_v3/manage/goods/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/template/web_v3/manage/goods/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/goods/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/goods/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apis.php" beforeDir="false" afterPath="$PROJECT_DIR$/apis.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tpl/web_v3/default/ewei_shopv2/web/goods.tpl.php" beforeDir="false" afterPath="$PROJECT_DIR$/data/tpl/web_v3/default/ewei_shopv2/web/goods.tpl.php" afterDir="false" />
-    </list>
+    <list default="true" id="06ce1170-9c08-49b8-a07a-83c5c9354632" name="Default Changelist" comment="上下架到商城  按钮显示问题--已修复" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -40,7 +45,19 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="hiddenUrls">
+      <set>
+        <option value="git@github.com:youngjzl/weiqing.git" />
+      </set>
+    </option>
   </component>
   <component name="ProjectId" id="1fkn3OLSH4NFuZWwW3O8iOqYmx7" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -195,7 +212,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -250,10 +279,6 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="549" y="0" key="FileDocumentManager.FileCacheConflict/0.0.1920.1040@0.0.1920.1040" timestamp="1598342180067" />
-    <state x="778" y="391" key="Github.ShareDialog" timestamp="1597631991075">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="778" y="391" key="Github.ShareDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1597631991075" />
     <state width="1867" height="331" key="GridCell.Tab.0.bottom" timestamp="1600412995732">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -314,10 +339,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="359" y="77" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1605766942914" />
-    <state x="452" y="187" key="Vcs.Push.Dialog.v2" timestamp="1605768262251">
+    <state x="452" y="187" key="Vcs.Push.Dialog.v2" timestamp="1606676802863">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="452" y="187" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605768262251" />
+    <state x="452" y="187" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606676802863" />
     <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1599814326234">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -326,10 +351,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="165" y="119" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605867270108" />
-    <state x="727" y="414" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605767599685">
+    <state x="727" y="414" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1606676944492">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="727" y="414" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605767599685" />
+    <state x="727" y="414" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606676944492" />
     <state x="134" y="0" width="1471" height="1018" maximized="true" key="dock-window-1" timestamp="1600231017469">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
