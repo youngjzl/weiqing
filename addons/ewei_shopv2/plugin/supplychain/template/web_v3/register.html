@@ -62,20 +62,17 @@
                     </div>
                     <div class="form-group has-feedback">
                         <label class="col-lg-3 control-label must">申请人身份证正面</label>
-<!--                        <div class="col-lg-5">-->
-<!--                            <input type="file" class="form-control" name="cardImage1" data-bv-field="cardImage1">-->
-<!--                        </div>-->
                         <div class="fileinput fileinput-new" data-provides="fileinput"  id="exampleInputUpload">
-                            <div class="fileinput-new thumbnail" style="width: 200px;height: auto;max-height:150px;">
-                                <img id='picImg' style="width: 100%;height: auto;max-height: 140px;" src="images/noimage.png" alt="" />
+                            <div class="fileinput-new thumbnail" style="width: 200px;height: auto;max-height:150px;margin-left: 10px">
+                                <img id='picImg' style="width: 100%;height: auto;max-height: 140px;" src="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/bootstrap/img/noimage.png" alt="" />
                             </div>
-                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
-                            <div>
-                        <span class="btn btn-primary btn-file">
-                            <span class="fileinput-new">选择文件</span>
-                            <span class="fileinput-exists">换一张</span>
-                            <input type="file" name="pic1" id="picID" accept="image/gif,image/jpeg,image/x-png"/>
-                        </span>
+                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;margin-left: 10px"></div>
+                            <div style="float: right;margin: 54px 10px;">
+                                <span class="btn btn-primary btn-file">
+                                    <span class="fileinput-new">选择文件</span>
+                                    <span class="fileinput-exists">换一张</span>
+                                    <input type="file" name="cardImage1" id="cardImage1" accept="image/gif,image/jpeg,image/x-png"/>
+                                </span>
                                 <a href="javascript:;" class="btn btn-warning fileinput-exists" data-dismiss="fileinput">移除</a>
                             </div>
                         </div>
@@ -298,6 +295,35 @@
             $('#defaultForm').data('bootstrapValidator').resetForm(true);
         });
     });
+</script>
+<script type="text/javascript">
+    $(function () {
+        //比较简洁，细节可自行完善
+        $('#uploadSubmit').click(function () {
+            var data = new FormData($('#uploadForm')[0]);
+            $.ajax({
+                url: 'xxx/xxx',
+                type: 'POST',
+                data: data,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    console.log(data);
+                    if(data.status){
+                        console.log('upload success');
+                    }else{
+                        console.log(data.message);
+                    }
+                },
+                error: function (data) {
+                    console.log(data.status);
+                }
+            });
+        });
+
+    })
 </script>
 {if !empty($_W['setting']['copyright']['statcode'])}{$_W['setting']['copyright']['statcode']}{/if}
 {if !empty($copyright) && !empty($copyright['copyright'])}

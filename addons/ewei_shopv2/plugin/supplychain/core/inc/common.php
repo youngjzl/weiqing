@@ -1,4 +1,5 @@
 <?php
+require EWEI_SHOPV2_PLUGIN . 'supplychain/core/inc/function.php';
 global $_W;
 global $_GPC;
 $routes = explode('.', $_W['routes']);

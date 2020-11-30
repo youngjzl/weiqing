@@ -5,7 +5,6 @@ if (!defined('IN_IA')) {
 	exit('Access Denied');
 }
 require EWEI_SHOPV2_PLUGIN . 'supplychain/core/inc/common.php';
-require EWEI_SHOPV2_PLUGIN . 'supplychain/core/inc/function.php';
 class SupplychainWebPage extends PluginWebPage
 {
 	public $pluginname;

@@ -49,10 +49,17 @@ class Route_EweiShopV2Model {
             }
             $isNewstore = true;
             $isplugin = true;
+        } else if(strexists($_W['siteurl'] ,"web/supplychain.php")) {
+            if(empty($r)) {
+                $r = "supplychain";
+                $routes = explode('.', $r);
+            }
+            $isSupplychain = true;
+            $isplugin = true;
         } else{
             $isplugin = !empty($r) && is_dir(EWEI_SHOPV2_PLUGIN . $routes[0]);
         }
-        
+
         if ($isplugin) {
             if ($isweb) {
                 require_once EWEI_SHOPV2_CORE . "inc/page_web_plugin.php";
@@ -71,6 +78,9 @@ class Route_EweiShopV2Model {
             } else if($isNewstore){
                 $_W['plugin'] ="newstore";
                 $root = EWEI_SHOPV2_PLUGIN .  "newstore/core/web/manage/";
+            }else if($isSupplychain){
+                $_W['plugin'] ="supplychain";
+                $root = EWEI_SHOPV2_PLUGIN .  "supplychain/core/web/";
             }
             else{
                 $routes = array_slice($routes, 1);
@@ -80,7 +90,7 @@ class Route_EweiShopV2Model {
         } else if($routes[0]=='system'){
             require_once EWEI_SHOPV2_CORE . "inc/page_system.php";
         }
-        
+
         switch ($segs) {
             case 0: {
                 
@@ -169,7 +179,7 @@ class Route_EweiShopV2Model {
                 break;
             }
         }
-        
+
         if (!is_file($file)) {
             
             show_message("未找到控制器 {$r}");
@@ -195,10 +205,10 @@ class Route_EweiShopV2Model {
         
         
         $GLOBALS["_S"] = $_W['shopset']  = $global_set;
-        
-        
-        
-        
+
+
+
+
         include $file;
         
         
@@ -207,11 +217,12 @@ class Route_EweiShopV2Model {
         } else {
             $class = ucfirst($class) . "_EweiShopV2Page";
         }
-        
+
         $instance = new $class();
         if (!method_exists($instance, $method)) {
             show_message("控制器 {$_W['controller']} 方法 {$method} 未找到!");
         }
+
         
         $response = $instance->$method();
         
