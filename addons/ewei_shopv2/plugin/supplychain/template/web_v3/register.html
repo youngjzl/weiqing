@@ -1,9 +1,19 @@
 {template 'supplychain/_header_base'}
+<link rel="stylesheet" href="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/citydata/index.css">
 <link rel="stylesheet" href="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/bootstrap/css/bootstrapValidator.min.css">
 <link rel="stylesheet" href="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/bootstrap/css/bootstrap-fileinput.css">
 <style type="text/css">
     h1{text-align:center;}
     body{font-size: 13px}
+    i[data-bv-icon-for="cardImage1"]{
+        visibility: hidden;
+    }
+    i[data-bv-icon-for="cardImage2"]{
+        visibility: hidden;
+    }
+    i[data-bv-icon-for="supplyLogo"]{
+        visibility: hidden;
+    }
 </style>
 <body>
 <div class="container">
@@ -11,7 +21,7 @@
         <section>
             <div class="col-lg-8 col-lg-offset-2">
                 <h1 class="">供应商注册</h1>
-                <form id="defaultForm" method="post" class="form-horizontal bv-form" action="target.php" novalidate="novalidate">
+                <form id="defaultForm" class="form-horizontal bv-form"  novalidate="novalidate">
                     <div class="page-header">
                         <h2>供应商信息</h2>
                     </div>
@@ -79,14 +89,36 @@
                     </div>
                     <div class="form-group has-feedback">
                         <label class="col-lg-3 control-label must">申请人身份证反面</label>
-                        <div class="col-lg-5">
-                            <input type="file" class="form-control" name="cardImage2" data-bv-field="cardImage2">
+                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail" style="width: 200px;height: auto;max-height:150px;margin-left: 10px">
+                                <img style="width: 100%;height: auto;max-height: 140px;" src="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/bootstrap/img/noimage.png" alt="" />
+                            </div>
+                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;margin-left: 10px"></div>
+                            <div style="float: right;margin: 54px 10px;">
+                                <span class="btn btn-primary btn-file">
+                                    <span class="fileinput-new">选择文件</span>
+                                    <span class="fileinput-exists">换一张</span>
+                                    <input type="file" name="cardImage2" id="cardImage2" accept="image/gif,image/jpeg,image/x-png"/>
+                                </span>
+                                <a href="javascript:;" class="btn btn-warning fileinput-exists" data-dismiss="fileinput">移除</a>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group has-feedback">
                         <label class="col-lg-3 control-label must">供应商LOGO</label>
-                        <div class="col-lg-5">
-                            <input type="file" class="form-control" name="supplyLogo" data-bv-field="supplyLogo">
+                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail" style="width: 200px;height: auto;max-height:150px;margin-left: 10px">
+                                <img style="width: 100%;height: auto;max-height: 140px;" src="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/bootstrap/img/noimage.png" alt="" />
+                            </div>
+                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;margin-left: 10px"></div>
+                            <div style="float: right;margin: 54px 10px;">
+                                <span class="btn btn-primary btn-file">
+                                    <span class="fileinput-new">选择文件</span>
+                                    <span class="fileinput-exists">换一张</span>
+                                    <input type="file" name="supplyLogo" id="supplyLogo" accept="image/gif,image/jpeg,image/x-png"/>
+                                </span>
+                                <a href="javascript:;" class="btn btn-warning fileinput-exists" data-dismiss="fileinput">移除</a>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group has-feedback">
@@ -97,8 +129,8 @@
                     </div>
                     <div class="form-group has-feedback">
                         <label class="col-lg-3 control-label must">选择区域</label>
-                        <div class="col-lg-5">
-                            <input type="text" class="form-control" name="selectAddress" data-bv-field="selectAddress">
+                        <div class="col-lg-8">
+                            <div class="city-picker-selector" id="city-picker-selector2"></div>
                         </div>
                     </div>
                     <div class="form-group has-feedback">
@@ -109,7 +141,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-lg-9 col-lg-offset-3">
-                            <button type="submit" class="btn btn-primary" name="signup2" value="确定">确定</button>
+                            <button class="btn btn-primary" name="signup" id="signup" value="确定">确定</button>
                         </div>
                     </div>
                 </form>
@@ -119,11 +151,14 @@
 </div>
 <script type="text/javascript" src="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/bootstrap/js/bootstrapValidator.min.js"></script>
 <script type="text/javascript" src="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/bootstrap/js/bootstrap-fileinput.js"></script>
+<script type="text/javascript" src="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/citydata/citydata.min.js"></script>
+<script type="text/javascript" src="{php echo EWEI_SHOPV2_LOCAL}plugin/supplychain/static/citydata/cityPicker-2.0.4.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function() {
         $('#defaultForm').bootstrapValidator({
-//        live: 'disabled',
             message: '请填写正确的值',
+            excluded : [':disabled'],
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
                 invalid: 'glyphicon glyphicon-remove',
@@ -263,14 +298,6 @@
                         },
                     }
                 },
-                //区域选择
-                selectAddress: {
-                    validators: {
-                        emailAddress: {
-                            message: 'The input is not a valid email address'
-                        }
-                    }
-                },
                 //公司地址
                 companyAddress: {
                     validators: {
@@ -283,47 +310,76 @@
                         },
                     }
                 },
+            },
+        });
+        // 模拟城市-无联动/无搜索
+        var selector2 = $('#city-picker-selector2').cityPicker({
+            dataJson: cityData,
+            renderMode: true,
+            search: false,
+            autoSelected: true,
+            code: 'cityCode',
+            level: 3,
+            onChoiceEnd: function() {
+                console.log(this.values)
             }
         });
+        // 设置城市
+        selector2.setCityVal('中国');
 
-        // Validate the form manually
-        $('#validateBtn').click(function() {
-            $('#defaultForm').bootstrapValidator('validate');
-        });
+        $('#signup').on('click', function() {
+            var validator = $('#defaultForm').data("bootstrapValidator"); //获取validator对象
+            validator.validate(); //手动触发验证
+            if (validator.isValid()) { //通过验证
+                var data = new FormData(document.getElementById("defaultForm"));
+                data.append("cityjson", JSON.stringify(selector2.getCityVal()));
+                $.ajax({
+                    type: 'post',
+                    url: '{php echo supplychainUrl('register')}',
+                    data: data,
+                    contentType: false, //不设置内容类型
+                    processData: false, //不处理数据
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log(result);
+                        if (result.success) {
+                            $('#defaultForm').bootstrapTable('refresh'); //刷新table
+                        } else {
+                            /*销毁验证，待点击重新进行验证*/
+                            var validatorObj = $("#defaultForm").data('bootstrapValidator');
+                            if (validatorObj) {
+                                $("#defaultForm").data('bootstrapValidator').destroy(); //或者 validatorObj.destroy(); 都可以，销毁验证
+                                $('#defaultForm').data('bootstrapValidator', null);
+                            }
+                            alert(456);
+                        }
+                    },
+                    error: function (e) {
 
-        $('#resetBtn').click(function() {
-            $('#defaultForm').data('bootstrapValidator').resetForm(true);
-        });
+                    }
+                })
+            }
+        })
     });
 </script>
 <script type="text/javascript">
     $(function () {
-        //比较简洁，细节可自行完善
-        $('#uploadSubmit').click(function () {
-            var data = new FormData($('#uploadForm')[0]);
-            $.ajax({
-                url: 'xxx/xxx',
-                type: 'POST',
-                data: data,
-                async: false,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (data) {
-                    console.log(data);
-                    if(data.status){
-                        console.log('upload success');
-                    }else{
-                        console.log(data.message);
-                    }
-                },
-                error: function (data) {
-                    console.log(data.status);
-                }
-            });
-        });
 
-    })
+        // // 获取城市值
+        $('.btn-obtain').on('click', function (event) {
+            alert(JSON.stringify(selector1.getCityVal()));
+        });
+        //
+        // $('.btn-prohibit').on('click', function (event) {
+        //     selector1.changeStatus('disabled');
+        // });
+        //
+        // $('.btn-current').on('click', function (event) {
+        //     selector1.changeStatus('current');
+        // });
+
+
+    });
 </script>
 {if !empty($_W['setting']['copyright']['statcode'])}{$_W['setting']['copyright']['statcode']}{/if}
 {if !empty($copyright) && !empty($copyright['copyright'])}
