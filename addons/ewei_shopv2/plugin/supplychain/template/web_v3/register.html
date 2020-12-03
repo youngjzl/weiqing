@@ -27,7 +27,7 @@
                     </div>
                     <div class="form-group has-feedback">
                         <label class="col-lg-3 control-label must">供应商名称</label>
-                        <div class="col-lg-4">
+                        <div class="col-lg-5">
                             <input type="text" class="form-control" name="supplyName" placeholder="名称不超过30个字符" data-bv-field="supplyName">
                         </div>
                     </div>
@@ -41,6 +41,24 @@
                         <label class="col-lg-3 control-label must">真实姓名</label>
                         <div class="col-lg-5">
                             <input type="text" class="form-control" name="realname" placeholder="姓名不超过10个字符" data-bv-field="realname">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">登录名</label>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" name="loginName" placeholder="登录名" data-bv-field="loginName">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">密码</label>
+                        <div class="col-lg-5">
+                            <input type="password" class="form-control" name="pwd" placeholder="密码" data-bv-field="pwd">
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-lg-3 control-label must">确认密码</label>
+                        <div class="col-lg-5">
+                            <input type="password" class="form-control" name="pwd2" placeholder="再次填写密码" data-bv-field="pwd2">
                         </div>
                     </div>
                     <div class="form-group has-feedback">
@@ -66,7 +84,7 @@
                     </div>
                     <div class="form-group has-feedback">
                         <label class="col-lg-3 control-label must">身份证号</label>
-                        <div class="col-lg-4">
+                        <div class="col-lg-5">
                             <input type="text" class="form-control" name="cardNum" placeholder="身份证号码" data-bv-field="cardNum">
                         </div>
                     </div>
@@ -199,6 +217,50 @@
                         },
                     }
                 },
+                //登录名
+                loginName:{
+                    validators: {
+                        notEmpty: {
+                            message: '必填项'
+                        },
+                        regexp: {
+                            regexp: /^(?!_)(?!.*?_$)[a-zA-Z0-9_\u4e00-\u9fa5]+$/,
+                            message: '只能含有汉字、数字、字母、下划线不能以下划线开头和结尾'
+                        },
+                    }
+                },
+                //密码
+                pwd:{
+                    validators: {
+                        notEmpty: {
+                            message: '必填项'
+                        },
+                        regexp: {
+                            regexp: /^[\w]{6,12}$/,
+                            message: '格式为6-12位，只能是字母、数字和下划线'
+                        },
+                        identical: {
+                            field: 'pwd2',
+                            message: '两次输入的密码不相符'
+                        },
+                    }
+                },
+                //确认密码
+                pwd2:{
+                    validators: {
+                        notEmpty: {
+                            message: '必填项'
+                        },
+                        regexp: {
+                            regexp: /^[\w]{6,12}$/,
+                            message: '格式为6-12位，只能是字母、数字和下划线'
+                        },
+                        identical: {
+                            field: 'pwd',
+                            message: '两次输入的密码不相符'
+                        },
+                    }
+                },
                 //手机号码
                 mobile:{
                     validators: {
@@ -320,9 +382,6 @@
             autoSelected: true,
             code: 'cityCode',
             level: 3,
-            onChoiceEnd: function() {
-                console.log(this.values)
-            }
         });
         // 设置城市
         selector2.setCityVal('中国');
@@ -341,21 +400,17 @@
                     processData: false, //不处理数据
                     dataType: 'json',
                     success: function (result) {
-                        console.log(result);
-                        if (result.success) {
-                            $('#defaultForm').bootstrapTable('refresh'); //刷新table
-                        } else {
+                        alert(result.result.message);
+                        if (!result.status==1) {
                             /*销毁验证，待点击重新进行验证*/
                             var validatorObj = $("#defaultForm").data('bootstrapValidator');
                             if (validatorObj) {
                                 $("#defaultForm").data('bootstrapValidator').destroy(); //或者 validatorObj.destroy(); 都可以，销毁验证
                                 $('#defaultForm').data('bootstrapValidator', null);
                             }
-                            alert(456);
+                        }else {
+                            window.location.href="{php echo supplychainUrl('login') }";
                         }
-                    },
-                    error: function (e) {
-
                     }
                 })
             }

@@ -62,44 +62,5 @@ class Login_EweiShopV2Page extends Page
         $submitUrl = $_W['siteroot'] . 'web/supplychain.php?c=site&a=entry&i=' . $_COOKIE[$_W['config']['cookie']['pre'] . '__uniacid'] . '&m=ewei_shopv2&do=web&r=login';
         include $this->template('supplychain/login/login');
     }
-    private function getImage($set, $f)
-    {
-        global $_W;
-        if ($_W['setting']['remote']['type'] == 0)
-        {
-            if (!(empty($set[$f])))
-            {
-                return tomedia($set[$f]);
-            }
-        }
-        else if (!(empty($set[$f])))
-        {
-            return $this->takeUrl($set[$f]);
-        }
-    }
-    private function takeUrl($url)
-    {
-        global $_W;
-        if (strexists($url, 'http://') || strexists($url, 'https://'))
-        {
-            return $url;
-        }
-        $type = $_W['setting']['remote']['type'];
-        $remote = $_W['setting']['remote'];
-        $typeStr = '';
-        switch ($type)
-        {
-            case 1: $typeStr = 'ftp';
-                break;
-            case 2: $typeStr = 'alioss';
-                break;
-            case 3: $typeStr = 'qiniu';
-                break;
-            case 4: $typeStr = 'cos';
-                break;
-            default: continue;
-        }
-        return $remote[$typeStr]['url'] . '/' . $url;
-    }
 }
 ?>
