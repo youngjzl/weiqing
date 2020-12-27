@@ -1,0 +1,128 @@
+{template '_header'}
+
+<style>
+    .tabs-container .tab-pane .panel-body {border-left: none; border-right: none; border-bottom: none;}
+    .span-center{text-align: center;display: block;}
+</style>
+
+<form action="" method="post" class="form-horizontal form-validate" enctype="multipart/form-data" >
+    <div class="page-header">
+        当前位置：<span class="text-primary">微信支付</span>
+    </div>
+    <div class="page-content">
+        <div class="panel-body" id="app_wechat">
+            <div class="form-group" >
+                <label class="col-lg control-label must">微信AppId</label>
+                <div class="col-sm-9">
+                    {ifp 'sysset.payset.edit'}
+                    <input type="text" name="data[app_wechat_appid]" class="form-control" value="{if !empty($sec['app_wechat']['appid'])}{$sec['app_wechat']['appid']}{/if}"/>
+                    {else}
+                    <div class='form-control-static'>{if !empty($sec['app_wechat']['appid'])}{$sec['app_wechat']['appid']}{/if}</div>
+                    {/if}
+                </div>
+            </div>
+
+            <div class="form-group" >
+                <label class="col-lg control-label must">微信AppSecret</label>
+                <div class="col-sm-9">
+                    {ifp 'sysset.payset.edit'}
+                    <input type="text" name="data[app_wechat_appsecret]" class="form-control" value="{if !empty($sec['app_wechat']['appsecret'])}{$sec['app_wechat']['appsecret']}{/if}"/>
+                    {else}
+                    <div class='form-control-static'>{if !empty($sec['app_wechat']['appsecret'])}{$sec['app_wechat']['appsecret']}{/if}</div>
+                    {/if}
+                </div>
+            </div>
+
+            <div class="form-group" >
+                <label class="col-lg control-label must">微信商户名称</label>
+                <div class="col-sm-9">
+                    {ifp 'sysset.payset.edit'}
+                    <input type="text" name="data[app_wechat_merchname]" class="form-control" value="{if !empty($sec['app_wechat']['merchname'])}{$sec['app_wechat']['merchname']}{/if}"/>
+                    {else}
+                    <div class='form-control-static'>{if !empty($sec['app_wechat']['merchname'])}{$sec['app_wechat']['merchname']}{/if}</div>
+                    {/if}
+                </div>
+            </div>
+
+            <div class="form-group" >
+                <label class="col-lg control-label must">微信商户ID</label>
+                <div class="col-sm-9">
+                    {ifp 'sysset.payset.edit'}
+                    <input type="text" name="data[app_wechat_merchid]" class="form-control" value="{if !empty($sec['app_wechat']['merchid'])}{$sec['app_wechat']['merchid']}{/if}"/>
+                    {else}
+                    <div class='form-control-static'>{if !empty($sec['app_wechat']['merchid'])}{$sec['app_wechat']['merchid']}{/if}</div>
+                    {/if}
+                </div>
+            </div>
+
+            <div class="form-group" >
+                <label class="col-lg control-label must">微信商户API密钥</label>
+                <div class="col-sm-9">
+                    {ifp 'sysset.payset.edit'}
+                    <input type="text" name="data[app_wechat_apikey]" class="form-control" value="{if !empty($sec['app_wechat']['apikey'])}{$sec['app_wechat']['apikey']}{/if}"/>
+                    {else}
+                    <div class='form-control-static'>{if !empty($sec['app_wechat']['apikey'])}{$sec['app_wechat']['apikey']}{/if}</div>
+                    {/if}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg control-label">CERT证书文件</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="hidden" name="data[app_wechat_cert]" value="{$data['app_wechat_cert']}"/>
+                    {ifp 'sysset.payset.edit'}
+
+                    <input type="file" name="app_wechat_cert_file" class="form-control" />
+                    <span class="help-block">
+                                    {if !empty($sec['app_wechat']['cert'])}
+                                    <span class='label label-success'>已上传</span>
+                                    {else}
+                                    <span class='label label-danger'>未上传</span>
+                                    {/if}
+                                    下载证书 cert.zip 中的 apiclient_cert.pem 文件</span>
+                    {else}
+                    {if !empty($sec['app_wechat']['cert'])}
+                    <span class='label label-success'>已上传</span>
+                    {else}
+                    <span class='label label-danger'>未上传</span>
+                    {/if}
+                    {/if}
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg control-label">KEY密钥文件</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="hidden" name="data[app_wechat_key]"  value="{$data['app_wechat_key']}"/>
+                    {ifp 'sysset.payset.edit'}
+
+                    <input type="file" name="app_wechat_key_file" class="form-control" />
+                    <span class="help-block">
+                                   {if !empty($sec['app_wechat']['key'])}
+                                    <span class='label label-success'>已上传</span>
+                                    {else}
+                                    <span class='label label-danger'>未上传</span>
+                                    {/if}
+                                    下载证书 cert.zip 中的 apiclient_key.pem 文件
+                                </span>
+                    {else}
+                    {if !empty($sec['app_wechat']['key'])}
+                    <span class='label label-success'>已上传</span>
+                    {else}
+                    <span class='label label-danger'>未上传</span>
+                    {/if}
+                    {/if}
+                </div>
+            </div>
+        </div>
+        <span class="span-center">
+        {ifp 'sysset.payset.edit'}
+            <input type="submit" value="提交" class="btn btn-primary"  />
+        {/if}
+    </span>
+</form>
+
+<script type="text/javascript">
+
+</script>
+{template '_footer'}

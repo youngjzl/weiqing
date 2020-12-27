@@ -1,0 +1,103 @@
+{template '_header'}
+
+<style>
+    .tabs-container .tab-pane .panel-body {border-left: none; border-right: none; border-bottom: none;}
+    .span-center{text-align: center;display: block;}
+</style>
+
+<form action="" method="post" class="form-horizontal form-validate" enctype="multipart/form-data" >
+    <div class="page-header">
+        当前位置：<span class="text-primary">支付宝支付</span>
+    </div>
+    <div class="page-content">
+        <div class="panel-body" id="app_alipay">
+            <div class="form-group" >
+                <label class="col-lg control-label must">APPID</label>
+                <div class="col-sm-9">
+                    {ifp 'sysset.payset.edit'}
+                    <input class="form-control" name="data[app_alipay_appid]" value="{if !empty($sec['app_alipay']['appid'])}{$sec['app_alipay']['appid']}{/if}" />
+                    <div class="help-block">开放平台应用id</div>
+                    {else}
+                    <div class='form-control-static'>{if !empty($sec['app_alipay']['appid'])}{$sec['app_alipay']['appid']}{/if}</div>
+                    {/if}
+                </div>
+            </div>
+
+            <div class="form-group" >
+                <label class="col-lg control-label"></label>
+                <div class="col-sm-9">
+                    <span>查看修改旧版(RSA1)支付宝密钥<span class="text text-danger">（由于支付宝近期更新了新版的接口加密方式，新申请的支付宝应用必须使用新版(RSA2)的加密方式。使用旧版的支付宝接口生成的APP只能使用旧版(RSA1)的支付宝接口，为了保证新版(新生成的)APP和旧版(已经安装的)APP支付能同时正常使用，所以同时提供两种支付宝接口的密钥配置。)</span></span>
+                    <div class="col-lg pull-right" style="text-align: right" >
+                        <input type="checkbox" class="js-switch small " id="rsa1_isshow" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div   id="rsa1" style="display: none;">
+                <div class="form-group" >
+                    <label class="col-lg control-label ">支付宝公钥(public_key)</label>
+                    <div class="col-sm-9">
+                        {ifp 'sysset.payset.edit'}
+                        <textarea name="data[app_alipay_public_key]" rows="4" class="form-control">{if !empty($sec['app_alipay']['public_key'])}{$sec['app_alipay']['public_key']}{/if}</textarea>
+                        <div class="help-block">一行且不能有空格</div>
+                        {else}
+                        <div class='form-control-static'>{if !empty($sec['app_alipay']['public_key'])}{$sec['app_alipay']['public_key']}{/if}</div>
+                        {/if}
+                    </div>
+                </div>
+
+                <div class="form-group" >
+                    <label class="col-lg control-label">应用私钥(private_key)</label>
+                    <div class="col-sm-9">
+                        {ifp 'sysset.payset.edit'}
+                        <textarea name="data[app_alipay_private_key]" rows="4" class="form-control">{if !empty($sec['app_alipay']['private_key'])}{$sec['app_alipay']['private_key']}{/if}</textarea>
+                        <div class="help-block">一行且不能有空格</div>
+                        {else}
+                        <div class='form-control-static'>{if !empty($sec['app_alipay']['private_key'])}{$sec['app_alipay']['private_key']}{/if}</div>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" >
+                <label class="col-lg control-label must">新版支付宝公钥RSA2(public_key)</label>
+                <div class="col-sm-9">
+                    {ifp 'sysset.payset.edit'}
+                    <textarea name="data[app_alipay_public_key_rsa2]" rows="4" class="form-control">{if !empty($sec['app_alipay']['public_key_rsa2'])}{$sec['app_alipay']['public_key_rsa2']}{/if}</textarea>
+                    <div class="help-block">一行且不能有空格</div>
+                    {else}
+                    <div class='form-control-static'>{if !empty($sec['app_alipay']['public_key_rsa2'])}{$sec['app_alipay']['public_key_rsa2']}{/if}</div>
+                    {/if}
+                </div>
+            </div>
+
+            <div class="form-group" >
+                <label class="col-lg control-label must">新版应用私钥RSA2(private_key)</label>
+                <div class="col-sm-9">
+                    {ifp 'sysset.payset.edit'}
+                    <textarea name="data[app_alipay_private_key_rsa2]" rows="4" class="form-control">{if !empty($sec['app_alipay']['private_key_rsa2'])}{$sec['app_alipay']['private_key_rsa2']}{/if}</textarea>
+                    <div class="help-block">一行且不能有空格</div>
+                    {else}
+                    <div class='form-control-static'>{if !empty($sec['app_alipay']['private_key_rsa2'])}{$sec['app_alipay']['private_key_rsa2']}{/if}</div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+        <span class="span-center">
+        {ifp 'sysset.payset.edit'}
+            <input type="submit" value="提交" class="btn btn-primary"  />
+        {/if}
+        </span>
+    </div>
+</form>
+
+<script type="text/javascript">
+    require(['bootstrap'], function () {
+        $('#myTab a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+    });
+</script>
+{template '_footer'}
