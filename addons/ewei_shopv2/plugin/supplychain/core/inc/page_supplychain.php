@@ -21,6 +21,7 @@ class SupplychainWebPage extends PluginWebPage
 		} else {
 			parent::__construct(false);
 		}
+
 		$this->pluginname = $_W['plugin'];
 		$this->modulename = 'ewei_shopv2';
 		$this->plugintitle = m('plugin')->getName($this->pluginname);
@@ -36,14 +37,14 @@ class SupplychainWebPage extends PluginWebPage
 	private function init()
 	{
 		global $_W;
-		if ($_W['merchisfounder'] != '1' && $_W['routes'] != 'shop') {
+		if ($_W['supplychainisfounder'] != '1' && $_W['routes'] != 'shop') {
 			$perm = mcv($_W['routes']);
-			$perm_type = p('merch')->getLogTypes(true);
+			$perm_type = p('supplychain')->getLogTypes(true);
 			$perm_type_value = array();
 			foreach ($perm_type as $val) {
 				$perm_type_value[] = $val['value'];
 			}
-			$is_xxx = p('merch')->check_xxx($_W['routes']);
+			$is_xxx = p('supplychain')->check_xxx($_W['routes']);
 			if ($is_xxx) {
 				if (!$perm) {
 					foreach ($is_xxx as $item) {

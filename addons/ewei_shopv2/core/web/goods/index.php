@@ -108,7 +108,8 @@ class Index_EweiShopV2Page extends WebPage {
             $condition .= ' AND g.`deleted`=1';
         }else if ($goodsfrom == 'verify') {
             $status = 0;
-            $condition .= ' AND g.`deleted`=0 and merchid>0 and checked=1';
+//            $condition .= ' AND g.`deleted`=0 and merchid>0 and checked=1';
+            $condition .= ' AND g.`deleted`=0 and supplychainid>0 and checked=1';
         }
 
 

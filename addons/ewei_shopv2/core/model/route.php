@@ -27,7 +27,7 @@ class Route_EweiShopV2Model {
         }
         $r = str_replace("//", "/", trim($_GPC['r'], "/"));
         $routes = explode('.', $r);
-        
+
         $segs = count($routes);
         
         $method = "main";
@@ -51,7 +51,7 @@ class Route_EweiShopV2Model {
             $isplugin = true;
         } else if(strexists($_W['siteurl'] ,"web/supplychain.php")) {
             if(empty($r)) {
-                $r = "supplychain";
+                $r = "supplychain.manage";
                 $routes = explode('.', $r);
             }
             $isSupplychain = true;
@@ -80,7 +80,7 @@ class Route_EweiShopV2Model {
                 $root = EWEI_SHOPV2_PLUGIN .  "newstore/core/web/manage/";
             }else if($isSupplychain){
                 $_W['plugin'] ="supplychain";
-                $root = EWEI_SHOPV2_PLUGIN .  "supplychain/core/web/";
+                $root = EWEI_SHOPV2_PLUGIN .  "supplychain/core/web/manage/";
             }
             else{
                 $routes = array_slice($routes, 1);
@@ -110,7 +110,6 @@ class Route_EweiShopV2Model {
                     $file = $root . "index.php";
                     $class = "Index";
                 }
-                
                 $_W['action'] = $routes[0];
             }
                 break;
@@ -141,7 +140,7 @@ class Route_EweiShopV2Model {
                         $class = "Index";
                     }
                 }
-                
+
                 
                 $_W['action'] = $routes[0] . "." . $routes[1];
                 
@@ -181,25 +180,25 @@ class Route_EweiShopV2Model {
         }
 
         if (!is_file($file)) {
-            
+
             show_message("未找到控制器 {$r}");
         }
-        
+
         
         $_W['routes'] = $r;
         $_W['isplugin'] = $isplugin;
         $_W['controller'] = $routes[0];
-        
+
   
         $global_set= m('cache')->getArray('globalset');
-        
+
         if(empty($global_set)){
             $global_set = m('common')->setGlobalSet();
         }
         if(!is_array($global_set)){
             $global_set = array();
         }
-        
+
         empty($global_set['trade']['credittext']) && $global_set['trade']['credittext'] = "积分";
         empty($global_set['trade']['moneytext']) && $global_set['trade']['moneytext'] = "余额";
         
@@ -208,10 +207,8 @@ class Route_EweiShopV2Model {
 
 
 
-
         include $file;
-        
-        
+
         if (isset($_GPC['r']) && strpos($_GPC['r'], 'pc') !== false) {
             $class = ucfirst($class) . "Controller";
         } else {
@@ -223,13 +220,11 @@ class Route_EweiShopV2Model {
             show_message("控制器 {$_W['controller']} 方法 {$method} 未找到!");
         }
 
-        
         $response = $instance->$method();
-        
+
         if (!empty($response)) {
             echo $response;
         }
-        die;
     }
     
 }

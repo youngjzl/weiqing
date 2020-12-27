@@ -793,7 +793,7 @@ class WeUtility {
 }
 
 abstract class WeBase {
-	
+
 	public $module;
 	
 	public $modulename;
@@ -1277,7 +1277,7 @@ abstract class WeModuleReceiver extends WeBase {
 
 
 abstract class WeModuleSite extends WeBase {
-	
+
 	public $inMobile;
 
 	public function __call($name, $arguments) {

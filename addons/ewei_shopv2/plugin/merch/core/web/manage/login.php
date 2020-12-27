@@ -1,4 +1,5 @@
 <?php
+require EWEI_SHOPV2_PLUGIN . 'merch/core/inc/function.php';
 class Login_EweiShopV2Page extends Page 
 {
 	public function main() 
@@ -54,7 +55,7 @@ class Login_EweiShopV2Page extends Page
 			$status['lastvisit'] = TIMESTAMP;
 			$status['lastip'] = CLIENT_IP;
 			pdo_update('ewei_shop_merch_account', $status, array('id' => $account['id']));
-			$url = $_W['siteroot'] . 'web/merchant.php?c=site&a=entry&i=' . $account['uniacid'] . '&m=ewei_shopv2&do=web&r=shop';
+			$url = $_W['siteroot'] . 'web/merchant.php?c=site&a=entry&i=' . $account['uniacid'] . '&m=ewei_shopv2&do=web&r=goods';
 			show_json(1, array('url' => $url));
 		}
 		$submitUrl = $_W['siteroot'] . 'web/merchant.php?c=site&a=entry&i=' . $_COOKIE[$_W['config']['cookie']['pre'] . '__uniacid'] . '&m=ewei_shopv2&do=web&r=login';

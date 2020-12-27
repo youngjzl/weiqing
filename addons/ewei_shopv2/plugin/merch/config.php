@@ -175,6 +175,192 @@ return array(
     ),
 
     'manage_menu'=>array(
+        'goods' => array(
+            'title'=>'商品',
+            'subtitle'=>'商品管理',
+            'icon'=>'goods',
+            'items'=>array(
+                array(
+                    'title'=>'商品库',
+                    'desc'=>'购买商品',
+                    'perm'=>'goods.main'
+                )
+                /*
+                array(
+                    'title'=>'审核中',
+                    'route'=>'check',
+                    'desc'=>'审核中商品',
+                    'perm'=>'goods.main'
+                ),
+                array(
+                    'title'=>'已售罄',
+                    'route'=>'out',
+                    'desc'=>'已售罄/无库存商品管理',
+                    'perm'=>'goods.main'
+                ),
+                array(
+                    'title'=>'仓库中',
+                    'route'=>'stock',
+                    'desc'=>'仓库中商品管理',
+                    'perm'=>'goods.main'
+                ),
+                array(
+                    'title'=>'回收站',
+                    'route'=>'cycle',
+                    'desc'=>'回收站/已删除商品管理',
+                    'perm'=>'goods.main'
+                ),
+                array(
+                    'title'=>'商品分类',
+                    'route'=>'category'
+                ),
+                array(
+                    'title'=>'商品组',
+                    'route'=>'group'
+                ),
+                array(
+                    'title'=>'虚拟卡密',
+                    'route'=>'virtual',
+                    'items'=>array(
+                        array(
+                            'title'=>'虚拟卡密',
+                            'route'=>'temp',
+                            'extend'=>'goods.virtual.data'
+                        ),
+                        array(
+                            'title'=>'卡密分类',
+                            'route'=>'category'
+                        )
+                    )
+                )
+                */
+            )
+        ),
+        'order' => array(
+            'title' => '订单',
+            'subtitle' => '订单管理',
+            'icon' => 'order',
+            'main'=>true,
+            'items'=> array(
+                array(
+                    'title'=>'待发货',
+                    'route'=>'list.status1',
+                    'desc'=>'待发货订单管理'
+                ),
+                array(
+                    'title'=>'待收货',
+                    'route'=>'list.status2',
+                    'desc'=>'待收货订单管理'
+                ),
+                array(
+                    'title'=>'待付款',
+                    'route'=>'list.status0',
+                    'desc'=>'待付款订单管理'
+                ),
+                array(
+                    'title'=>'已完成',
+                    'route'=>'list.status3',
+                    'desc'=>'已完成订单管理'
+                ),
+                array(
+                    'title'=>'已关闭',
+                    'route'=>'list.status_1',
+                    'desc'=>'已关闭订单管理'
+                ),
+                array(
+                    'title'=>'全部订单',
+                    'route'=>'list',
+                    'desc'=>'全部订单列表',
+                    'permmust'=>'order.list.main'
+                ),
+                array(
+                    'title'=>'维权',
+                    'route'=>'list',
+                    'items'=>array(
+                        array(
+                            'title'=>'维权申请',
+                            'route'=>'status4',
+                            'desc'=>'维权申请管理'
+                        ),
+                        array(
+                            'title'=>'维权完成',
+                            'route'=>'status5',
+                            'desc'=>'维权完成管理'
+                        )
+                    )
+                ),
+                array(
+                    'title'=>'工具',
+                    'items'=>array(
+                        array(
+                            'title'=>'自定义导出',
+                            'route'=>'export',
+                            'desc'=>'订单自定义导出'
+                        ),
+                        array(
+                            'title'=>'批量发货',
+                            'route'=>'batchsend',
+                            'desc'=>'订单批量发货'
+                        )
+                    )
+                )
+            )
+        ),
+        'statistics' => array(
+            'title'=>'数据',
+            'subtitle'=>'数据统计',
+            'icon'=>'statistics',
+            'items'=>array(
+                array(
+                    'title'=>'销售统计',
+                    'items'=>array(
+                        array(
+                            'title'=>'销售统计',
+                            'route'=>'sale'
+                        ),
+                        array(
+                            'title'=>'销售指标',
+                            'route'=>'sale_analysis'
+                        ),
+                        array(
+                            'title'=>'订单统计',
+                            'route'=>'order'
+                        )
+                    )
+                ),
+                array(
+                    'title'=>'商品统计',
+                    'items'=>array(
+                        array(
+                            'title'=>'销售明细',
+                            'route'=>'goods'
+                        ),
+                        array(
+                            'title'=>'销售排行',
+                            'route'=>'goods_rank'
+                        ),
+                        array(
+                            'title'=>'销售转化率',
+                            'route'=>'goods_trans'
+                        )
+                    )
+                ),
+                array(
+                    'title'=>'会员统计',
+                    'items'=>array(
+                        array(
+                            'title'=>'消费排行',
+                            'route'=>'member_cost'
+                        ),
+                        array(
+                            'title'=>'增长趋势',
+                            'route'=>'member_increase'
+                        )
+                    )
+                )
+            )
+        )
+        /*
         'shop' => array(
             'title'=>'店铺',
             'subtitle'=>'店铺首页',
@@ -259,135 +445,6 @@ return array(
                 )
             )
         ),
-        'goods' => array(
-            'title'=>'商品',
-            'subtitle'=>'商品管理',
-            'icon'=>'goods',
-            'items'=>array(
-                array(
-                    'title'=>'出售中',
-                    'desc'=>'出售中商品管理',
-                    'perm'=>'goods.main'
-                ),
-                array(
-                    'title'=>'审核中',
-                    'route'=>'check',
-                    'desc'=>'审核中商品',
-                    'perm'=>'goods.main'
-                ),
-                array(
-                    'title'=>'已售罄',
-                    'route'=>'out',
-                    'desc'=>'已售罄/无库存商品管理',
-                    'perm'=>'goods.main'
-                ),
-                array(
-                    'title'=>'仓库中',
-                    'route'=>'stock',
-                    'desc'=>'仓库中商品管理',
-                    'perm'=>'goods.main'
-                ),
-                array(
-                    'title'=>'回收站',
-                    'route'=>'cycle',
-                    'desc'=>'回收站/已删除商品管理',
-                    'perm'=>'goods.main'
-                ),
-                array(
-                    'title'=>'商品分类',
-                    'route'=>'category'
-                ),
-                array(
-                    'title'=>'商品组',
-                    'route'=>'group'
-                ),
-                array(
-                    'title'=>'虚拟卡密',
-                    'route'=>'virtual',
-                    'items'=>array(
-                        array(
-                            'title'=>'虚拟卡密',
-                            'route'=>'temp',
-                            'extend'=>'goods.virtual.data'
-                        ),
-                        array(
-                            'title'=>'卡密分类',
-                            'route'=>'category'
-                        )
-                    )
-                )
-            )
-        ),
-        'order' => array(
-            'title' => '订单',
-            'subtitle' => '订单管理',
-            'icon' => 'order',
-            'main'=>true,
-            'items'=> array(
-                array(
-                    'title'=>'待发货',
-                    'route'=>'list.status1',
-                    'desc'=>'待发货订单管理'
-                ),
-                array(
-                    'title'=>'待收货',
-                    'route'=>'list.status2',
-                    'desc'=>'待收货订单管理'
-                ),
-                array(
-                    'title'=>'待付款',
-                    'route'=>'list.status0',
-                    'desc'=>'待付款订单管理'
-                ),
-                array(
-                    'title'=>'已完成',
-                    'route'=>'list.status3',
-                    'desc'=>'已完成订单管理'
-                ),
-                array(
-                    'title'=>'已关闭',
-                    'route'=>'list.status_1',
-                    'desc'=>'已关闭订单管理'
-                ),
-                array(
-                    'title'=>'全部订单',
-                    'route'=>'list',
-                    'desc'=>'全部订单列表',
-                    'permmust'=>'order.list.main'
-                ),
-                array(
-                    'title'=>'维权',
-                    'route'=>'list',
-                    'items'=>array(
-                        array(
-                            'title'=>'维权申请',
-                            'route'=>'status4',
-                            'desc'=>'维权申请管理'
-                        ),
-                        array(
-                            'title'=>'维权完成',
-                            'route'=>'status5',
-                            'desc'=>'维权完成管理'
-                        )
-                    )
-                ),
-                array(
-                    'title'=>'工具',
-                    'items'=>array(
-                        array(
-                            'title'=>'自定义导出',
-                            'route'=>'export',
-                            'desc'=>'订单自定义导出'
-                        ),
-                        array(
-                            'title'=>'批量发货',
-                            'route'=>'batchsend',
-                            'desc'=>'订单批量发货'
-                        )
-                    )
-                )
-            )
-        ),
         'sale' => array(
             'title'=>'营销',
             'subtitle'=>'营销设置',
@@ -431,60 +488,6 @@ return array(
                             'title'=>'其他设置',
                             'route'=>'set',
                             'desc'=>'优惠券设置'
-                        )
-                    )
-                )
-            )
-        ),
-        'statistics' => array(
-            'title'=>'数据',
-            'subtitle'=>'数据统计',
-            'icon'=>'statistics',
-            'items'=>array(
-                array(
-                    'title'=>'销售统计',
-                    'items'=>array(
-                        array(
-                            'title'=>'销售统计',
-                            'route'=>'sale'
-                        ),
-                        array(
-                            'title'=>'销售指标',
-                            'route'=>'sale_analysis'
-                        ),
-                        array(
-                            'title'=>'订单统计',
-                            'route'=>'order'
-                        )
-                    )
-                ),
-                array(
-                    'title'=>'商品统计',
-                    'items'=>array(
-                        array(
-                            'title'=>'销售明细',
-                            'route'=>'goods'
-                        ),
-                        array(
-                            'title'=>'销售排行',
-                            'route'=>'goods_rank'
-                        ),
-                        array(
-                            'title'=>'销售转化率',
-                            'route'=>'goods_trans'
-                        )
-                    )
-                ),
-                array(
-                    'title'=>'会员统计',
-                    'items'=>array(
-                        array(
-                            'title'=>'消费排行',
-                            'route'=>'member_cost'
-                        ),
-                        array(
-                            'title'=>'增长趋势',
-                            'route'=>'member_increase'
                         )
                     )
                 )
@@ -607,5 +610,6 @@ return array(
                 )
             )
         )
+        */
     )
 );

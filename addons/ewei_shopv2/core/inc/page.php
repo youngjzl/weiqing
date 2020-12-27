@@ -6,6 +6,7 @@ if (!defined('IN_IA')) {
 
 class Page extends WeModuleSite
 {
+
     public function runTasks()
     {
         global $_W;
@@ -222,9 +223,7 @@ class Page extends WeModuleSite
     
     public function template($filename = '', $type = TEMPLATE_INCLUDEPATH, $account = false){
         global $_W, $_GPC;
-        
         $isv3 = true;
-        
         if(isset($_W['shopversion'])){
             $isv3 = $_W['shopversion'];
         }
@@ -232,19 +231,23 @@ class Page extends WeModuleSite
         if($isv3 && !empty($_GPC['v2'])){
             $isv3 = false;
         }
-        
+
         if(!empty($_W['plugin']) && $isv3){
             $plugin_config = m('plugin')->getConfig($_W['plugin']);
             if((is_array($plugin_config) && empty($plugin_config['v3'])) || !$plugin_config){
                 $isv3 = false;
             }
         }
-        
+
         $bsaeTemp = array('_header', '_header_base', '_footer', '_tabs', 'funbar');
+
         if($_W['plugin']=='merch' && $_W['merch_user'] && (!in_array($filename, $bsaeTemp) || !$isv3)){
             return $this->template_merch($filename, $isv3);
         }
-        
+
+        if($_W['plugin']=='supplychain' && $_W['supplychain_user'] && (!in_array($filename, $bsaeTemp) || !$isv3)){
+            return $this->template_supplychain($filename, $isv3);
+        }
         if (empty($filename)) {
             $filename = str_replace(".", "/", $_W['routes']);
         }
@@ -256,10 +259,9 @@ class Page extends WeModuleSite
             $filename = 'web/' . $filename_default;
             $filename_v3 = 'web_v3/' . $filename_default;
         }
-        
         $name = 'ewei_shopv2';
         $moduleroot = IA_ROOT . "/addons/ewei_shopv2";
-        
+
         if (defined('IN_SYS')) {
             if(!$isv3){
                 $compile = IA_ROOT . "/data/tpl/web/{$_W['template']}/{$name}/{$filename}.tpl.php";
@@ -267,7 +269,9 @@ class Page extends WeModuleSite
                 if (!is_file($source)) {
                     $source = $moduleroot . "/template/{$filename}/index.html";
                 }
+
             }
+
             if($isv3 || !is_file($source)){
                 if($isv3){
                     $compile = IA_ROOT . "/data/tpl/web_v3/{$_W['template']}/{$name}/{$filename}.tpl.php";
@@ -276,17 +280,19 @@ class Page extends WeModuleSite
                 if (!is_file($source)) {
                     $source = $moduleroot . "/template/{$filename_v3}/index.html";
                 }
+
             }
+
             if (!is_file($source)) {
                 $explode = array_slice(explode('/', $filename), 1);
                 $temp = array_slice($explode, 1);
-                if($isv3){
+                if ($isv3) {
                     $source = $moduleroot . "/plugin/" . $explode[0] . "/template/web_v3/" . implode('/', $temp) . ".html";
                     if (!is_file($source)) {
                         $source = $moduleroot . "/plugin/" . $explode[0] . "/template/web_v3/" . implode('/', $temp) . "/index.html";
                     }
                 }
-                if(!$isv3 || !is_file($source)){
+                if (!$isv3 || !is_file($source)) {
                     $source = $moduleroot . "/plugin/" . $explode[0] . "/template/web/" . implode('/', $temp) . ".html";
                     if (!is_file($source)) {
                         $source = $moduleroot . "/plugin/" . $explode[0] . "/template/web/" . implode('/', $temp) . "/index.html";
@@ -356,24 +362,21 @@ class Page extends WeModuleSite
                 }
             }
         }
-        
+
         if (!is_file($source)) {
             exit("Error: template source '{$filename}' is not exist!");
         }
         if (DEVELOPMENT || !is_file($compile) || filemtime($source) > filemtime($compile)) {
             shop_template_compile($source, $compile, true);
         }
-        
         return $compile;
     }
     
     public function template_merch($filename, $isv3) {
         global $_W;
-        
         if (empty($filename)) {
             $filename = str_replace(".", "/", $_W['routes']);
         }
-        
         $filename = str_replace("/add", "/post", $filename);
         $filename = str_replace("/edit", "/post", $filename);
         
@@ -382,19 +385,21 @@ class Page extends WeModuleSite
         
         $compile = IA_ROOT . "/data/tpl/web/{$_W['template']}/merch/{$name}/{$filename}.tpl.php";
         $explode = explode('/', $filename);
+
         if($isv3){
             $source = $moduleroot . "/plugin/merch/template/web_v3/manage/" . implode('/', $explode) . ".html";
             if (!is_file($source)) {
                 $source = $moduleroot . "/plugin/merch/template/web_v3/manage/" . implode('/', $explode) . "/index.html";
             }
         }
+
         if(!$isv3 || !is_file($source)){
             $source = $moduleroot . "/plugin/merch/template/web/manage/" . implode('/', $explode) . ".html";
             if (!is_file($source)) {
                 $source = $moduleroot . "/plugin/merch/template/web/manage/" . implode('/', $explode) . "/index.html";
             }
         }
-        
+
         if (!is_file($source)) {
             $explode = explode('/', $filename);
             $temp = array_slice($explode, 1);
@@ -416,6 +421,62 @@ class Page extends WeModuleSite
             exit("Error: template source '{$filename}' is not exist!");
         }
         
+        if (DEVELOPMENT || !is_file($compile) || filemtime($source) > filemtime($compile)) {
+            shop_template_compile($source, $compile, true);
+        }
+        return $compile;
+    }
+
+    public function template_supplychain($filename, $isv3) {
+        global $_W;
+        if (empty($filename)) {
+            $filename = str_replace(".", "/", $_W['routes']);
+        }
+
+        $filename = str_replace("/add", "/post", $filename);
+        $filename = str_replace("/edit", "/post", $filename);
+
+        $name = 'ewei_shopv2';
+        $moduleroot = IA_ROOT . "/addons/ewei_shopv2";
+
+        $compile = IA_ROOT . "/data/tpl/web/{$_W['template']}/supplychain/{$name}/{$filename}.tpl.php";
+        $explode = explode('/', $filename);
+
+        if($isv3){
+            $source = $moduleroot . "/plugin/supplychain/template/web_v3/manage/" . implode('/', $explode) . ".html";
+            if (!is_file($source)) {
+                $source = $moduleroot . "/plugin/supplychain/template/web_v3/manage/" . implode('/', $explode) . "/index.html";
+            }
+        }
+
+        if(!$isv3 || !is_file($source)){
+            $source = $moduleroot . "/plugin/supplychain/template/web/manage/" . implode('/', $explode) . ".html";
+            if (!is_file($source)) {
+                $source = $moduleroot . "/plugin/supplychain/template/web/manage/" . implode('/', $explode) . "/index.html";
+            }
+        }
+
+        if (!is_file($source)) {
+            $explode = explode('/', $filename);
+            $temp = array_slice($explode, 1);
+            if($isv3){
+                $source = $moduleroot . "/plugin/" . $explode[0] . "/template/web_v3/" . implode('/', $temp) . ".html";
+                if (!is_file($source)) {
+                    $source = $moduleroot . "/plugin/" . $explode[0] . "/template/web_v3/" . implode('/', $temp) . "/index.html";
+                }
+            }
+            if(!$isv3 || !is_file($source)){
+                $source = $moduleroot . "/plugin/" . $explode[0] . "/template/web/" . implode('/', $temp) . ".html";
+                if (!is_file($source)) {
+                    $source = $moduleroot . "/plugin/" . $explode[0] . "/template/web/" . implode('/', $temp) . "/index.html";
+                }
+            }
+        }
+
+        if (!is_file($source)) {
+            exit("Error: template source '{$filename}' is not exist!");
+        }
+
         if (DEVELOPMENT || !is_file($compile) || filemtime($source) > filemtime($compile)) {
             shop_template_compile($source, $compile, true);
         }

@@ -3395,7 +3395,6 @@ class Perm_EweiShopV2ComModel extends ComModel
     private function check($permtype = '')
     {
         global $_W, $_GPC;
-
         if ($_W['role'] == 'manager' || $_W['role'] == 'founder' || $_W['role'] == 'owner') {
             return true;
         }

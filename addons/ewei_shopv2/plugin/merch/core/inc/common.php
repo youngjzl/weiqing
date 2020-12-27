@@ -156,6 +156,29 @@ function mcom($com = '')
 {
 	return true;
 }
+function de_supplychain_code($code,$salt='lpkostrv'){
+    global $_W;
+
+    static $source_string = 'E5FCDG3HQA4B1NOPIJ2RSTUV67MWX89KLYZ';
+
+    if (strrpos($code, $salt) !== false)
+
+        $code = substr($code, strrpos($code, $salt)+1);
+
+    $len = strlen($code);
+
+    $code = strrev($code);
+
+    $num = 0;
+
+    for ($i=0; $i < $len; $i++) {
+
+        $num += strpos($source_string, $code[$i]) * pow(35, $i);
+
+    }
+
+    return $num;
+}
 
 
 ?>

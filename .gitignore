@@ -5,6 +5,7 @@
 # IntelliJ project files
 .idea
 *.iml
+*.xlsx
 *.rar
 *.xml
 *.txt
@@ -14,3 +15,4 @@
 *.tpl.php
 out
 gen
+/addons/ewei_shopv2/data/tmp/16074821142.xlsx

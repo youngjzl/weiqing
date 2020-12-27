@@ -1,10 +1,318 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{php $no_left=true}
+{template '_header'}
+<style>
+    .ibox-content h3{
+        font-size:14px;
+        line-height: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .ibox-content p{
+        line-height: 1.5;
+    }
+    .fui-list-group{
+        border-bottom:0px;
+    }
+</style>
+<div class="page-header">当前位置：<span class="text-primary">首页</span></div>
 
-</body>
-</html>
+<div class="page-content transparent">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5><i class="icow icow-shop"></i>欢迎您，供货商</h5>
+                    {ifp 'sysset'}
+                    <ul>
+                        <a href="{php echo supplychainUrl('sysset')}" class="text-primary">修改</a>
+                    </ul>
+                    {/if}
+                </div>
+                <div class="ibox-content" style="height: 107px;">
+                    <div class="col-sm-2" style="padding:0">
+                        <img onerror="this.src='{EWEI_SHOPV2_LOCAL}static/images/nopic.png'" src="{php echo tomedia($user['logo'])}" style="width:65px;height:65px;border-radius:5px">
+                    </div>
+                    <div class="col-sm-10"  style="padding-left:30px">
+                        <h3>{$user['supplychainname']}</h3>
+                        <p>我的分享码：{$user['code']}</p>
+                        <p>{$user['desc']}</p>
+                        <p class=''>
+                            我是供应商的描述
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="ibox-content  no-border">
+                <ul class="fui-list-group">
+                    {ifp 'goods.out'}
+                    <li class="fui-list">
+                        <a href="{php echo supplychainUrl('goods/out')}">
+                            <div class="fui-list-media">
+                                <span class="icow text-info icow-goodsL"></span>
+                            </div>
+                            <div class="fui-list-inner">
+                                <h5 class="goods_totals">-</h5>
+                                <p>已售罄商品</p>
+                            </div>
+                        </a>
+                    </li>
+                    {/if}
+                    {ifp 'order.list.status1'}
+                    <li class="fui-list">
+                        <a href="{php echo webUrl('order/list/status1')}">
+                            <div class="fui-list-media">
+                                <span class="icow text-green icow-fahuo"></span>
+                            </div>
+                            <div class="fui-list-inner">
+                                <h5 class="order_status1">-</h5>
+                                <p>{if $is_openmerch==1}自营{/if}待发货订单</p>
+                            </div>
+                        </a>
+                    </li>
+                    {/if}
+                    {ifp 'order.list.status4'}
+                    <li class="fui-list">
+                        <a href="{php echo webUrl('order/list/status4')}">
+                            <div class="fui-list-media">
+                                <span class="icow text-primary icow-tuihuo"></span>
+                            </div>
+                            <div class="fui-list-inner">
+                                <h5 class="order_status4">-</h5>
+                                <p>{if $is_openmerch==1}自营{/if}维权中订单</p>
+                            </div>
+                        </a>
+                    </li>
+                    {/if}
+                    {ifp 'finance.log.withdraw'}
+                    <li class="fui-list">
+                        <a href="{php echo webUrl('finance/log/withdraw',array('status'=>0))}">
+                            <div class="fui-list-media">
+                                <span class="icow text-warning icow-shenhe"></span>
+                            </div>
+                            <div class="fui-list-inner">
+                                <h5 class="finance_total">-</h5>
+                                <p>待审核提现</p>
+                            </div>
+                        </a>
+                    </li>
+                    {/if}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-{$ordercol}">
+            <div class="ibox" style="position: relative;">
+                <div class="ibox-title">
+                    <h5><i class="icow">&#xe622;</i>订单概述</h5>
+                    <ul class="nav nav-tabs" id="orderinfo">
+                        <li class="active"><a data-toggle="tab"  href="#order_count_0" onclick="get_order(0)">今日</a></li>
+                        <li><a data-toggle="tab" href="#order_count_1" onclick="get_order(1)">昨日</a></li>
+                        <li><a data-toggle="tab" href="#order_count_7" onclick="get_order(7)">最近七日</a></li>
+                        <li><a data-toggle="tab" href="#order_count_30" onclick="get_order(30)">本月</a></li>
+                    </ul>
+                </div>
+                <div class="ibox-content">
+                    <div class="tab-content" style="height: auto;">
+                        <div class="tab-pane active" id="order_count_0">
+                            <div class="fui-list-group">
+                                <div class="fui-list no-padding">
+                                    <div class="fui-list-inner">
+                                        <h4 class="text-warning order_count_0 _popover-tips" data-content="成交量：已付款订单数<br>交易量：下单总数（含未付款订单）">-</h4>
+                                        成交量/交易量(件)
+                                    </div>
+                                </div>
+                                <div class="fui-list no-padding">
+                                    <div class="fui-list-inner">
+                                        <h4 class="text-warning order_price_0 _popover-tips" data-content="成交额：已付款订单金额（含运费）<br>交易额：下单总额（含运费）">-</h4>
+                                        成交额/交易额(元)
+                                    </div>
+                                </div>
+                                <div class="fui-list no-padding">
+                                    <div class="fui-list-inner">
+                                        <h4 class="text-warning order_avg_0 _popover-tips" data-content="成交额/下单去重会员数（含维权订单）">-</h4>
+                                        人均消费(元)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="order_count_1">
+                            <div class="fui-list-group">
+                                <div class="fui-list no-padding">
+                                    <div class="fui-list-inner">
+                                        <h4 class="text-warning order_count_1 _popover-tips" data-content="成交量：已付款订单数<br>交易量：下单总数（含未付款订单）">-</h4>
+                                        成交量/交易量(件)
+                                    </div>
+                                </div>
+                                <div class="fui-list no-padding">
+                                    <div class="fui-list-inner">
+                                        <h4 class="text-warning order_price_1 _popover-tips" data-content="成交额：已付款订单金额（含运费）<br>交易额：下单总额（含运费）">-</h4>
+                                        成交额/交易额(元)
+                                    </div>
+                                </div>
+                                <div class="fui-list no-padding">
+                                    <div class="fui-list-inner">
+                                        <h4 class="text-warning order_avg_1 _popover-tips" data-content="成交额/下单去重会员数（含维权订单）">-</h4>
+                                        人均消费(元)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="order_count_7">
+                            <div class="fui-list-group">
+                                <div class="fui-list no-padding">
+                                    <div class="fui-list-inner">
+                                        <h4 class="text-warning order_count_7 _popover-tips" data-content="成交量：已付款订单数<br>交易量：下单总数（含未付款订单）">-</h4>
+                                        成交量/交易量(件)
+                                    </div>
+                                </div>
+                                <div class="fui-list no-padding">
+                                    <div class="fui-list-inner">
+                                        <h4 class="text-warning order_price_7 _popover-tips" data-content="成交额：已付款订单金额（含运费）<br>交易额：下单总额（含运费）">-</h4>
+                                        成交额/交易额(元)
+                                    </div>
+                                </div>
+                                <div class="fui-list no-padding">
+                                    <div class="fui-list-inner">
+                                        <h4 class="text-warning order_avg_7 _popover-tips" data-content="成交额/下单去重会员数（含维权订单）">-</h4>
+                                        人均消费(元)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="order_count_30">
+                            <div class="fui-list-group">
+                                <div class="fui-list no-padding">
+                                    <div class="fui-list-inner">
+                                        <h4 class="text-warning order_count_30 _popover-tips" data-content="成交量：已付款订单数<br>交易量：下单总数（含未付款订单）">-</h4>
+                                        成交量/交易量(件)
+                                    </div>
+                                </div>
+                                <div class="fui-list no-padding">
+                                    <div class="fui-list-inner">
+                                        <h4 class="text-warning order_price_30 _popover-tips" data-content="成交额：已付款订单金额（含运费）<br>交易额：下单总额（含运费）">-</h4>
+                                        成交额/交易额(元)
+                                    </div>
+                                </div>
+                                <div class="fui-list no-padding">
+                                    <div class="fui-list-inner">
+                                        <h4 class="text-warning order_avg_30 _popover-tips" data-content="成交额/下单去重会员数（含维权订单）">-</h4>
+                                        人均消费(元)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ibox">
+                <div class="ibox-content" style="border: 0;">
+                    <div class="row relative">
+                        <div class="ibox-loading" id="echarts-line-chart-loading"></div>
+                        <div class="col-md-12">
+                            <div class="" id="echarts-line-chart" style="height:156px; margin-top: 8px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-{$ordercol}">
+            <div class="ibox h300">
+                <div class="ibox-title">
+                    <h5><i class="icow">&#xe615;</i>商品销量排行</h5>
+                    <ul class="nav nav-tabs" id="sale">
+                        <li class="active"><a data-toggle="tab" href="#goods_rank_0" onclick="get_goods(0)">今日</a></li>
+                        <li><a data-toggle="tab" href="#goods_rank_1" onclick="get_goods(1)">昨日</a></li>
+                        <li><a data-toggle="tab" href="#goods_rank_7" onclick="get_goods(7)">最近七日</a></li>
+                        {ifp 'statistics.goods'}
+                        <li><a href="{php echo webUrl('statistics/goods')}">更多</a></li>
+                        {/if}
+                    </ul>
+                </div>
+                <div class="ibox-content">
+                    <div class="tab-content relative">
+                        <div class="ibox-loading" id="goods-rank-loading"></div>
+                        <div class="tab-pane active" id="goods_rank_0">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th width="40px">排名</th>
+                                    <th width="">商品名称</th>
+                                    <th width="20%">成交数量</th>
+                                    <th width="20%">成交金额</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="goods_rank_1">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th width="40px">排名</th>
+                                    <th width="">商品名称</th>
+                                    <th width="20%">成交数量</th>
+                                    <th width="20%">成交金额</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="goods_rank_7">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th width="40px">排名</th>
+                                    <th width="">商品名称</th>
+                                    <th width="20%">成交数量</th>
+                                    <th width="20%">成交金额</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.ajax({
+            type: "GET",
+            url: "{php echo supplychainUrl('order/list/ajaxgettotals')}",
+            dataType: "json",
+            success: function (data) {
+                shopajax();
+                var res = data.result;
+                $("h5.status1").text(res.status1);
+                $("h5.status4").text(res.status4);
+            }
+        });
+
+        function shopajax() {
+            $.ajax({
+                type: "GET",
+                url: "{php echo supplychainUrl('shop/ajax')}",
+                dataType: "json",
+                success: function (data) {
+                    var res = data.result;
+                    $("h5.goods_totals").text(res.goods_totals);
+                }
+            });
+        }
+    });
+</script>
+
+
+{template '_footer'}

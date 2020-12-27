@@ -797,6 +797,15 @@ if (!function_exists('shop_template_parse')) {
                 return $str;
             }
         }
+        if (strexists($_W['siteurl'], 'supplychain.php') || strexists($_W['siteurl'], 'r=supplychain.manage')) {
+            //供应商分权
+            if (p('supplychain')) {
+                $str = preg_replace('/{ifp\s+(.+?)}/', '<?php if(mcv($1)) { ?>', $str);
+                $str = preg_replace('/{ifpp\s+(.+?)}/', '<?php if(mcp($1)) { ?>', $str);
+                $str = preg_replace('/{ife\s+(\S+)\s+(\S+)}/', '<?php if( mce($1 ,$2) ) { ?>', $str);
+                return $str;
+            }
+        }
         if (strexists($_W['siteurl'], 'newstoreant.php')) {
             //门店分权
             if (p('newstore')) {
@@ -1682,6 +1691,11 @@ if (!function_exists('webUrl')) {
                     return merchUrl($do, $query, $full);
                 }
             }
+            if ($_W['plugin'] == 'supplychain') {
+                if (function_exists('supplychainUrl')) {
+                    return supplychainUrl($do, $query, $full);
+                }
+            }
             if ($_W['plugin'] == 'newstore') {
                 if (function_exists('newstoreUrl')) {
                     return newstoreUrl($do, $query, $full);
@@ -1732,6 +1746,7 @@ if (!function_exists('dump')) {
             var_dump($val);
             echo '</pre>';
         }
+        exit();
     }
 }
 

@@ -3,12 +3,15 @@
 class System_EweiShopV2Model
 {
 	private $merch = false;
+	private $supplychain = false;
 
 	public function __construct()
 	{
 		global $_W;
 		if ($_W['plugin'] == 'merch' && $_W['merch_user']) {
 			$this->merch = true;
+		} else if ($_W['plugin']=='supplychain' && $_W['supplychain_user']) {
+			$this->supplychain = true;
 		}
 	}
 
@@ -29,6 +32,8 @@ class System_EweiShopV2Model
 
 		if ($this->merch) {
 			$allmenus = $this->pluginMenu('merch', 'manage_menu');
+		}else if ($this->supplychain){
+			$allmenus = $this->pluginMenu('supplychain', 'manage_menu');
 		}
 		else {
 			if (!$_W['isplugin'] && $routes[0] == 'system') {
@@ -170,6 +175,9 @@ class System_EweiShopV2Model
 						}
 
 						if ($this->merch && $child['hidemerch']) {
+							continue;
+						}
+						if ($this->supplychain && $child['hidesupplychain']) {
 							continue;
 						}
 
@@ -566,7 +574,12 @@ class System_EweiShopV2Model
 			$menus = $this->shopMenu();
 		}
 		else {
-			$menus = $this->pluginMenu('merch', 'manage_menu');
+			if (!$this->supplychain) {
+				$menus = $this->shopMenu();
+			}else{
+				$menus = $this->pluginMenu('merch', 'manage_menu');
+			}
+
 		}
 
 		foreach ($menus as $key => $val) {
@@ -1274,6 +1287,17 @@ class System_EweiShopV2Model
 				unset($config['manage_menu']['apply']['items'][1]);
 			}
 		}
+		if (p('supplychain')) {
+			$params = array(':uniacid' => $_W['uniacid'], ':supplychainid' => $_W['supplychainid']);
+			$_condition = 'and uniacid=:uniacid and id=:supplychainid';
+			$_sql = 'select iscredit from' . tablename('ewei_shop_supplychain_user') . ('where 1 ' . $_condition);
+			$iscredit = pdo_fetch($_sql, $params);
+			$iscredit = $iscredit['iscredit'];
+
+			if ($iscredit == 1) {
+				unset($config['manage_menu']['apply']['items'][1]);
+			}
+		}
 
 		return empty($config[$key]) ? array() : $config[$key];
 	}
@@ -1331,39 +1355,46 @@ class System_EweiShopV2Model
 			$return_arr['logout'] = merchUrl('quit');
 		}
 		else {
-			$return_arr['menu_title'] = $_W['uniaccount']['name'];
-			if ($_W['role'] == 'founder' && $routes[0] != 'system') {
-				$return_arr['system'] = 1;
+			if($this->supplychain){
+				$return_arr['menu_title'] = $_W['supplychain_username'] . '【' . $_W['uniaccount']['username']. '】' ;
+				$return_arr['menu_items'][] = array('text' => '修改密码', 'href' => supplychainUrl('updatepassword'));
+				$return_arr['logout'] = supplychainUrl('quit');
+			}else{
+				$return_arr['menu_title'] = $_W['uniaccount']['name'];
+				if ($_W['role'] == 'founder' && $routes[0] != 'system') {
+					$return_arr['system'] = 1;
+				}
+
+				if ($routes[0] == 'system') {
+					$return_arr['menu_items'][] = array('text' => '返回商城', 'href' => webUrl(), 'icow' => 'icow-qiehuan');
+				}
+				else {
+					$return_arr['menu_items'][] = array('text' => '切换公众号', 'href' => webUrl('sysset/account'), 'icow' => 'icow-qiehuan');
+					if ($_W['role'] == 'manager' || $_W['role'] == 'founder') {
+						$return_arr['menu_items'][] = array('text' => '编辑公众号', 'href' => './index.php?c=account&a=post&uniacid=' . $_W['uniacid'] . '&acid=' . $_W['acid'], 'blank' => 'true', 'icow' => 'icow-bianji5');
+						$return_arr['menu_items'][] = array('text' => '支付方式', 'href' => webUrl('sysset/payset'), 'icow' => 'icow-zhifu');
+					}
+
+					$permset = intval(m('cache')->getString('permset', 'global'));
+					if (com('perm') && cv('perm')) {
+						$return_arr['menu_items'][] = 'line';
+						$return_arr['menu_items'][] = array('text' => '权限管理', 'href' => webUrl('perm'), 'icow' => 'icow-quanxian');
+					}
+
+					if (p('grant')) {
+						$return_arr['menu_items'][] = 'line';
+						$return_arr['menu_items'][] = array('text' => '应用授权', 'href' => webUrl('plugingrant'), 'icow' => 'icow-shouquan');
+					}
+
+					if ($_W['isfounder'] && $_W['role'] != 'vice_founder') {
+					}
+
+					$return_arr['menu_items'][] = array('text' => '修改密码', 'href' => './index.php?c=user&a=profile&', 'blank' => true, 'icow' => 'icow-quanxian1');
+				}
+
+				$return_arr['logout'] = './index.php?c=user&a=logout&';
 			}
 
-			if ($routes[0] == 'system') {
-				$return_arr['menu_items'][] = array('text' => '返回商城', 'href' => webUrl(), 'icow' => 'icow-qiehuan');
-			}
-			else {
-				$return_arr['menu_items'][] = array('text' => '切换公众号', 'href' => webUrl('sysset/account'), 'icow' => 'icow-qiehuan');
-				if ($_W['role'] == 'manager' || $_W['role'] == 'founder') {
-					$return_arr['menu_items'][] = array('text' => '编辑公众号', 'href' => './index.php?c=account&a=post&uniacid=' . $_W['uniacid'] . '&acid=' . $_W['acid'], 'blank' => 'true', 'icow' => 'icow-bianji5');
-					$return_arr['menu_items'][] = array('text' => '支付方式', 'href' => webUrl('sysset/payset'), 'icow' => 'icow-zhifu');
-				}
-
-				$permset = intval(m('cache')->getString('permset', 'global'));
-				if (com('perm') && cv('perm')) {
-					$return_arr['menu_items'][] = 'line';
-					$return_arr['menu_items'][] = array('text' => '权限管理', 'href' => webUrl('perm'), 'icow' => 'icow-quanxian');
-				}
-
-				if (p('grant')) {
-					$return_arr['menu_items'][] = 'line';
-					$return_arr['menu_items'][] = array('text' => '应用授权', 'href' => webUrl('plugingrant'), 'icow' => 'icow-shouquan');
-				}
-
-				if ($_W['isfounder'] && $_W['role'] != 'vice_founder') {
-				}
-
-				$return_arr['menu_items'][] = array('text' => '修改密码', 'href' => './index.php?c=user&a=profile&', 'blank' => true, 'icow' => 'icow-quanxian1');
-			}
-
-			$return_arr['logout'] = './index.php?c=user&a=logout&';
 		}
 
 		return $return_arr;
@@ -1490,6 +1521,9 @@ class System_EweiShopV2Model
 		if ($this->merch) {
 			return mcv($str);
 		}
+		if ($this->supplychain){
+			return mcv($str);
+		}
 
 		return cv($str);
 	}
@@ -1499,7 +1533,6 @@ class System_EweiShopV2Model
 		if (!com('perm')) {
 			return array();
 		}
-
 		$name = com_run('perm::allPerms');
 		unset($name['shop']);
 		unset($name['goods']);
@@ -1520,12 +1553,15 @@ class System_EweiShopV2Model
 	{
 		global $_W;
 		global $_GPC;
-
 		if (!$this->merch) {
 			$history_url = $_GPC['history_url'];
-		}
-		else {
-			$history_url = $_GPC['merch_history_url'];
+		}else {
+			if ($this->supplychain){
+				$history_url = $_GPC['supplychain_history_url'];
+			}else{
+				$history_url = $_GPC['merch_history_url'];
+			}
+
 		}
 
 		if (empty($history_url)) {
